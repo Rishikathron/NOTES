@@ -1,0 +1,52 @@
+SOLID - Principles:
+
+  -> The solid principles are few object oriented designing best practices which helps us to maintain clean and readable code 
+through out the application.
+
+Pre-Requirements - Object oriented Design concept and interfaces and abstract classess should be more specific.
+
+1. Single Responsibility Principle - S:
+
+	-> This principle States that each and every class should have one feature or one task in it.
+	-> Each class should define one Responsibility and not more than one.
+	Example : We have an application which is tax calculator and that has the responsibility to calculate tax, emi's, mortage tax, and loan tax
+		all the responsibilities should not be in one single class instead we need to maintain seperate classess for all these responsibilities and call/
+		include in the main class.. 
+
+2. OpenClose Principle - O:
+
+	->This principle states that if a new feature is implemented that should be in a different class so that it wont affect the existing functionality.
+	Example : we have an existing code that is running in production, now we need to add new feature. Here adding the feature in existing class 
+		can cause issue in the production and existing code might not work. Hence, Create a new class and extend the existing code and make new feature changes.
+		this is called openclose principle.
+		
+3. Liskov Substitution Principle - L:
+
+	-> This Principle States that if a class is derived from the super class/ if a class is derived from another class then the baseclass functionality
+	must not change. we can modify in the derived class but the baseclass functionality must not change else it violates the rules.
+	Example : We have an inheritance/ interface and we are extending/implemening the class to another class which is derived then, we must not change 
+	inheritance/interface class's existing functionality but the derived class can have modified part.
+
+4. Interface Segregation Principle - I:
+	-> This Principle states that we should not force to implement interface that do not use. we should break the interface into more specific interfaces
+	to prevent being depend on methods that we dont use.
+	Example : * we have an interface to display the customer details like name, address, area and other details. In that interface we have a methods
+			for getting some other details of that customer, which violates the rules
+			  * Since it is interface he has to implemet all the methods are there in the interface where this getting customer details method is not
+			required. If needed we need to put that method in another interface so that we can prevent being depend on the method we dont use.
+			
+5. Dependancy Injection:
+	-> Dependency injection is a programming technique that makes a class independent of its dependencies. It achieves that by decoupling 
+	the usage of an object from its creation.
+	-> we have a class which calulate maths mark and returns it we use this calss in the main class, by creating the object in the main and other classes..
+	-> Here Dependancy with the mathsCaluculate exisists with all the classess that use mathscaluculate.cs, now if we need science marks and we have class
+	scienceCalculate, we need to change all the files and classess where we use mathsCaluculate.cs hence this is tightly coupled and testing should be made
+	with each and everyclasses uses mathsCaluculate.cs class
+	
+	-> So we can create a common class which accepts parameter of science mark or maths mark, and based on the parameter we can return 
+	the required class values. since it is loosely coupled unit testing is much easier.
+	
+	Example : https://youtube.com/shorts/WMGbqdqFKJg?feature=share  "Watch this youtube short to have a brief idea"
+	
+	
+	
