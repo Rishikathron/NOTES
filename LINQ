@@ -1,0 +1,48 @@
+LINQ API in .NET
+1. We can write LINQ queries for the classes that implement IEnumerable<T> or IQueryable<T> interface.
+
+=>  Enumerable
+	1. The Enumerable class includes extension methods for the classes that implement IEnumerable<T> interface,
+		 for example all the built-in collection classes implement IEnumerable<T> interface and so we can write 
+		 LINQ queries to retrieve data from the built-in collections.
+=> Queryable
+    1. The Queryable class includes extension methods for classes that implement IQueryable<t> interface.
+  		The IQueryable<T> interface is used to provide querying capabilities against a specific data source where 
+		the type of the data is known.
+
+=> Points to Remember:
+	1. Use System.Linq namespace to use LINQ.
+	2. LINQ api includes two main static class Enumerable & Queryable.
+	3. The static Enumerable class includes extension methods for classes that implements the IEnumerable<T> interface.
+	4. IEnumerable<T> type of collections are in-memory collection like List, Dictionary, SortedList, Queue, HashSet, LinkedList.
+	5. The static Queryable class includes extension methods for classes that implements the IQueryable<T> interface.
+	
+=> Standard Query Operators
+	1. Standard Query Operators in LINQ are actually extension methods for the IEnumerable<T> and IQueryable<T> types. They are defined in the System.Linq.Enumerable and System.Linq.Queryable classes.
+		 There are over 50 standard query operators available in LINQ that provide different functionalities like 
+		 filtering, sorting, grouping, aggregation, concatenation, etc.
+		 
+		 
+		Classification			Standard Query Operators
+		-------------------------------------------------------------
+		Filtering				Where, OfType
+		Sorting					OrderBy, OrderByDescending, ThenBy, ThenByDescending, Reverse
+		Grouping				GroupBy, ToLookup
+		Join					GroupJoin, Join
+		Projection				Select, SelectMany
+		Aggregation				Aggregate, Average, Count, LongCount, Max, Min, Sum
+		Quantifiers				All, Any, Contains
+		Elements				ElementAt, ElementAtOrDefault, First, FirstOrDefault, Last, LastOrDefault, Single, SingleOrDefault
+		Set						Distinct, Except, Intersect, Union
+		Partitioning			Skip, SkipWhile, Take, TakeWhile
+		Concatenation			Concat
+		Equality				SequenceEqual
+		Generation				DefaultEmpty, Empty, Range, Repeat
+		Conversion				AsEnumerable, AsQueryable, Cast, ToArray, ToDictionary, ToList
+		
+	====>>> https://www.tutorialsteacher.com/linq/linq-filtering-operators-where  Refer for further content
+	
+	P.S :>  2 types of linq are used method syntax and query syntax,
+				-> we use method syntax in our project like where and all and any and FirstOrDefault(), skip(),take() 
+				-> we use query syntac only in joins in our project like (from emp in Employee select emp.Name)
+	
