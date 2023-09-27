@@ -1,0 +1,35 @@
+STORED PROCEDURES:
+-------------------
+ 1. The store procedures define functions for creating triggers or custom aggregate functions.
+ 2. In addition, stored procedures also add many procedural features e.g., control structures and complex calculation.
+ 3. These allow you to develop custom functions much easier and more effective.
+
+Syntax:
+	create [or replace] procedure procedure_name(parameter_list)
+	language plpgsql
+	as $$
+	declare
+	-- variable declaration
+	begin
+	-- stored procedure body
+	end; $$
+
+
+Advantages of using PostgreSQL stored procedures:
+------------------------------------------------
+=> The stored procedures bring many advantages as follows:
+
+	1. Reduce the number of round trips between applications and database servers.
+	2. All SQL statements are wrapped inside a function stored in the PostgreSQL database server so the application only has to issue a function call 
+	 to get the result back instead of sending multiple SQL statements and wait for the result between each call.
+	3. Increase application performance because the user-defined functions and stored procedures are pre-compiled and stored in the PostgreSQL 
+	database server.
+	4. Reusable in many applications. Once you develop a function, you can reuse it in any applications.
+
+Disadvantages of using PostgreSQL stored procedures:
+----------------------------------------------------
+=> Besides the advantages of using stored procedures, there are some caveats:
+
+	1. Slowness in software development because stored procedure programming requires specialized skills that many developers do not possess.
+	2. Difficult to manage versions and hard to debug.
+	3. May not be portable to other database management systems e.g., MySQL or Microsoft SQL Server.

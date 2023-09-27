@@ -1,0 +1,271 @@
+Abstract Classes and Methods:
+-----------------------------
+=> An abstract class is mostly used to provide a base for subclasses to extend and implement the abstract methods 
+	and override or use the implemented methods in abstract class.
+
+1. Data abstraction is the process of hiding certain details and showing only essential information to the user.
+2. Abstraction can be achieved with either abstract classes or interfaces 
+
+=> The abstract keyword is used for classes and methods:
+	1. Abstract class: is a restricted class that cannot be used to create objects (to access it, it must be inherited from another class).
+
+	2. An abstract class can have both abstract and regular methods:
+
+		abstract class Animal 
+		{
+		  public abstract void animalSound();
+		  public void sleep() 
+		  {
+			Console.WriteLine("Zzz");
+		  }
+		}
+	
+		From the example above, it is not possible to create an object of the Animal class:
+
+		Animal myObj = new Animal(); // Will generate an error (Cannot create an instance of the abstract class or interface 'Animal')
+	
+	3. To access the abstract class, it must be inherited from another class.
+	
+	4. we use the override keyword to override the base class method.
+	 
+	// Abstract class
+		abstract class Animal
+		{
+		  // Abstract method (does not have a body)
+		  public abstract void animalSound();
+		  // Regular method
+		  public void sleep()
+		  {
+			Console.WriteLine("Zzz");
+		  }
+		}
+
+		// Derived class (inherit from Animal)
+		class Pig : Animal
+		{
+		  public override void animalSound()
+		  {
+			// The body of animalSound() is provided here
+			Console.WriteLine("The pig says: wee wee");
+		  }
+		}
+
+		class Program
+		{
+		  static void Main(string[] args)
+		  {
+			Pig myPig = new Pig(); // Create a Pig object
+			myPig.animalSound();  // Call the abstract method
+			myPig.sleep();  // Call the regular method
+		  }
+		}
+		
+----------------------------------------------------------------------------------------------------------------------------
+Interfaces
+----------
+=> Interfaces allow you to specify what methods a class should implement. Interfaces make it easy to use a variety of 
+	different classes in the same way.
+
+1. Another way to achieve abstraction in C#, is with interfaces.
+
+2. An interface is a completely "abstract class", which can only contain abstract methods and properties (with empty bodies):
+
+	// interface
+	interface Animal 
+	{
+	  void animalSound(); // interface method (does not have a body)
+	  void run(); // interface method (does not have a body)
+	}
+
+
+3. By default, members of an interface are abstract and public.
+
+Note: Interfaces can contain properties and methods, but not fields.
+
+4. To access the interface methods, the interface must be "implemented" (kinda like inherited) by another class.
+5. To implement an interface, use the : symbol (just like with inheritance). The body of the interface method is 
+	provided by the "implement" class. Note that you do not have to use the override keyword when implementing an interface:
+
+
+	interface IAnimal 
+		{
+		  void animalSound(); // interface method (does not have a body)
+		}
+
+		// Pig "implements" the IAnimal interface
+		class Pig : IAnimal 
+		{
+		  public void animalSound() 
+		  {
+			// The body of animalSound() is provided here
+			Console.WriteLine("The pig says: wee wee");
+		  }
+		}
+
+		class Program 
+		{
+		  static void Main(string[] args) 
+		  {
+			Pig myPig = new Pig();  // Create a Pig object
+			myPig.animalSound();
+		  }
+		}
+
+Multiple Interfaces:
+-------------------
+1. To implement multiple interfaces, separate them with a comma:
+
+		interface IFirstInterface 
+		{
+		  void myMethod(); // interface method
+		}
+
+		interface ISecondInterface 
+		{
+		  void myOtherMethod(); // interface method
+		}
+
+		// Implement multiple interfaces
+		class DemoClass : IFirstInterface, ISecondInterface 
+		{
+		  public void myMethod() 
+		  {
+			Console.WriteLine("Some text..");
+		  }
+		  public void myOtherMethod() 
+		  {
+			Console.WriteLine("Some other text...");
+		  }
+		}
+
+		class Program 
+		{
+		  static void Main(string[] args)
+		  {
+			DemoClass myObj = new DemoClass();
+			myObj.myMethod();
+			myObj.myOtherMethod();
+		  }
+		}
+=-------------------------------------------------------------------------------------------------------------------------------------------
+Difference between abstract class and interface:-
+=> Definition: 
+	1. An abstract class is a class that cannot be instantiated and can contain both abstract and non-abstract methods. 
+	2. An interface, on the other hand, is a contract that specifies a set of methods that a class must implement.
+=> Method implementation: 
+	1. In an abstract class, some methods can be implemented, while others are left abstract, meaning that
+	they have no implementation and must be overridden by concrete subclasses. 
+	2. In contrast, all methods in an interface are by default abstract and must be implemented by any class that implements the interface.
+=> Inheritance: 
+	1. A class can inherit from only one abstract class, but it can implement multiple interfaces.
+	2. This is because an abstract class represents a type of object, while an interface represents a set of behaviors.
+=> Access modifiers: 
+	1. Abstract classes can have access modifiers such as public, protected, and private for their methods and properties, 
+		while interfaces can only have public access.
+
+=>Variables: 
+	1. An abstract class can have member variables, while an interface cannot.
+-----------------------------------------------------------------------------------------------------------------------------------------------
+Polymorphism and Overriding Methods:
+-----------------------------------
+Polymorphism means "many forms", and it occurs when we have many classes that are related to each other by inheritance.
+
+For example, think of a base class called Animal that has a method called animalSound(). Derived classes of Animals could be Pigs, Cats, Dogs, Birds - And they also have their own implementation of an animal sound (the pig oinks, and the cat meows, etc.):
+class Animal  // Base class (parent) 
+{
+  public void animalSound() 
+  {
+    Console.WriteLine("The animal makes a sound");
+  }
+}
+
+class Pig : Animal  // Derived class (child) 
+{
+  public void animalSound() 
+  {
+    Console.WriteLine("The pig says: wee wee");
+  }
+}
+
+class Dog : Animal  // Derived class (child) 
+{
+  public void animalSound() 
+  {
+    Console.WriteLine("The dog says: bow wow");
+  }
+}
+
+class Program 
+{
+  static void Main(string[] args) 
+  {
+    Animal myAnimal = new Animal();  // Create a Animal object
+    Animal myPig = new Pig();  // Create a Pig object
+    Animal myDog = new Dog();  // Create a Dog object
+
+    myAnimal.animalSound();
+    myPig.animalSound();
+    myDog.animalSound();
+  }	
+}
+
+The output will be:
+
+The animal makes a sound
+The animal makes a sound
+The animal makes a sound
+------------------------------------------------------------------
+	Not The Output I Was Looking For
+	The output from the example above was probably not what you expected. That is because the base class method overrides the derived class method, when they share the same name.
+
+	However, C# provides an option to override the base class method, by adding the virtual keyword to the method inside the base class, and by using the override keyword for each derived class methods:
+
+class Animal  // Base class (parent) 
+{
+  public virtual void animalSound() 
+  {
+    Console.WriteLine("The animal makes a sound");
+  }
+}
+
+class Pig : Animal  // Derived class (child) 
+{
+  public override void animalSound() 
+  {
+    Console.WriteLine("The pig says: wee wee");
+  }
+}
+
+class Dog : Animal  // Derived class (child) 
+{
+  public override void animalSound() 
+  {
+    Console.WriteLine("The dog says: bow wow");
+  }
+}
+
+class Program 
+{
+  static void Main(string[] args) 
+  {
+    Animal myAnimal = new Animal();  // Create a Animal object
+    Animal myPig = new Pig();  // Create a Pig object
+    Animal myDog = new Dog();  // Create a Dog object
+
+    myAnimal.animalSound();
+    myPig.animalSound();
+    myDog.animalSound();
+  }
+} 
+ 
+ 
+The output will be:
+
+The animal makes a sound
+The pig says: wee wee
+The dog says: bow wow
+
+
+
+
+
