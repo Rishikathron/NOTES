@@ -13,7 +13,7 @@ Pre-Requirements - Object oriented Design concept and interfaces and abstract cl
 		all the responsibilities should not be in one single class instead we need to maintain seperate classess for all these responsibilities and call/
 		include in the main class.. 
 
-2. OpenClose Principle - O:
+2. OpenClose Principle - O: (open for extension closed for modification)
 
 	->This principle states that if a new feature is implemented that should be in a different class so that it wont affect the existing functionality.
 	Example : we have an existing code that is running in production, now we need to add new feature. Here adding the feature in existing class 
@@ -35,7 +35,7 @@ Pre-Requirements - Object oriented Design concept and interfaces and abstract cl
 			  * Since it is interface he has to implemet all the methods are there in the interface where this getting customer details method is not
 			required. If needed we need to put that method in another interface so that we can prevent being depend on the method we dont use.
 			
-5. Dependancy Injection:
+5. Dependancy Inversion / Injection:
 	-> Dependency injection is a programming technique that makes a class independent of its dependencies. It achieves that by decoupling 
 	the usage of an object from its creation.
 	-> we have a class which calulate maths mark and returns it we use this calss in the main class, by creating the object in the main and other classes..
