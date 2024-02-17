@@ -1,0 +1,225 @@
+JavaScript:
+===========
+JavaScript (JS) is a lightweight, interpreted, or just-in-time compiled programming language with first-class functions.
+While it is most well-known as the scripting language for Web pages, many non-browser environments also use it, such as Node.js, Apache CouchDB and Adobe Acrobat.
+JavaScript is a prototype-based, multi-paradigm, single-threaded, dynamic language, supporting object-oriented, imperative, and declarative (e.g. functional programming) styles.
+ 
+JavaScript was initially created to “make web pages alive”.
+The programs in this language are called scripts. They can be written right in a web page’s HTML and run automatically as the page loads.
+Scripts are provided and executed as plain text. They don’t need special preparation or compilation to run.
+
+JavaScript is a scripting language that may be used to construct online and mobile apps, web servers, games, and more.
+JavaScript is an object-oriented programming language that is used to generate websites and applications. 
+the server-side version of JavaScript known as Node.js may be used to create online and mobile apps, real-time applications, online streaming applications, and videogames. 
+Developers may save a lot of time on monotonous programming jobs by using these code libraries, allowing them to focus on the production work of development.
+ It is object-based, lightweight, cross-platform translated language. 
+ It is widely used for client-side validation. The JavaScript Translator (embedded in the browser) is responsible for translating the JavaScript code for the web browser.
+ 
+JavaScript is a scripting or programming language that allows you to implement complex features on web pages.
+JavaScript is a scripting language that enables you to create dynamically updating content, control multimedia, animate images, and pretty much everything else.
+A very common use of JavaScript is to dynamically modify HTML and CSS to update a user interface, via the Document Object Model API.
+When the browser encounters a block of JavaScript, it generally runs it in order, from top to bottom. This means that you need to be careful what order you put things in. 
+
+the terms interpreted and compiled in the context of programming. 
+         -------------   -----------
+In interpreted languages, the code is run from top to bottom and the result of running the code is immediately returned. 
+You don't have to transform the code into a different form before the browser runs it. 
+The code is received in its programmer-friendly text form and processed directly from that.
+
+Compiled languages on the other hand are transformed (compiled) into another form before they are run by the computer.
+For example, C/C++ are compiled into machine code that is then run by the computer. 
+The program is executed from a binary format, which was generated from the original program source code.
+
+JavaScript is a lightweight interpreted programming language. The web browser receives the JavaScript code in its original text form and runs the script from that. 
+most modern JavaScript interpreters actually use a technique called just-in-time compiling to improve performance; the JavaScript source code gets compiled into a faster, 
+binary format while the script is being used, so that it can be run as quickly as possible.
+
+However, JavaScript is still considered an interpreted language, since the compilation is handled at run time, rather than ahead of time.
+ 
+ 
+The core client-side JavaScript language consists of some common programming features that allow you to do things like:
+=======================================================================================================
+
+Store useful values inside variables. In the above example for instance, we ask for a new name to be entered then store that name in a variable called name.
+Operations on pieces of text (known as "strings" in programming). 
+In the above example we take the string "Player 1: " and join it to the name variable to create the complete text label, e.g. "Player 1: Chris".
+Running code in response to certain events occurring on a web page. 
+We used a click event in our example above to detect when the label is clicked and then run the code that updates the text label.
+Lightweight
+Interpreted programming language
+Good for the applications which are network-centric
+Complementary to Java
+Complementary to HTML
+Open source
+Cross-platform
+Integration with other backend and frontend technologies
+Used especially for the development of network-based applications.
+
+
+the functionality built on top of the client-side JavaScript language. So-called Application Programming Interfaces (APIs) provide you with extra superpowers to use in your JavaScript code.
+APIs are ready-made sets of code building blocks that allow a developer to implement programs that would otherwise be hard or impossible to implement. 
+--------
+Browser APIs are built into your web browser, and are able to expose data from the surrounding computer environment, or do useful complex things. For example:
+------------------
+The DOM (Document Object Model) API allows you to manipulate HTML and CSS, creating, removing and changing HTML, dynamically applying new styles to your page, etc. 
+Every time you see a popup window appear on a page, or some new content displayed (as we saw above in our simple demo) for example, that's the DOM in action.
+The Geolocation API retrieves geographical information. This is how Google Maps is able to find your location and plot it on a map.
+The Canvas and WebGL APIs allow you to create animated 2D and 3D graphics. People are doing some amazing things using these web technologies —
+see Chrome Experiments and webglsamples.
+Audio and Video APIs like HTMLMediaElement and WebRTC allow you to do really interesting things with multimedia, such as play audio and video right in a web page,
+or grab video from your web camera and display it on someone else's computer.
+
+Third party APIs are not built into the browser by default, and you generally have to grab their code and information from somewhere on the Web. For example:
+---------------
+The Twitter API allows you to do things like displaying your latest tweets on your website.
+The Google Maps API and OpenStreetMap API allows you to embed custom maps into your website, and other such functionality.
+
+the terms server-side and client-side code, especially in the context of web development.
+---------------------------------------------------------------------------------------
+ Client-side code is code that is run on the user's computer — when a web page is viewed, the page's client-side code is downloaded, then run and displayed by the browser. 
+ 
+ Server-side code on the other hand is run on the server, then its results are downloaded and displayed in the browser. 
+ Examples of popular server-side web languages include PHP, Python, Ruby, ASP.NET, and even JavaScript! 
+ JavaScript can also be used as a server-side language, for example in the popular Node.js environment
+ 
+ 
+The word dynamic is used to describe both client-side JavaScript, and server-side languages 
+ it refers to the ability to update the display of a web page/app to show different things in different circumstances, generating new content as required.
+ Server-side code dynamically generates new content on the server, e.g. pulling data from a database, 
+ whereas client-side JavaScript dynamically generates new content inside the browser on the client,
+ e.g. creating a new HTML table, filling it with data requested from the server, then displaying the table in a web page shown to the user. 
+ 
+A web page with no dynamically updating content is referred to as static — it just shows the same content all the time.
+
+
+JavaScript is applied to your HTML page in a similar manner to CSS. Whereas CSS uses <link> elements to apply external stylesheets and <style> elements to apply internal stylesheets to HTML, 
+JavaScript only needs one friend in the world of HTML — the <script> element. 
+
+Internal JavaScript
+
+go to your text editor and add the following in your head — just before your closing </head> tag:
+<script>
+  // JavaScript goes here
+</script>
+
+JavaScript is case sensitive, and very fussy, so you need to enter the syntax exactly as shown, otherwise it may not work.
+
+External JavaScript
+
+<script src="script.js" defer></script>
+
+====================================
+
+Instead of including JavaScript in your HTML, use a pure JavaScript construct.
+The querySelectorAll() function allows you to select all the buttons on a page. You can then loop through the buttons, assigning a handler for each using addEventListener(). 
+
+const buttons = document.querySelectorAll('button');
+
+for (const button of buttons) {
+  button.addEventListener('click', createParagraph);
+}
+
+This might be a bit longer than the onclick attribute, but it will work for all buttons — no matter how many are on the page, nor how many are added or removed. 
+The JavaScript does not need to be changed.
+
+There are a number of issues involved with getting scripts to load at the right time.
+A common problem is that all the HTML on a page is loaded in the order in which it appears. 
+If you are using JavaScript to manipulate elements on the page (or more accurately, the Document Object Model),
+your code won't work if the JavaScript is loaded and parsed before the HTML you are trying to do something to.
+
+document.addEventListener('DOMContentLoaded', () => {
+  // …
+});
+
+In the internal example, you can see this structure around the code:
+This is an event listener, which listens for the browser's DOMContentLoaded event, which signifies that the HTML body is completely loaded and parsed. 
+. The JavaScript inside this block will not run until after that event is fired, therefore the error is avoided 
+
+In the external example, we use a more modern JavaScript feature to solve the problem, the defer attribute,
+ which tells the browser to continue downloading the HTML content once the <script> tag element has been reached.
+ 
+There are actually two modern features we can use to bypass the problem of the blocking script — async and defer (which we saw above).
+ Let's look at the difference between these two.
+ 
+ Scripts loaded using the async attribute will download the script without blocking the page while the script is being fetched. 
+ However, once the download is complete, the script will execute, which blocks the page from rendering. You get no guarantee that scripts will run in any specific order
+ It is best to use async when the scripts in the page run independently from each other and depend on no other script on the page.
+ async should be used when you have a bunch of background scripts to load in, and you just want to get them in place as soon as possible. 
+ 
+ Scripts loaded with the defer attribute will load in the order they appear on the page. They won't run until the page content has all loaded, 
+  which is useful if your scripts depend on the DOM being in place (e.g. they modify one or more elements on the page).
+  
+  
+  
+ ---------------------
+ 
+ difference between JavaScript and Java
+ ===============
+JavaScript
+Java
+
+JavaScript is an object-oriented scripting language.
+Java is an object-oriented programming language.
+
+JavaScript applications are meant to run inside a web browser.
+Java applications are generally made for use in operating systems and virtual machines.
+
+JavaScript does not need compilation before running the application code.
+Java source code needs a compiler before it can be ready to run in realtime.
+
+Java is an object-oriented and structured programming language, which helps to run web pages on different platforms. The java code should be compiled on the compiler.
+ JavaScript is an object-oriented scripting language. In which, the scripts are optimized for both server and client-side. Javascript is introduced to perform HTML pages.
+ 
+ 
+ ===============================================
+JavaScript is single-threaded or that it is using a callback queue.
+
+The JavaScript Engine
+-----------------------------
+A popular example of a JavaScript Engine is Google’s V8 engine. The V8 engine is used inside Chrome and Node.js for example. 
+
+The Engine consists of two main components:
+* Memory Heap — this is where the memory allocation happens
+* Call Stack — this is where your stack frames are as your code executes
+
+The Runtime
+--------------
+There are APIs in the browser that have been used by almost any JavaScript developer out there (e.g. “setTimeout”). 
+Those APIs, however, are not provided by the Engine.
+
+ We have those things called Web APIs which are provided by browsers, like the DOM, AJAX, setTimeout and much more.
+And then, we have the so popular event loop and the callback queue.
+
+The Call Stack
+---------------
+JavaScript is a single-threaded programming language, which means it has a single Call Stack. Therefore it can do one thing at a time.
+
+The Call Stack is a data structure which records basically where in the program we are. If we step into a function, we put it on the top of the stack.
+ If we return from a function, we pop off the top of the stack. That’s all the stack can do.
+ 
+ When the engine starts executing this code, the Call Stack will be empty.
+ Each entry in the Call Stack is called a Stack Frame.
+ 
+ “Blowing the stack” — this happens when you reach the maximum Call Stack size. 
+ And that could happen quite easily, especially if you’re using recursion without testing your code very extensively. 
+ 
+ function foo() {
+    foo();
+}
+foo();
+
+Running code on a single thread can be quite easy since you don’t have to deal
+ with complicated scenarios that are arising in multi-threaded environments — for example, deadlocks.
+ 
+But running on a single thread is quite limiting as well. 
+
+What happens when you have function calls in the Call Stack that take a huge amount of time in order to be processed
+The problem is that while the Call Stack has functions to execute, the browser can’t actually do anything else — it’s getting blocked. 
+This means that the browser can’t render, it can’t run any other code, it’s just stuck.
+
+Once your browser starts processing so many tasks in the Call Stack, it may stop being responsive for quite a long time. 
+And most browsers take action by raising an error, asking you whether you want to terminate the web page.
+
+the solution is asynchronous callbacks
+
+==================================

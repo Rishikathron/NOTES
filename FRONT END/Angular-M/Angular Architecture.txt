@@ -1,0 +1,193 @@
+Angular Architecture
+====================
+
+Angular is a platform and framework for building single-page client applications using HTML and TypeScript. Angular is written in TypeScript. It implements core and optional functionality as a set of TypeScript libraries that you import into your applications.
+
+The architecture of an Angular application relies on certain fundamental concepts. The basic building blocks of the Angular framework are Angular components that are organized into NgModules. NgModules collect related code into functional sets; an Angular application is defined by a set of NgModules. An application always has at least a root module that enables bootstrapping, and typically has many more feature modules.
+
+Components define views, which are sets of screen elements that Angular can choose among and modify according to your program logic and data
+Components use services, which provide specific functionality not directly related to views. Service providers can be injected into components as dependencies, making your code modular, reusable, and efficient.
+
+Modules, components and services are classes that use decorators. These decorators mark their type and provide metadata that tells Angular how to use them.
+
+The metadata for a component class associates it with a template that defines a view. A template combines ordinary HTML with Angular directives and binding markup that allow Angular to modify the HTML before rendering it for display.
+The metadata for a service class provides the information Angular needs to make it available to components through dependency injection (DI)
+
+An application's components typically define many views, arranged hierarchically. Angular provides the Router service to help you define navigation paths among views. The router provides sophisticated in-browser navigational capabilities.
+
+The framework consists of several libraries, some of them core and some optional.
+
+You write Angular applications by composing HTML templates with Angularized markup, writing component classes to manage those templates, adding application logic in services, and boxing components and services in modules.
+
+Then you launch the app by bootstrapping the root module. Angular takes over, presenting your application content in a browser and responding to user interactions according to the instructions you've provided.
+
+The architecture identifies the eight main building blocks of an Angular application:
+
+Modules
+Components
+Templates
+Metadata
+Data binding
+Directives
+Services
+Dependency injection
+
+Modules
+===========
+An NgModule declares a compilation context for a set of components that is dedicated to an application domain, a workflow, or a closely related set of capabilities. An NgModule can associate its components with related code, such as services, to form functional units.
+
+Every Angular application has a root module, conventionally named AppModule, which provides the bootstrap mechanism that launches the application. An application typically contains many functional modules.
+
+Like JavaScript modules, NgModules can import functionality from other NgModules, and allow their own functionality to be exported and used by other NgModules. For example, to use the router service in your app, you import the Router NgModule.
+
+Organizing your code into distinct functional modules helps in managing development of complex applications, and in designing for reusability. In addition, this technique lets you take advantage of lazy-loading —that is, loading modules on demand— to minimize the amount of code that needs to be loaded at startup.
+
+Angular apps are modular and Angular has its own modularity system called Angular modules or NgModules.
+
+An Angular module, whether a root or feature, is a class with an @NgModule decorator.(Decorators are functions that modify JavaScript classes. Angular has many decorators that attach metadata to classes so that it knows what those classes mean and how they should work. )
+
+NgModule is a decorator function that takes a single metadata object whose properties describe the module. The most important properties are:
+
+declarations - the view classes that belong to this module. Angular has three kinds of view classes: components, directives, and pipes.
+exports - the subset of declarations that should be visible and usable in the component templates of other modules.
+imports - other modules whose exported classes are needed by component templates declared in this module.
+providers - creators of services that this module contributes to the global collection of services; they become accessible in all parts of the app.
+bootstrap - the main application view, called the root component, that hosts all other app views. Only the root module should set this bootstrap property.
+
+Components
+==========
+Every Angular application has at least one component, the root component that connects a component hierarchy with the page document object model (DOM). Each component defines a class that contains application data and logic, and is associated with an HTML template that defines a view to be displayed in a target environment.
+
+You define a component's application logic—what it does to support the view—inside a class. The class interacts with the view through an API of properties and methods.
+
+The @Component() decorator identifies the class immediately below it as a component, and provides the template and related component-specific metadata.
+
+Angular creates, updates, and destroys components as the user moves through the application. Your app can take action at each moment in this lifecycle through optional lifecycle hooks.
+
+
+Templates
+========================================
+A template combines HTML with Angular markup that can modify HTML elements before they are displayed. Template directives provide program logic, and binding markup connects your application data and the DOM.
+
+You define a component's view with its companion template. A template is a form of HTML that tells Angular how to render the component.
+
+A template looks like regular HTML, except for a few differences.
+
+Although this template uses typical HTML elements like <h2> and <p>, it also has some differences. Code like *ngFor, {{hero.name}}, (click), [hero], and <hero-detail> uses Angular's template syntax.
+
+Metadata
+=============
+Metadata tells Angular how to process a class.It is used to decorate the class so that it can configure the expected behavior of a class.
+In fact, HeroListComponent really is just a class. It's not a component until you tell Angular about it.
+To tell Angular that HeroListComponent is a component, attach metadata to the class.
+In TypeScript, you attach metadata by using a decorator.
+
+The metadata in the @Component tells Angular where to get the major building blocks you specify for the component.
+The template, metadata, and component together describe a view.
+
+Apply other metadata decorators in a similar fashion to guide Angular behavior. @Injectable, @Input, and @Output are a few of the more popular decorators.
+
+Data binding
+===============
+Without a framework, you would be responsible for pushing data values into the HTML controls and turning user responses into actions and value updates. Writing such push/pull logic by hand is tedious, error-prone, and a nightmare to read as any experienced jQuery programmer can attest.
+
+Angular supports data binding, a mechanism for coordinating parts of a template with parts of a component. Add binding markup to the template HTML to tell Angular how to connect both sides.
+
+Event binding	 Lets your application respond to user input in the target environment by updating your application data.
+Property binding Lets you interpolate values that are computed from your application data into the HTML.
+
+The {{hero.name}} interpolation displays the component's hero.name property value within the <li> element.
+The [hero] property binding passes the value of selectedHero from the parent HeroListComponent to the hero property of the child HeroDetailComponent.
+The (click) event binding calls the component's selectHero method when the user clicks a hero's name.
+
+Two-way data binding is an important fourth form that combines property and event binding in a single notation, using the ngModel directive. 
+In two-way binding, a data property value flows to the input box from the component as with property binding. The user's changes also flow back to the component, resetting the property to the latest value, as with event binding.
+
+Angular processes all data bindings once per JavaScript event cycle, from the root of the application component tree through all child components.
+Data binding plays an important role in communication between a template and its component.
+Data binding is also important for communication between parent and child components.
+
+Directives
+=============
+Angular templates are dynamic. When Angular renders them, it transforms the DOM according to the instructions given by directives.
+
+A directive is a class with a @Directive decorator. A component is a directive-with-a-template; a @Component decorator is actually a @Directive decorator extended with template-oriented features.
+While a component is technically a directive, components are so distinctive and central to Angular applications that this architectural overview separates components from directives.
+
+Services
+==========
+Service is a broad category encompassing any value, function, or feature that your application needs.
+When you have data or logic that isn’t associated with the view but has to be shared across components, a service class is created. The class is always associated with the @Injectible decorator.
+
+Almost anything can be a service. A service is typically a class with a narrow, well-defined purpose. It should do something specific and do it well.
+There is nothing specifically Angular about services. Angular has no definition of a service. There is no service base class, and no place to register a service.
+Yet services are fundamental to any Angular application. Components are big consumers of services.
+
+A service class definition is immediately preceded by the @Injectable() decorator. The decorator provides the metadata that allows other providers to be injected as dependencies into your class.
+
+Dependency injection
+====================
+Dependency injection is a way to supply a new instance of a class with the fully-formed dependencies it requires. Most dependencies are services. Angular uses dependency injection to provide new components with the services they need.
+
+Angular can tell which services a component needs by looking at the types of its constructor parameters. 
+
+When Angular creates a component, it first asks an injector for the services that the component requires.
+
+An injector maintains a container of service instances that it has previously created. If a requested service instance is not in the container, the injector makes one and adds it to the container before returning the service to Angular. When all requested services have been resolved and returned, Angular can call the component's constructor with those services as arguments. This is dependency injection
+
+Dependency injection is wired into the Angular framework and used everywhere.
+The injector is the main mechanism.
+An injector maintains a container of service instances that it created.
+An injector can create a new service instance from a provider.
+A provider is a recipe for creating a service.
+Register providers with injectors.
+
+Dependency injection (DI) lets you keep your component classes lean and efficient. They don't fetch data from the server, validate user input, or log directly to the console; they delegate such tasks to services.
+-----------------------------------------------------------------------------------------------------
+Animations: Animate component behavior without deep knowledge of animation techniques or CSS with Angular's animation library.
+
+Change detection: The change detection documentation will cover how Angular decides that a component property value has changed, when to update the screen, and how it uses zones to intercept asynchronous activity and run its change detection strategies.
+
+Events: The events documentation will cover how to use components and services to raise events with mechanisms for publishing and subscribing to events.
+
+Forms: Support complex data entry scenarios with HTML-based validation and dirty checking.
+
+HTTP: Communicate with a server to get data, save data, and invoke server-side actions with an HTTP client.
+
+Lifecycle hooks: Tap into key moments in the lifetime of a component, from its creation to its destruction, by implementing the lifecycle hook interfaces.
+
+Pipes: Use pipes in your templates to improve the user experience by transforming values for display. Consider this currency pipe expression:
+
+price | currency:'USD':true
+
+It displays a price of 42.33 as $42.33.
+
+Router: Navigate from page to page within the client application and never leave the browser.
+
+Testing: Run unit tests on your application parts as they interact with the Angular framework using the Angular Testing Platform.
+
+========================================================================
+
+Workflow of Angular application
+=================================
+1.src/main.ts is the entry point of Angular application.
+ src/main.ts bootstraps the AppModule (src/app.module.ts), which is the root module for every Angular application.
+
+2.AppModule bootstraps the AppComponent (src/app.component.ts), which is the root component of every Angular application.
+
+Here,
+AppModule loads modules through imports option.
+AppModule also loads all the registered service using Dependency Injection (DI) framework.
+AppComponent renders its template (src/app.component.html) and uses the corresponding styles (src/app.component.css). AppComponent name, app-root is used to place it inside the src/index.html.
+
+Also, all registered services are accessible to all Angular components through Dependency Injection (DI) framework.
+
+------------------
+
+The Index.html file is an important file for every angular application. Because when the user hits “localhost: 4200” on browser then angular run index.html file. The index.html file has contained a selector of a component. The selector is registered in the body tag in the index file.
+It is found in the src folder of the app. Compiler dynamically adds all the javascript files at the end of this file. Since all the components are now known, the html file calls the root component that is app-root. The root component is defined in app.components.ts which targets app.component.html. 
+
+Main.ts file is an important part of Angular Application, Angular application can’t work without Main.ts file. In Angular application has only one Main.ts file. The Main.ts file has a Bootstrap Section. The Bootstrap section has registered a Module, which the user wants to execute first.
+This file acts as the entry point of the application. This entry point is defined in the internals of webpack that is used by Angular to support the modular functionality. The path/name of the main file can be changed but it should also be changed in angular.json file. Main.ts helps in creating the browser environment for the application to run. 
+
+ANGULAR.JSON is the file which has various properties and configuration of your Angular project. This is the file which is first referred by the builder to look for all the paths and configurations and to check which is the main file.

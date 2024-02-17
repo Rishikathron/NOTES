@@ -1,0 +1,107 @@
+ES6 features are:
+
+Supports constants/immutable variables.
+Block scope support for all variables, constants and functions.
+Introduction to arrow functions
+Handling extended parameter
+Default parameters
+Extended and template literals
+De-structuring assignment
+Promises
+Classes
+Modules
+Collections
+Supports Map/Set & Weak-map/Weak-Set
+Localization, meta-programming, internationalization
+
+
+One should not use arrow functions in the following cases:
+
+Function Hoisting, Named Functions
+Callback functions with dynamic context:
+this/arguments
+
+The Generator function returns an object after generating several values over time. 
+We can iterate over this object and extract values from the function one by one. 
+A generator function returns an iterable object when called. In ES6, we use the * sign for a generator function along with the new ‘yield' keyword.
+
+In ES6, a new kind of function is introduced which is different from the regular functions. Unlike regular functions, Generators functions can stop midway
+and then it can continue from where it was paused
+
+function *Numbers() {
+    let num = 1;
+    while(true) {
+        yield num++;
+    }
+}
+  
+var gen = Numbers();
+ 
+// Loop to print the first
+// 5 Generated numbers
+for (var i = 0; i < 5; i++) {
+ 
+    // Generate the next number
+    document.write(gen.next().value);
+ 
+    // New Line
+    document.write("<br>");
+}
+Output:
+
+1
+2
+3
+4
+5
+
+
+generators compute their output values on demand, allowing them to efficiently represent expensive to compute sequences or even infinite sequences.
+
+
+ The spread operator divides an iterable (such as an array or a string) into individual elements. It's mostly used in JavaScript to make shallow copies of JS. It improves the readability of your code by making it more concise.
+
+The spread operator can be used to join two arrays together or to concatenate them.
+
+let arr1 = [4, 5, 6];  
+    
+let arr2 = [1, 2, 3, ...arr1, 7, 8, 9, 10];  
+    
+console.log(arr2);
+Output:
+
+[ 1 2 3 4 5 6 7 8 9 10 ]
+
+Destructuring was introduced in ES6 as a way to extract data from arrays and objects into a single variable. It is possible to extract smaller fragments from objects and arrays using this method. The following is an example.
+
+let greeting =['Good','Morning'];  
+let [g1, g2] = greeting;  
+console.log (g1, g2);
+
+
+Symbols are a new type of object that can be used as distinct property names in objects. Using Symbols instead of strings allows separate modules to create properties that are not mutually exclusive. Symbols can also be kept private, preventing anyone who does not have direct access to the Symbol from accessing its properties.
+
+Symbols are a brand-new kind of primitive. Symbols, like numbers, strings, and booleans, have a function that can be used to produce them. Symbols, unlike the other primitives, do not have a literal syntax (similar to how strings have ") and can only be created using the Symbol constructor:
+
+ let symbol = Symbol();
+In truth, Symbols are only a little different means of attaching properties to an object; the well-known Symbols could easily be provided as standard methods, just like Object.prototype.has Own Property which appears in anything that inherits from Object.
+
+
+Webpack is a tool for bundling javascript files for usage in browsers. Webpack analyses the application and generates the bundles by creating a dependency graph that maps each module of the project required. It enables you to execute the environment that was hosted by Babel. A web pack has the advantage of combining numerous modules and packs into a single JavaScript file. It includes a dev server, which aids with code updates and asset management.
+
+
+The proxy objects are used to customize behaviour for basic operations like property lookup, assignment, enumeration, function invocation, etc.
+
+We need to define three crucial terms:
+
+handler —  a placeholder object that holds the trap(s)
+traps — the method(s) that let you access a property.
+target — the virtualized object by the proxy
+
+Set: By using the Set() class, users can define an array-like heterogeneous iterable object, which will consist of distinct values. The elements should not just be distinct by values but also by types. i.e. "2" and 2 will be considered as different.
+
+WeakSet(): A WeakSet() is a collection that is similar to a Set because it retains unique values; but it can only hold Objects. If an object in your WeakSet has no other reference variables left, it will be removed automatically.
+
+Functional Programming is a type of programming in which we build our applications with functions using expressions that calculates a value without mutating or changing the arguments that are passed to it. 
+JavaScript Array has a map, filter, and reduce methods which are the most famous functions in functional programming because they don’t mutate or change the array which makes these functions pure and which are features of a Functional Programming Language.
+

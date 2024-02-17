@@ -1,0 +1,530 @@
+Single Page Applications (SPA)
+==================================
+
+Single-page applications are web applications that load once with new features just being mere additions to the user interface. 
+It does not load new HTML pages to display the new page's content, instead generated dynamically. 
+This is made possible through JavaScript's ability to manipulate the DOM elements on the existing page itself. 
+A SPA approach is faster, thus providing a seamless user experience. 
+
+This therefore allows users to use websites without loading whole new pages from the server, which can result in performance gains and a more dynamic experience, with some tradeoff disadvantages such as SEO, more effort required to maintain state, implement navigation, and do meaningful performance monitoring.
+
+Differentiate between Angular and AngularJS
+============================================
+
+ The main difference between AngularJS and Angular is that AngularJS is based on JavaScript, while Angular is based on TypeScript. There are several similarities between these two front-end, open-source frameworks that are used to create dynamic web applications and SPAs
+
+                                 AngularJS                        Angular
+
+Language                         JavaScript                      TypeScript
+
+Architecture      Supports Model-View-Controller design    Uses components and directives
+
+Mobile support        Not supported by mobile browsers    Supports all popular mobile browsers
+
+Dependency Injection          Doesn’t support                     Supports
+
+Routing                  @routeProvider is used to provid        @Route configuration is used to
+                                   routing information             define routing information
+                               
+
+Management                    Difficult to manage with an        Better structured, easy to create 
+                               increase in source code size        and manage bigger applications
+
+
+CLI                  It does not come with a CLI tool.           It comes with the Angular CLI tool.
+
+
+Decorators in Angular
+=====================
+
+Decorators are a design pattern or functions that define how Angular features work. They are used to make prior modifications to a class, service, or filter.
+
+The whole purpose of Angular decorators is to store metadata about a class, method, or property. When you configure a component, you are providing a metadata for that class that tells Angular that you have a component, and that component has a specific configuration. 
+
+Each decorator has a base configuration with some default values. When the decorator is created using the relevant factory, the default configuration is passed.
+
+Decorators are functions that are invoked with a prefixed @ symbol, and are immediately followed by a class, method or property. They allow a service, directive or filter to be changed before being used. Basically, a decorator provides configuration metadata that determines how the component, class or a function should be processed, instantiated and used at runtime. 
+
+Angular defines a number of decorators that attach specific kinds of metadata to classes, so that the system knows what those classes mean and how they should work. 
+
+Angular supports four types of decorators, they are:
+
+Class Decorators: Class Decorators are the top-level decorators that are used to define the purpose for the classes. They provide information to Angular that a particular class is a component, or module. 
+@NgModule
+@Component
+@Injectable
+@Directive
+@Pipe
+
+Property Decorators:Property decorators are used to decorate the specific properties within the classes. Take a look at @Input(). Imagine that you have a property within the class that you want to have an input binding. Without decorators, you would have to define this property in your class for TypeScript to know about it, and then somewhere else tell Angular that you've got a property that you want to be an input.
+With decorators, you can simply put the @Input() decorator above the property, for which Angular's compiler will automatically create an input binding from the property name and link them.
+@Input
+@Output
+@HostBinding
+@ContentChild
+@ContentChildren
+@ViewChild
+@ViewChildren (These decorators are used inside a class)
+
+Method Decorators:A Method Decorator decorates specific methods within your class with functionality. This is declared just before a method declaration.
+Either the constructor function of the class for a static member, or the prototype of the class for an instance member.
+The name of the member.
+The Property Descriptor for the member.
+A good example of this is @HostListener. This tells Angular that when an event on your host happens, you want the decorated method to be called with the event.
+@HostListener (This decorator is used for methods inside a class like a click, mouse hover, etc.)
+
+Parameter Decorators:Parameter decorators are used to decorate parameters in your class constructors. For example- @Inject. It tells Angular that what you want that parameter to be initiated with.
+@Inject
+@Self
+@SkipSelf
+@Optional
+@Host (This decorator is used inside class constructor).
+
+Advantages of Angular.
+========================
+
+MVC architecture - Angular is a full-fledged MVC framework. It provides a firm opinion on how the application should be structured. It also offers bi-directional data flow and updates the real DOM. 
+Modules: Angular consists of different design patterns like components, directives, pipes, and services, which help in the smooth creation of applications.
+Dependency injection: Components dependent on other components can be easily worked around using this feature. 
+Other generic advantages include clean and maintainable code, unit testing, reusable components, data binding, and excellent responsive experience.
+Support for lazy loading 
+Powerful Router 
+Use of TypeScript 
+
+Disadvantages of Angular 
+==========================
+Steeper learning curve:Angular is an opinionated framework which means that it has its own rules that developers need to learn and follow. 
+Limited SEO Capabilities :Angular is just great for building powerful single-page web applications. However, as with all single-page web applications, there is a disadvantage when it comes to search engine optimization.
+Too many versions 
+Decline in popularity 
+Lot of boilerplate code 
+
+
+
+Angular 14
+===================================
+
+Angular version numbers indicate the level of changes that are introduced by the release. 
+Major , Minor and patch release
+
+You can ng update to any version of Angular, provided that the following criteria are met:
+
+The version you want to update to is supported.
+The version you want to update from is within one major version of the version you want to upgrade to.
+
+. Angular 14 has arrived with stand-alone components, promising to streamline Angular app development by reducing the need for Angular modules. The upgrade from Angular 13 to Angular 14 induces new opportunities for typed forms, improved template diagnosis, and stand-alone components.
+
+The Angular 14 release new features include CLI auto-completion, typed reactive forms, stand-alone components, directives and pipes, and enhanced template diagnostics.
+
+Stand-alone Components:
+The Angular 14 modules are optional; however, the goal is to move away from the existing setup by building pipes, directives, and components.
+
+ Strictly Typed Forms:
+The new Angular version update completely rectifies the major Github issue, i.e., executing strict typing for Angular reactive forms package. The strictly typed forms will enhance a modern-driven approach for Angular to function seamlessly with the existing forms.
+
+Angular CLI Auto-Completion:
+The best part about the Angular CLI auto-completion is that you can improve productivity by delivering the required commands to create modules, directives, and components for your new/existing project. However, the Angular 14 has plenty of commands handy for you.
+you should execute the ng completion command. The next step is to type the ng command and press Tab to explore all the possible options. Enter to opt for one of the options.
+
+Improved Template Diagnostics:
+The new Angular 14 update comes with enhanced template diagnostics to shield the developers from generic errors through compiler reconciliation to typescript code.
+
+Streamlined Page Title Accessibility:
+Generally, your page title distinctly shows the contents of your page during application development. Previously in Angular 13, the whole process of adding titles was aligned with the fresh Route.title property in the Angular router. However, Angular 14 doesn’t provide additional imports that are required while adding a title to your page
+
+Latest Primitives in the Angular CDK:
+What’s new in Angular 14? Well, the Angular Component Dev Kit (CDK) offers a comprehensive set of tools for Angular component development.
+
+Angular DevTools is Now Present Online
+Optional Injectors
+Built-in Enhancements
+Extended Developer Diagnostics
+
+npm install --global @angular/cli@next
+
+--------------------
+
+Bundling is the process of combining all the files to the single file. It is one of the optimization process done by Angular. In this process it produces 5 types of bundled JavaScript files along with their source map files by default. These files will be embedded in index.html file which is loaded by the browser.
+
+1) inline.bundle.js — Contains the scripts which are necessary for WebPack to run.
+
+2) polyfills.bundle.js — Contains the scripts in order to make the application compatible to different browsers.
+
+3) main.bundle.js — Contains code present in all the files of application.
+
+4) styles.bundle.js — Contains styles used by the application.
+
+5) vendor.bundle.js — Contains all Angular + 3rd party libraries in it.
+
+Differences:
+ng-serve: Compiles and runs the application from the memory and as a result it is only used during the development process. It doesn’t write the build files to any folder. Hence this process cannot be used to deploy in another server.
+
+ng-build: Compiles the application and produces the build files to an external folder. The name of the output folder is decided by the value of outputPath property present in the ‘build’ section in ‘angular.json’ file. As a result this output folder generated at the end can be used to deploy in any external server.
+
+-------------------------
+
+AOT and JIT Compiler in Angular 
+=================================
+
+An angular application mainly consists of HTML templates, their components which include various TypeScript files. 
+There are some unit testing and configuration file. Whenever we run over an application, the browser cannot understand the code directly hence we have to compile our code.
+
+Every Angular application mainly consists of components and templates as the Angular written using TypeScript language, which the browser cannot understand. Therefore, in order to get understand by the browser all the Angular applications need to be compiled first before loading or running inside the browser.
+
+There are two main ways of compiling Angular code to JavaScript.
+
+Just-in-time (JIT) compilation — This is when the code is compiled in the browser at runtime.
+Ahead-of-time (AOT) compilation — This is when the code is compiled as part of the build process, hence the name ahead-of-time.
+
+Starting with Angular version 9, the default compilation of choice is AOT. This means that whenever you build your Angular application for production with the command ng build --prod, the application will also be compiled as part of the build process.
+
+For Angular version 8 and older, to compile using AOT, use the command ng build --prod --aot=true.
+
+JIT Compilation
+=============
+
+Until Angular 8, JIT compilation is the default compilation. Since Angular 9, AOT Compilation is the default mode of compilation.
+
+Just in time compiler provides compilation during the execution of the program at a run time before execution. In simple words, code get compiles when it’s needed, not at the build time. 
+
+When the ng-serve or ng-build command executes, type of compilation depends on the ‘aot’ value present in the respective sections in ‘angular.json’ file.
+
+1.ng serve — aot=true
+2.ng build — aot=true
+
+As the name suggests, compilation is done during the run time of application. Browser downloads the compiler along with application files. Compiler is about 45% of the size of vendor.bundle.js file which was loaded in the browser.
+
+Why and When Should you use Just In Time Compiler ?
+
+Just in time compiler compiles each file separately and it’s mostly compiled in the browser. You don’t have to build your project again after changing your code.
+Most compiling is done on the browser side, so it will take less compiling time.
+If you have a big project or a situation where some of your components don’t come in use most of the time then you should use the Just in time compiler.
+Just in Time compiler is best when your application is in local development.
+
+In case of Just in time, not all code is compiled at the initial time. Only necessary component which are going to be needed at the starting of your application will be compiled. Then if the functionality is need in your project and it’s not in compiled code, that function or component will be compiled.
+This process will help to reduce the burden on the CPU and make your app render fast.
+One more interesting thing is, you can see and link to your source code in inspect mode because Just in Time, compiles your code with JIT mode and a map file.
+
+Advantage:
+The developer does not need to compile it manually at command prompt (CLI) for each and every modification of application code.
+
+Disadvantages:
+
+1. User has to wait for the compiler to load in the browser first and then application loads. Hence waiting time is increased.
+2. The size of the application is increased due to presence of compiler which will effect the overall performance of the application during runtime.
+3. In this, template binding errors were not detected i.e. the compiler doesn’t throw any error during the build process.
+4. Performance is slower, because every time when we run the application, the templates will be loaded into browser and compiled in the browser at run time. it takes some time to compile.
+
+AOT Compilation
+==================
+
+In this process, compilation is done during the build process and compiled files which were bundled, downloaded by the browser. As compilation is already done, vendor.bundle.js file doesn’t contain compiler code and hence it’s size decreases by nearly 50%.
+
+The Angular ahead-of-time (AOT) compiler converts your Angular HTML and TypeScript code into efficient JavaScript code during the build phase before the browser downloads and runs that code. Compiling your application during the build process provides a faster rendering in the browser.
+
+Why should you use the Ahead of Time compiler ?
+
+When you are using Ahead of Time Compiler, compilation only happens once, while you build your project.
+We don’t have to ship the HTML templates and the Angular compiler whenever we enter a new component.
+It can minimize the size of your application.
+The browser does not need to compile the code in run time, it can directly render the application immediately, without waiting to compile the app first so, it provides quicker component rendering.
+The Ahead of time compiler detects template error earlier. It detects and reports template binding errors during the build steps before users can see them.
+AOT provides better security. It compiles HTML components and templates into JavaScript files long before they are served into the client display. So, there are no templates to read and no risky client-side HTML or JavaScript evaluation. This will reduce the chances of injections attacks.
+
+We use Typescript, HTML, style-sheets to develop our Angular project and ng build –prod or ng build to build our source code into bundles which include JS files, index.html, style-sheets, and assets files.
+----
+Angular Ivy is the new compilation and rendering pipeline in Angular version 9 and newer. Angular Ivy is super-fast and efficient compared to its predecessor View Engine.
+
+The main things that will happen during the compilation are tree-shaking, bundling, uglification, and minification of code. In addition, the compiler removes Angular specific decorators, constructor parameters, and unused code.
+
+The compilation happens in three main phases, as follows:
+---------------
+Code analysis
+This is where the compiler analyses Angular specific metadata such as @Component() and @Input(). The metadata is what gives Angular the required info that it uses to construct instances of the application, for example, how to create a component and produce a visual representation of it. Angular represents the overall structure of decorator metadata inside .metadata.json files.
+
+Code generation
+During the second phase of compilation, the compiler will interpret the output of the .metadata.json files produced in phase one above. It will also check if the semantics of the metadata are compliant with compiler rules.
+
+Template type checking
+The final phase of the compilation has a lot to do with Angular templates, i.e., the files that hold HTML code. In this phase, the compiler will type-check expressions so that they do not cause crashes at runtime.
+
+Advantages :
+-------------
+Faster rendering of application with AOT as the browser downloads only pre-compiled version of the application. The browser loads executable code so it can render the application immediately, without waiting to compile the app first.
+
+Smaller downloading size of application. There’s no need to download the Angular compiler if the app is already compiled. The compiler is roughly half of Angular itself, so omitting it dramatically reduces the application payload.
+
+In this, template binding errors were detected during build process of the application. Hence template errors were identified earlier.
+
+Faster rendering
+Fewer asynchronous requests
+Smaller Angular framework download size
+Quick detection of template errors
+Better security
+
+Minor Drawbacks of AOT
+-----------
+The advantages that AOT compilation offers far outweigh its drawbacks. However, it is good to be aware of some minor issues with AOT.
+
+DevOps Build pipelines or local builds will normally take longer if you are using AOT compilation compared to JIT compilation.
+AOT does not support arrow or lambda functions and function expressions in metadata expressions. An error is generated during the analysis phase of the compilation if you happen to have such functions in metadata expressions. Note: Newer versions of Angular will try to automatically do this conversion for you.
+
+=====
+
+JIT	
+AOT
+
+JIT downloads the compiler and compiles code exactly before Displaying in the browser.
+AOT has already complied with the code while building your application, so it doesn’t have to compile at runtime.
+
+Loading in JIT is slower than the AOT because it needs to compile your application at runtime.	
+Loading in AOT is much quicker than the JIT because it already has compiled your code at build time.
+
+JIT is more suitable for development mode.	
+AOT is much suitable in the case of Production mode.
+
+Bundle size is higher compare to AOT.	
+Bundle size optimized in AOT, in results AOT bundle size is half the size of JIT bundles.
+
+You can run your app in JIT with this command:
+ng build OR ng serve
+To run your app in AOT you have to provide –aot at the end like:
+ng build --aot OR ng serve --aot  
+
+You can catch template binding error at display time.	
+You can catch the template error at building your application.
+
+
+You can compile your angular application in two ways: JIT and AOT. 
+Both are suitable for a different scenario like you can use JIT for development mode and AOT is better in production mode.  
+Implementing features and debugging is easy in JIT mode since you have to map files while AOT does not have it. 
+However, that AOT provides a big benefit to angular developers for production mode by reducing bundle size and making your app render faster.
+
+NgModules
+===========
+NgModules are containers that reserve a block of code to an application domain or a workflow. @NgModule takes a metadata object that generally describes the way to compile the template of a component and to generate an injector at runtime. 
+In addition, it identifies the module's components, directives, and pipes, making some of them public, through the export property so that external components can use them.
+
+Modules are a great way to organize an application and extend it with capabilities from external libraries.
+
+Angular libraries are NgModules, such as FormsModule, HttpClientModule, and RouterModule. Many third-party libraries are available as NgModules such as Material Design, Ionic, and AngularFire2.
+
+NgModules consolidate components, directives, and pipes into cohesive blocks of functionality, each focused on a feature area, application business domain, workflow, or common collection of utilities.
+
+Modules can also add services to the application. Such services might be internally developed, like something you'd develop yourself or come from outside sources, such as the Angular router and HTTP client.
+
+Modules can be loaded eagerly when the application starts or lazy loaded asynchronously by the router.
+
+NgModules configure the injector and the compiler and help organize related things together.
+
+An NgModule is a class marked by the @NgModule decorator. @NgModule takes a metadata object that describes how to compile a component's template and how to create an injector at runtime. It identifies the module's own components, directives, and pipes, making some of them public, through the exports property, so that external components can use them. @NgModule can also add service providers to the application dependency injectors.
+
+NgModules are Angular’s way to group blocks of code that have related domain, workflow, or capabilities. They describe how the application fits together.
+
+NgModule metadata does the following:
+-------------------------------
+Declares which components, directives, and pipes belong to the module
+Makes some of those components, directives, and pipes public so that other module's component templates can use them
+Imports other modules with the components, directives, and pipes that components in the current module need
+Provides services that other application components can use
+Every Angular application has at least one module, the root module. You bootstrap that module to launch the application.
+
+The root module is all you need in an application with few components. As the application grows, you refactor the root module into feature modules that represent collections of related functionality. You then import these modules into the root module.
+
+// imports
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppComponent } from './app.component';
+
+// @NgModule decorator with its metadata
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
+
+Filters in Angular
+======================
+
+Filters are used to format an expression and present it to the user. They can be used in view templates, controllers, or services. Some inbuilt filters are as follows. 
+
+date - Format a date to a specified format.
+filter - Select a subset of items from an array.
+Json - Format an object to a JSON string.
+limitTo -  Limits an array/string, into a specified number of elements/characters.
+lowercase - Format a string to lowercase
+
+ In Angular 1, we had filter which helped format, sort or transform how data was displayed in our templates. Filters can be used with a binding expression or a directive. In Angular 2, we have a similar feature but renamed to Pipes. This rename was to better align of what the feature does
+
+view encapsulation in Angular
+=============================
+View encapsulation defines whether the template and styles defined within the component can affect the whole application or vice versa. 
+The Component decorator provides the encapsulation option which can be used to control how the encapsulation is applied on a per component basis.
+
+Normally if we change a CSS class the effect is seen throughout an application, something special is happening here and it’s called View Encapsulation.
+
+Angular is inspired from Web Components, a core feature of which is the shadow DOM.
+
+The shadow DOM lets us include styles into Web Components without letting them leak outside the component’s scope.
+
+Angular also provides this feature for Components and we can control it with the encapsulation property.
+
+The valid values for this config property are:
+
+ViewEncapsulation.Native- styles from the main HTML do not propagate to the component. 
+The styles of components are only added to the shadow DOM host, ensuring that they only affect elements within their respective components' views.
+If we want Angular to use the shadow DOM we can set the encapsulation parameter to use ViewEncapsulation.Native 
+With ViewEncapsulation.Native styles we set on a component do not leak outside of the component’s scope.
+
+
+ViewEncapsulation.Emulated- styles from the main HTML propagate to the component.
+
+In the ViewEncapsulation.Emulated mode Angular changes our generic CSS class selector to one that targets just a single component type by using automatically generated attributes.
+
+Any styles we define on a component don’t leak out to the rest of the application but with ViewEncapsulation.Emulated our component still inherits global styles from Twitter Bootstrap.
+The styles of components are added to the <head> of the document, making them available throughout the application, but their selectors only affect elements within their respective components' templates.
+
+
+ViewEncapsulation.None. - styles from the component propagate back to the main HTML and therefore are visible to all components on the page.
+And If we don’t want to have any encapsulation at all, we can use ViewEncapsulation.None.
+The styles of components are added to the <head> of the document, making them available throughout the application, so are completely global and affect any matching elements within the document.
+
+The default value is ViewEncapsulation.Emulated and that is the behaviour we are currently seeing.
+
+=======================
+ controllers?
+AngularJS controllers control the data of AngularJS applications. They are regular JavaScript Objects. The ng-controller directive defines the application controller.
+====
+scope in Angular
+==================
+
+The scope in Angular binds the HTML, i.e., the view, and the JavaScript, i.e., the controller. It as expected is an object with the available methods and properties. 
+The scope is available for both the view and the controller. When you make a controller in Angular, you pass the $scope object as an argument. 
+
+The Scope in AngularJS is the binding part between HTML (view) and JavaScript (controller) and it is a built-in object. It contains application data and objects. It is available for both the view and the controller. It is an object with available properties and methods. There are two types of scopes in Angular JS.
+
+$Scope
+$rootScope
+
+When we make a controller in AngularJS, we will pass the $scope object as an argument. In AngularJS, it creates and injects a different $scope object into each controller in an application. Thus, the data and methods attached to $scope inside one controller cannot be accessed on another controller. Amidst the nested controller, the child controller will acquire the parent controller’s scope object. Accordingly, the child controller can access properties added to the parent controller but the parent controller cannot access properties annexed to the child controller.
+
+Understanding the Scope: If we see an AngularJS application that consists of:
+
+The HTML view.
+Model, the data which is available for the current view.
+Controller, the JavaScript function that makes/changes/removes/controls the data.
+The scope is the model and it is a JavaScript object with properties and methods which are available for both the view and the controller.
+
+Root Scope: Root scope is a scope that is created on the HTML element which has the ng-app directive & is contained in all the applications. The availability of root scope is in the whole application.
+
+$rootScope
+$Scope
+$rootScope is a parent object of all “$scope” angular objects created in a webpage.
+$scope is a child object that is used to bind the HTML(view) & Javascript(Controller) in a webpage.
+
+It is created with the ng-app directive.
+It is created with the ng-controller directive.
+
+It is available globally for all the controllers, i.e, the property assigned with “$rootscope” can be used anywhere.
+It is available only to the controller that has created it, i.e. the property assigned with “$scope” can’t be used outside the controller in which it is defined.
+
+In this case, every application has at least a single “$rootscope” & its lifecycle is the same as the app.
+In this case, every controller can have its own scope, which is not shared with others.
+
+Angular applications normally rely on controllers to control the flow of data in an application. This data is then passed into a view to being rendered. To join the controller and view together Angular uses a special object called scope. This scope object acts as an execution context for expressions and is arranged hierarchically mimicking the DOM structure.
+
+=========================
+Template statements
+--------------------
+Template statements are properties or methods used in HTML for responding to user events. With these template statements, the application that you create or are working on, can have the capability to engage users through actions such as submitting forms and displaying dynamic content.
+
+For example, 
+
+<button (click)="deleteHero()">Delete hero</button>
+
+The template here is deleteHero. The method is called when the user clicks on the button.
+===========================================
+
+AOT and JIT
+--------------
+Ahead of Time (AOT) compilation converts your code during the build time before the browser downloads and runs that code. This ensures faster rendering to the browser. To specify AOT compilation, include the --aot option with the ng build or ng serve command. 
+
+The Just-in-Time (JIT) compilation process is a way of compiling computer code to machine code during execution or run time. It is also known as dynamic compilation. JIT compilation is the default when you run the ng build or ng serve CLI commands. 
+
+=============================
+Bootstrap in angular
+--------------------
+Bootstrap is a powerful toolkit. It is a collection of HTML, CSS, and JavaScript tools for creating and building responsive web pages and web applications.
+
+Bootstrap is the most popular HTML, CSS, and JavaScript framework for web front-end development. It’s great for developing responsive, mobile-first web sites. The Bootstrap website is available at http://getbootstrap.com/. The Bootstrap framework can be used together with modern JavaScript web & mobile frameworks like Angular.
+
+There are two ways to embed the bootstrap library into your application. 
+
+Angular Bootstrap via CDN - Bootstrap CDN is a public Content Delivery Network. It enables you to load the CSS and JavaScript files remotely from its servers. 
+Angular Bootstrap via NPM - Another way to add Bootstrap to your Angular project is to install it into your project folder by using NPM (Node Package Manager). 
+Downloading Bootstrap files and adding them to the src/assets folder of your Angular project
+
+Open file src/index.html and insert
+
+the <link> element at the end of the head section to include the Bootstrap CSS file
+a <script> element to include jQuery at the bottom of the body section
+a <script> element to include the Bootstrap JavaScript file at the bottom of the body section
+
+npm install bootstrap 
+npm install jquery
+------------------------------------------------------
+
+Eager and Lazy loading
+=======================
+Eager loading is the default module-loading strategy. Feature modules under Eager loading are loaded before the application starts. This is typically used for small size applications.The browser will store all the content in its cache. However, websites having large content files tend to load slower with this method.
+Pages with fewer images and more textual content use eager loading.
+
+Lazy loading dynamically loads the feature modules when there's a demand. This makes the application faster. It is used for bigger applications where all the modules are not required at the start of the application.
+Lazy loading improves a website’s performance by loading the required content first and delaying the rest of the page content. The remaining content is loaded only when the user needs it. The browser loads only a portion of the content which the user requires. As a result, the time taken to load the website is reduced.
+
+Pre-Loading: used to load specific feature modules that are very likely to be used soon after the application started.
+----------------------------------------------------------------
+
+Type of DOM that Angular implement
+==================================
+DOM (Document Object Model) treats an XML or HTML document as a tree structure in which each node is an object representing a part of the document. 
+
+Angular uses the regular DOM. This updates the entire tree structure of HTML tags until it reaches the data to be updated. However, to ensure that the speed and performance are not affected, Angular implements Change Detection.
+
+Angular Ivy is a new Angular renderer, which is radically different from anything we have seen in mainstream frameworks, because it uses incremental DOM.
+----
+Every component creates a new virtual DOM tree every time it gets rerendered. React compares the new virtual DOM tree with the old one and then applies a series of transformations to the browser DOM to match the new virtual DOM tree.
+
+Virtual DOM has two main advantages:
+
+We can use any programming language to implement the component’s render function, so we don’t need to compile anything. React developers mainly uses JSX, but we can use plain JavaScript as well.
+We get a value as a result of rendering component. It can be used for testing, debugging, etc..
+
+Incremental DOM
+Incremental DOM is used internally at Google, and it is defined by this key idea:
+
+Every component gets compiled into a series of instructions. These instructions create DOM trees and update them in-place when the data changes.
+
+Why did the Google team go with incremental DOM instead of virtual DOM?
+
+They have one goal in mind: applications have to perform well on mobile devices. This mainly meant optimizing two things: the bundle size and the memory footprint.
+
+To achieve the two goals:
+
+The rendering engine itself has to be tree shakable
+The rendering engine has to have low memory footprint
+
+When using incremental DOM, the framework does not interpret the component. Instead, the component references instructions. If it doesn’t reference a particular instruction, it will never be used. And since we know this at compile time, we can omit the unused instruction from the bundle.
+Virtual DOM requires an interpreter. What part of that interpreter is needed and what part is not isn’t known at compile time, so we have to ship the whole thing to the browser.
+
+Incremental DOM, on the other hand, doesn’t need any memory to rerender the view if it doesn’t change the DOM. We only have to allocate the memory when the DOM nodes are added or removed. And the size of the allocation is proportional to the size of the DOM change.
+Since most of render/template calls don’t change anything (or change very little), this can result in huge memory savings.
+
+----
+
+
+
+

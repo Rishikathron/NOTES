@@ -1,0 +1,83 @@
+Dependency Injection
+===========================
+
+When you develop a smaller part of your system, like a module or a class, you may need to use features from other classes. For example, you may need an HTTP service to make backend calls. 
+Dependency Injection, or DI, is a design pattern and mechanism for creating and delivering some parts of an application to other parts of an application that require them. 
+Angular supports this design pattern and you can use it in your applications to increase flexibility and modularity.
+
+In Angular, dependencies are typically services, but they also can be values, such as strings or functions. 
+An injector for an application (created automatically during bootstrap) instantiates dependencies when needed, using a configured provider of the service or value.
+
+DI is wired into the Angular framework and allows classes with Angular decorators, such as Components, Directives, Pipes, and Injectables, to configure dependencies that they need.
+
+Two main roles exist in the DI system: dependency consumer and dependency provider.
+
+Angular facilitates the interaction between dependency consumers and dependency providers using an abstraction called Injector. When a dependency is requested, the injector checks its registry to see if there is an instance already available there. If not, a new instance is created and stored in the registry. Angular creates an application-wide injector (also known as "root" injector) during the application bootstrap process, as well as any other injectors as needed. In most cases you don't need to manually create injectors, but you should know that there is a layer that connects providers and consumers.
+
+It keeps code flexible, testable, and mutable. Classes can inherit external logic without knowing how to create it. Any consumers of those classes also do not need to know anything.
+
+Dependency injection offers some incredible advantages. Here are some of them
+---------------------
+Dependency Injection helps in Unit testing.
+Boilerplate code is reduced, as initializing of dependencies is done by the injector component.
+Extending the application becomes more manageable.
+It helps to enable loose coupling, which is essential in application programming. 
+to ensure that different parts of your application are well isolated and can't interfere with each other
+
+Creating an injectable service
+-------------------------------
+
+Angular distinguishes components from services to increase modularity and reusability. By separating a component's view-related features from other kinds of processing, you can make your component classes lean and efficient.
+
+A component can delegate certain tasks to services, such as fetching data from the server, validating user input, or logging directly to the console. By defining such processing tasks in an injectable service class, you make those tasks available to any component. You can also make your application more adaptable by injecting different providers of the same kind of service, as appropriate in different circumstances.
+
+Services can depend on other services. 
+
+ng generate service heroes/hero
+
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class HeroService {
+  constructor() { }
+}
+
+The @Injectable() decorator specifies that Angular can use this class in the DI system. 
+Decorator that marks a class as available to be provided and injected as a dependency.
+
+The metadata, providedIn: 'root', means that the HeroService is visible throughout the application.
+The following options specify that this injectable should be provided in one of the following injectors:
+
+'root' : The application-level injector in most apps.
+'platform' : A special singleton platform injector shared by all applications on the page.
+'any' : Provides a unique instance in each lazy loaded module while all eagerly loaded modules share one instance.
+
+To inject a service as a dependency into a component, you can use component's constructor() and supply a constructor argument with the dependency type. 
+constructor(heroService: HeroService)
+
+If you specify the service class as the provider token, the default behavior is for the injector to instantiate that class using the new operator.
+
+[{ provide: Logger, useClass: Logger }]
+
+The provide property holds the token that serves as the key for both locating a dependency value and configuring the injector.
+The second property is a provider definition object, which tells the injector how to create the dependency value. The provider-definition key can be one of the following:
+useClass - this option tells Angular DI to instantiate a provided class when a dependency is injected
+useExisting - allows you to alias a token and reference any existing one.
+useFactory - allows you to define a function that constructs a dependency.
+useValue - provides a static value that should be used as a dependency.
+
+
+ModuleInjector
+The ModuleInjector can be configured in one of two ways by using:
+
+The @Injectable() providedIn property to refer to @NgModule(), or root
+The @NgModule() providers array
+
+ElementInjector
+Angular creates ElementInjector hierarchies implicitly for each DOM element.
+
+Providing a service in the @Component() decorator using its providers or viewProviders property configures an ElementInjector. 
+
+Angular's resolution behavior can be modified with @Optional(), @Self(), @SkipSelf() and @Host(). Import each of them from @angular/core and use each in the component class constructor when you inject your service.

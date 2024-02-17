@@ -1,0 +1,21 @@
+SonarQube is a Code Quality Assurance tool that collects and analyzes source code, and provides reports for the code quality of your project. It combines static and dynamic analysis tools and enables quality to be measured continually over time.
+
+ This provides users with a rich searchable history of the code to analyze where the code is messing up and determine whether or not it is styling issues, code defeats, code duplication, lack of test coverage, or excessively complex code. 
+
+
+Sonarqube also ensures code reliability, Application security, and reduces technical debt by making your code base clean and maintainable.
+
+Static code analysis is done without executing any of the code. It is a collection of algorithms and techniques to analyze source code to automatically find potential errors and poor coding practices. This is done with compiler errors and run-time debugging techniques such as white box testing. Static code analysis is also considered a way to automate code review process. 
+
+SonarQube is an open-source platform that can identify bugs and security vulnerabilities and enforce coding standards to ensure consistent practices. SonarQube can be self-hosted or deployed to the cloud.
+
+SonarQube - Best for maintaining code quality
+ReSharper - Best for refactoring code
+CodeClimate - Best for GitHub users
+CAST - Best for performing software assessments at scale
+Codacy - Best for CI/CD integrations
+
+Code analysis tools, also called static analysis tools, can help you deliver quality code for any software project. 
+
+Code analysis tools are software applications that analyze source code for potential coding errors without running it. 
+Developers use them to identify and fix issues like bugs or security risks in the software development process.

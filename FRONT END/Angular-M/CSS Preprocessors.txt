@@ -1,0 +1,41 @@
+Sass stands for Syntactically Awesome Stylesheets.
+It is an extension of CSS3, adding nested rules, mixins, variables, selector inheritance, etc.
+
+Sass can be used in three ways
+
+As a command line tool
+As a standalone Ruby module
+As a plugin for any Rack-enabled framework
+
+Key features for Sass include
+
+Full CSS3-compatible
+Language extensions such as nesting, variables, and mixins
+Many useful functions for manipulating colors and other values
+Advanced features like control directives for libraries
+Well-formatted, customizable output
+
+Variables in Sass begin with a ($) sign and variable assignment is done with a colon(:).
+
+The difference between Sass and SCSS is that,
+
+Sass is a CSS pre-processor with syntax advancements and an extension of CSS3
+Sass has two syntax
+The first syntax is “SCSS” and it uses the .scss extension
+The other syntax is indented syntax or just “Sass” and it uses the .sass extension
+While Sass has loose syntax with white space and no semicolons, the SCSS resembles more to CSS
+Any CSS valid document can be converted to Sass by simply changing the extension from.CSS to.SCSS.
+
+@EXTEND directive provides a simple way to allow a selector to inherit the styles of another one.
+
+
+In LESS, you can write a basic logic statement using a ‘guarded mixin’, which is equivalent to Sass if statements
+In LESS, you can loop through numeric values using recursive functions while Sass allows you to iterate any kind of data
+In Sass, you can write your own handy functions
+
+
+Mixins enable embedding all the properties of a class into another class by including the class name as one of its properties. It is just like variables but for whole classes.
+
+@mixin A mixin lets you make groups of CSS declarations that you want to reuse throughout your site
+@extend directive provides a simple way to allow a selector to inherit/extend the styles of another one.
+%placeholder are classes that aren’t output when your SCSS is compiled

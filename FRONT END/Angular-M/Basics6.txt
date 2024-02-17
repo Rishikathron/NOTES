@@ -1,0 +1,21 @@
+The @ViewChild and @ViewChildren decorators in Angular provide a way to access and manipulate DOM elements, directives and components. 
+You can use ViewChild if you need to query one element from the DOM and ViewChildren for multiple elements.
+
+The decorator takes the following meta information:
+
+selector - the selector of the element to query. This can be a directive type or a name.
+read - read a different token from the queried elements.
+static - This is new in Angular 8 and indicates whether or not to resolve query results before change detection runs.
+
+ViewChild can take the following selectors:
+
+Classes with the @Component or @Directive decorators i.e components and directives,
+Template reference variables,
+Providers,
+TemplateRef
+
+
+Accessing DOM elements, directives, web components etc. is one of the most common requirements of a web developer.
+Angular has it’s own cool way of accessing them and using it somewhere in the template itself. This is done with the help of template reference variables. We have to mark the element with a hash(#) followed by an unique identifier name.
+
+(keyup)=”0" which helps in forcing angular to run change detection. When we type anything into the input the keyup event is fired.

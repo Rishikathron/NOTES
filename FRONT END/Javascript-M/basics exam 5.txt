@@ -1,0 +1,419 @@
+
+JSON
+=========
+
+JSON is a text-based data format following JavaScript object syntax, which was popularized by Douglas Crockford. 
+It is useful when you want to transmit data across a network and it is basically just a text file with an extension of .json, and a MIME type of application/json.
+JSON (JavaScript Object Notation) is a lightweight format that is used for data interchanging. 
+It is based on a subset of JavaScript language in the way objects are built in JavaScript.
+
+When receiving the data from a web server, the data is always in a string format.
+Parsing: Converting a string to a native object
+JSON.parse(text);
+
+When sending data to a web server, the data has to be in a string format. 
+Stringification: converting a native object to a string so it can be transmitted across the network
+JSON.stringify(object);
+
+Below are the list of syntax rules of JSON
+
+The data is in name/value pairs
+The data is separated by commas
+Curly braces hold objects
+Square brackets hold arrays
+
+When exchanging data between a browser and a server, the data can only be text. Since JSON is text only, it can easily be sent to and from a server,
+ and used as a data format by any programming language.
+ 
+ 
+Progressive web applications (PWAs) 
+=================================
+are a type of mobile app delivered through the web, built using common web technologies including HTML, CSS and JavaScript. 
+These PWAs are deployed to servers, accessible through URLs, and indexed by search engines.
+
+ web apps that use service workers, manifests, and other web-platform features in combination 
+ with progressive enhancement to give users an experience on par with native apps.
+ 
+ A Native App is a software application built in a specific programming language for a specific device platform, either IOS or Android.
+ 
+ PWAs are built with the capabilities like push notifications and the ability to work offline. They are also built on and enhanced with modern APIs 
+ which makes it easy to deliver improved capabilities along with reliability and the ability to install them on any device.
+ 
+ They are responsive and work with many different screen sizes.
+They function just like normal Native Apps.
+The updates are independent, you don't need to visit the play store for an update.
+They're built with common web technologies.
+They're fast and lightweight.
+They work offline unlike other sites.
+They are discoverable via search engine.
+They are easily installable.
+Low maintenance cost.
+--------------------------------------------------------------------------------------------------------
+
+redirect new page in javascript
+
+In vanilla javascript, you can redirect to a new page using the location property of window object. The syntax would be as follows,
+
+function redirect() {
+  window.location.href = "newPage.html";
+}
+
+----
+
+There are 3 possible ways to check whether a string contains a substring or not,
+
+Using includes: 
+--------------
+ES6 provided String.prototype.includes method to test a string contains a substring
+var mainString = "hello",
+  subString = "hell";
+mainString.includes(subString);
+
+Using indexOf: 
+-------------
+In an ES5 or older environment, you can use String.prototype.indexOf which returns the index of a substring. 
+If the index value is not equal to -1 then it means the substring exists in the main string.
+
+var mainString = "hello",
+  subString = "hell";
+mainString.indexOf(subString) !== -1;
+
+Using RegEx: 
+---------------
+The advanced solution is using Regular expression's test method(RegExp.test), which allows for testing for against regular expressions
+var mainString = "hello",
+  regex = /hell/;
+regex.test(mainString);
+
+ validate an email in javascript
+ ................................
+ 
+You can validate an email in javascript using regular expressions. 
+It is recommended to do validations on the server side instead of the client side. Because the javascript can be disabled on the client side.
+
+function validateEmail(email) {
+  var re =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
+.....................................
+You can use window.location.href expression to get the current url path and you can use the same expression for updating the URL too.
+ You can also use document.URL for read-only purposes but this solution has issues in FF.
+
+console.log("location.href", window.location.href); // Returns full URL
+
+The below Location object properties can be used to access URL components of the page,
+
+href - The entire URL
+protocol - The protocol of the URL
+host - The hostname and port of the URL
+hostname - The hostname of the URL
+port - The port number in the URL
+pathname - The path name of the URL
+search - The query portion of the URL
+hash - The anchor portion of the URL
+
+...........................
+
+You can use URLSearchParams to get query string values in javascript. Let's see an example to get the client code value from URL query string,
+
+const urlParams = new URLSearchParams(window.location.search);
+const clientCode = urlParams.get("clientCode");
+
+..........................
+
+You can check whether a key exists in an object or not using three approaches,
+
+Using in operator: You can use the in operator whether a key exists in an object or not
+"key" in obj;
+and If you want to check if a key doesn't exist, remember to use parenthesis,
+!("key" in obj);
+
+Using hasOwnProperty method:
+You can use hasOwnProperty to particularly test for properties of the object instance (and not inherited properties)
+obj.hasOwnProperty("key"); // true
+
+Using undefined comparison: 
+If you access a non-existing property from an object, the result is undefined. 
+Let’s compare the properties against undefined to determine the existence of the property.
+const user = {
+  name: "John",
+};
+
+console.log(user.name !== undefined); // true
+console.log(user.nickName !== undefined); // false
+
+...............................
+
+You can use the for-in loop to loop through javascript object. 
+You can also make sure that the key you get is an actual property of an object, and doesn't come from the prototype using hasOwnProperty method.
+
+var object = {
+  k1: "value1",
+  k2: "value2",
+  k3: "value3",
+};
+
+for (var key in object) {
+  if (object.hasOwnProperty(key)) {
+    console.log(key + " -> " + object[key]); // k1 -> value1 ...
+  }
+}
+
+The for-loop is a commonly used iteration syntax in javascript. It has both pros and cons
+
+Pros
+Works on every environment
+You can use break and continue flow control statements
+
+Cons
+Too verbose
+Imperative
+You might face one-by-off errors
+
+.....................................
+
+test for an empty object
+
+There are different solutions based on ECMAScript versions
+
+Using Object entries(ECMA 7+): 
+You can use object entries length along with constructor type.
+
+Object.entries(obj).length === 0 && obj.constructor === Object; // Since date object length is 0, you need to check constructor check as well
+
+Using Object keys(ECMA 5+):
+You can use object keys length along with constructor type.
+
+Object.keys(obj).length === 0 && obj.constructor === Object; // Since date object length is 0, you need to check constructor check as well
+
+Using for-in with hasOwnProperty(Pre-ECMA 5):
+You can use a for-in loop along with hasOwnProperty.
+function isEmpty(obj) {
+  for (var prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      return false;
+    }
+  }
+
+  return JSON.stringify(obj) === JSON.stringify({});
+}
+
+....................................
+
+ arguments object
+ -----------------
+The arguments object is an Array-like object accessible inside functions that contains the values of the arguments passed to that function. 
+For example, let's see how to use arguments object inside sum function,
+
+function sum() {
+  var total = 0;
+  for (var i = 0, len = arguments.length; i < len; ++i) {
+    total += arguments[i];
+  }
+  return total;
+}
+
+sum(1, 2, 3); // returns 6
+
+Note: You can't apply array methods on arguments object. But you can convert into a regular array as below.
+
+var argsArray = Array.prototype.slice.call(arguments);
+
+.............................
+
+You can create a function which uses a chain of string methods such as charAt, toUpperCase and slice methods to generate
+ a string with the first letter in uppercase.
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+.................................
+
+You can use new Date() to generate a new Date object containing the current date and time. For example, let's display the current date in mm/dd/yyyy
+
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, "0");
+var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+var yyyy = today.getFullYear();
+
+today = mm + "/" + dd + "/" + yyyy;
+document.write(today);
+------------------------
+
+You need to use date.getTime() method to compare date values instead of comparison operators (==, !=, ===, and !== operators)
+
+var d1 = new Date();
+var d2 = new Date(d1);
+console.log(d1.getTime() === d2.getTime()); //True
+console.log(d1 === d2); // False
+
+You can use the toLocaleString() method to convert dates in one timezone to another. 
+For example, let's convert current date to British English timezone as below,
+
+console.log(event.toLocaleString("en-GB", { timeZone: "UTC" })); //29/06/2019, 09:56:00
+-----------------------
+
+You can use ECMAScript 6's String.prototype.startsWith() method to check if a string starts with another string or not. 
+But it is not yet supported in all browsers. Let's see an example to see this usage,
+
+"Good morning".startsWith("Good"); // true
+"Good morning".startsWith("morning"); // false
+
+-------------
+
+JavaScript provided a trim method on string types to trim any whitespaces present at the beginning or ending of the string.
+
+"  Hello World   ".trim(); //Hello World
+If your browser(<IE9) doesn't support this method then you can use below polyfill.
+
+if (!String.prototype.trim) {
+  (function () {
+    // Make sure we trim BOM and NBSP
+    var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+    String.prototype.trim = function () {
+      return this.replace(rtrim, "");
+    };
+  })();
+}
+......................
+
+add a key value pair in javascript
+------------------------------------
+There are two possible solutions to add new properties to an object. Let's take a simple object to explain these solutions.
+
+var object = {
+  key1: value1,
+  key2: value2,
+};
+Using dot notation:
+ This solution is useful when you know the name of the property
+object.key3 = "value3";
+
+Using square bracket notation: 
+This solution is useful when the name of the property is dynamically determined.
+obj["key3"] = "value3";
+
+...................................
+
+No,that's not a special operator. But it is a combination of 2 standard operators one after the other,
+
+A logical not (!)
+A prefix decrement (--)
+At first, the value decremented by one and then tested to see if it is equal to zero or not for determining the truthy/falsy value.
+
+
+You can use the logical or operator || in an assignment expression to provide a default value. The syntax looks like as below,
+
+var a = b || c;
+As per the above expression, variable 'a 'will get the value of 'c' only if 'b' is falsy 
+(if is null, false, undefined, 0, empty string, or NaN), otherwise 'a' will get the value of 'b'.
+
+
+You can define multiline string literals using the '\' character followed by line terminator.
+
+var str =
+  "This is a \
+very lengthy \
+sentence!";
+
+But if you have a space after the '\' character, the code will look exactly the same, but it will raise a SyntaxError.
+
+........................
+
+app shell model
+
+An application shell (or app shell) architecture is one way to build a Progressive Web App that reliably and instantly loads on your users' screens,
+ similar to what you see in native applications. It is useful for getting some initial HTML to the screen fast without a network.
+ 
+.........................
+
+polyfill
+A polyfill is a piece of JS code used to provide modern functionality on older browsers that do not natively support it. 
+For example, Silverlight plugin polyfill can be used to mimic the functionality of an HTML Canvas element on Microsoft Internet Explorer 7.
+
+.............................
+
+The break statement is used to "jump out" of a loop. i.e, It breaks the loop and continues executing the code after the loop.
+
+for (i = 0; i < 10; i++) {
+  if (i === 5) {
+    break;
+  }
+  text += "Number: " + i + "<br>";
+}
+
+The continue statement is used to "jump over" one iteration in the loop. i.e, It breaks one iteration (in the loop), 
+if a specified condition occurs, and continues with the next iteration in the loop.
+
+for (i = 0; i < 10; i++) {
+  if (i === 5) {
+    continue;
+  }
+  text += "Number: " + i + "<br>";
+}
+
+========================
+
+js labels
+------------------
+The label statement allows us to name loops and blocks in JavaScript.
+ We can then use these labels to refer back to the code later. 
+ For example, the below code with labels avoids printing the numbers when they are same,
+
+var i, j;
+
+loop1: for (i = 0; i < 3; i++) {
+  loop2: for (j = 0; j < 3; j++) {
+    if (i === j) {
+      continue loop1;
+    }
+    console.log("i = " + i + ", j = " + j);
+  }
+}
+
+// Output is:
+//   "i = 1, j = 0"
+//   "i = 2, j = 0"
+//   "i = 2, j = 1"
+
+......................................
+
+benefits of keeping declarations at the top
+It is recommended to keep all declarations at the top of each script or function. The benefits of doing this are,
+
+Gives cleaner code
+It provides a single place to look for local variables
+Easy to avoid unwanted global variables
+It reduces the possibility of unwanted re-declarations
+
+
+benefits of initializing variables
+It is recommended to initialize variables because of the below benefits,
+
+It gives cleaner code
+It provides a single place to initialize variables
+Avoid undefined values in the code
+
+======================================
+
+recommendations to create new object
+It is recommended to avoid creating new objects using new Object(). Instead you can initialize values based on it's type to create the objects.
+
+Assign {} instead of new Object()
+Assign "" instead of new String()
+Assign 0 instead of new Number()
+Assign false instead of new Boolean()
+Assign [] instead of new Array()
+Assign /()/ instead of new RegExp()
+Assign function (){} instead of new Function()
+You can define them as an example,
+
+var v1 = {};
+var v2 = "";
+var v3 = 0;
+var v4 = false;
+var v5 = [];
+var v6 = /()/;
+var v7 = function () {};

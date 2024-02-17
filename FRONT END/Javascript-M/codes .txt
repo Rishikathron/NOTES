@@ -1,0 +1,256 @@
+// console.log("hi");
+// const cat = {
+//     name : 'Bertie',
+//     breed : 'Cymric',
+//     color : 'white',
+//     greeting: function greet(na) {
+//       console.log('Meow!,'+na);
+//     }
+//   }
+
+//   console.log(cat.greeting('manasa'));
+
+// var catName=cat['name'];
+// cat.greeting();
+//   console.log(catName);
+
+
+//   music ={
+//     name:'anime',
+//     favourite:2,
+//     clo:null,
+//     manasa:['mana','sa'],
+//     kal:[
+//         {manr:'sam'},
+//         {man:'gam'}
+//     ],
+//     kk:{
+//         mana:'kosam',
+//         mana:'me'
+//     }
+//   }
+//   console.log(music)
+
+function luckyseven(array){
+  console.log(array)
+for(let i=0;i<array.length;i++){
+  console.log(array[i]+array[i+1]+array[i+2])
+  if(array[i]+array[i+1]+array[i+2] === 7){
+    console.log(true)
+    return true;
+  }
+}
+};
+
+  // console.log(luckyseven([0,2,4,1]));
+
+
+  // function simpleClockAngle(num) {
+
+  //   // we got 6 because 360/60 = 6
+  //   // 360 represents the full number of a degrees in a circle and
+  //   // 60 is the number of minutes on a clock, so dividing these two numbers
+  //   // gives us the number of degrees for one minute
+  //   return 6 * num;
+  
+  // }
+  
+  // console.log(simpleClockAngle(19));
+
+
+
+
+  
+
+  // function sum_array(arr) {
+  //   // store our final answer
+  //   var sum = 0;
+  //   // loop through entire array
+  //   for (var i = 0; i < arr.length; i++) {
+  //     // loop through each inner array
+  //     for (var j = 0; j < arr[i].length; j++) {
+  //       // add this number to the current final sum
+  //       sum += arr[i][j];
+  //     }
+  //   }
+    
+  //   return sum;
+  // }
+  
+  // sum_array([[3, 2], [1], [4, 12]]);
+
+
+
+
+
+
+  // function sumArray(arr) {
+  //   return arr.reduce((t, e) => t.concat(e)).reduce((t, e) => t + e)
+  // }
+
+
+
+
+  // function test_divisors(low, high) {
+  
+  //   // we'll store all numbers and strings within an array
+  //   // instead of printing directly to the console
+  //   var output = [];
+    
+  //   for (var i = low; i <= high; i++) {
+      
+  //     // // simply store the current number in the output array
+  //     // output.push(i);
+      
+  //     // // check if the current number is evenly divisible by 3
+  //     // if (i % 3 === 0) { output.push('div3'); }
+  //     if(i%3==0){
+  //       console.log("div3")
+  //     }
+  //     else{
+  //       console.log(i)
+  //     }
+  //   }
+    
+  //   // return all numbers and strings
+  //   return output;
+    
+  // }
+  
+  // console.log(test_divisors(2, 10));
+
+  function oddball(arr){
+
+  // return arr.reduce(function(o,e){
+  //       if(e%2==1){
+  //     return o+=e;
+  //     }
+  // });
+  //   for(let i =0;i<arr.length;i++){
+  //     if((arr[i]%2) != 0){
+  //            sum+=arr[i];      
+  //     }
+  //   }
+   // return sum;
+  }
+ 
+//   function oneeach(arr){
+//     for(let i =0;i<arr.length;i++){
+//       console.log(arr[i]+1)
+//     }
+//   }
+
+// console.log(oneeach([1,2,3,4]))
+
+// module.exports = function (a, b) {
+//   return a.length === b.length && (a + a).indexOf(b) > -1;
+// };
+
+
+// let a = 0;
+// let b = false;
+// console.log((a == b));
+// console.log((a === b));
+
+
+
+
+
+
+
+// Code 1
+
+// (function(a){
+//   return (function(){
+//     console.log(a);
+//     a = 23;
+//   })()
+// })(45);
+
+
+function rotateRight(arr,rotations){
+  if(rotations == 0) return arr;
+  for(let i = 0; i < rotations;i++){
+    let element = arr.pop();
+    arr.unshift(element);
+  }
+  return arr;
+}
+rotateRight([2, 3, 4, 5, 7], 3); // Return [4,5,7,2,3]
+rotateRight([44, 1, 22, 111], 5); // Returns [111,44,1,22]
+
+//61. Write the code given If two strings are anagrams of one another, then return true.function(s, t) {
+  function ana(s, t) {
+    if(s === t) return true
+    if(s.length !== t.length) return false
+   
+    let count = {}
+   
+    for(let letter of s)
+     count[letter] = (count[letter] || 0) + 1
+   
+    for(let letter of t) { 
+     if(!count[letter]) return false
+     else --count[letter]
+    }
+   
+    return true;
+   }
+
+   console.log(ana('mana','anaym'))
+
+
+ //  63. In JavaScript, how do you turn an Object into an Array []?
+let obj = { id: "1", name: "user22", age: "26", work: "programmer" };
+
+//Method 1: Convert the keys to Array using - Object.keys()
+console.log(Object.keys(obj));
+// ["id", "name", "age", "work"]
+
+// Method 2 Converts the Values to Array using - Object.values()
+console.log(Object.values(obj));
+// ["1", "user22r", "26", "programmer"]
+
+// Method 3 Converts both keys and values using - Object.entries()
+console.log(Object.entries(obj));
+//[["id", "1"],["name", "user22"],["age", "26"],["work", “programmer"]]
+
+
+
+
+
+//finding_all_the_occurrences_of_an_element
+
+const array = ["manasa","jk","manasa","k","manasa","l","p"];
+const element = "manasa";
+
+console.log(array.indexOf(element)) // 0
+
+let index=array.indexOf(element);
+let indices = [];
+
+while(index !== -1){
+indices.push(index);
+index = array.indexOf(element,index+1);
+}
+console.log(indices) // [ 0, 2, 4 ]
+
+console.log(array.indexOf(element,-5 )) // 2
+console.log(array.indexOf(element,5 )) //-1
+console.log(array.indexOf(element,4 )) //4
+
+
+//#finding_if_an_element_exists_in_the_array_or_not_and_updating_the_array
+
+const array = ["ab","cd","e","f","gh"];
+ const ele = "i";
+
+ if(array.indexOf(ele) !== -1){
+  let mm=[];
+  mm.push(ele)
+  console.log(`element exists: ${mm}`)
+ }
+ else{
+  array.push(ele)
+  console.log(`element not exists so pushed: ${array}`)
+ }

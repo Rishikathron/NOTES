@@ -1,0 +1,159 @@
+Pipes
+-------------
+
+Pipes are simple functions to use in template expressions to accept an input value and return a transformed value. Pipes are useful because you can use them throughout your application, while only declaring each pipe once.
+This is useful for things like formatting dates, currencies, and other data.
+
+Pipes are defined using the pipe “|” symbol. 
+Pipes can be chained with other pipes.
+Pipes can be provided with arguments by using the colon (:) sign.
+
+Angular supports many built-in pipes. However, you can also create custom pipes that suit your requirements.
+
+
+Built-in pipes
+========================
+Angular provides built-in pipes for typical data transformations, including transformations for internationalization (i18n), which use locale information to format data. The following are commonly used built-in pipes for data formatting:
+
+DatePipe: Formats a date value according to locale rules.
+
+{{ value_expression | date [ : format [ : timezone [ : locale ] ] ] }}
+{{ dateObj | date }}               // output is 'Jun 15, 2015'
+{{ dateObj | date:'medium' }}      // output is 'Jun 15, 2015, 9:43:11 PM'
+{{ dateObj | date:'shortTime' }}   // output is '9:43 PM'
+{{ dateObj | date:'mm:ss' }}       // output is '43:11'
+
+UpperCasePipe: Transforms text to all upper case.
+{{ value_expression | uppercase }}
+{{value | uppercase 
+
+LowerCasePipe: Transforms text to all lower case.
+{{ value_expression | lowercase }}
+{{value | lowercase}}
+
+CurrencyPipe: Transforms a number to a currency string, formatted according to locale rules.
+{{ value_expression | currency [ : currencyCode [ : display [ : digitsInfo [ : locale ] ] ] ] }}
+{{a | currency}}
+{{b | currency:'CAD':'symbol':'4.2-2':'fr'}}
+
+DecimalPipe: Transforms a number into a string with a decimal point, formatted according to locale rules.
+{{ value_expression | number [ : digitsInfo [ : locale ] ] }}
+{{pi | number}}
+{{pi | number:'4.1-5':'fr'}} output: '0 003,14159'
+
+PercentPipe: Transforms a number to a percentage string, formatted according to locale rules.
+{{ value_expression | percent [ : digitsInfo [ : locale ] ] }}
+{{a | percent}}
+{{b | percent:'4.3-5':'fr'}} b: number = 1.3495; output '0 134,950 %'
+
+======================
+Custom Pipes
+============================
+To create a Custom Pipe, first, You need to follow these steps
+
+Create a pipe class
+Decorate the class with @pipe decorator.
+Give a name to the pipe in the name meta data of the @pipe decorator. We will use this name in the template.
+The pipe class must implement the PipeTransform interface. The interfaces contain only one method transform.
+The first parameter to the transform method is the value to be transferred. The transform method must transform the value and return the result. You can add any number of additional arguments to the transform method.
+Declare the pipe class in the Angular Module (app.module.ts)
+Use the custom pipe just as you use other pipes.
+
+
+import {Pipe, PipeTransform} from '@angular/core';
+ 
+@pipe({
+    name: 'tempConverter'
+})
+export class TempConverterPipe implements PipeTransform {
+    transform(value: number, unit: string) {
+        if(value && !isNaN(value)) {
+            if (unit === 'C') {
+                var temperature = (value - 32) /1.8 ;
+                return temperature.toFixed(2);
+            } else if (unit === 'F'){
+                var temperature = (value * 1.8 ) + 32
+                return temperature.toFixed(2);
+            }
+        }
+        return;
+    }
+}
+ 
+
+{{Fahrenheit | tempConverter:'C'}}
+
+
+Pure and Impure Pipes:
+==============================
+These are pipelines that only employ pure functions. As a result, a pure pipe does not employ any internal state, and the output remains constant as long as the parameters provided remain constant. Angular calls the pipe only when the parameters being provided change. A single instance of the pure pipe is utilized in all components.
+
+Angular calls an impure pipe for each change detection cycle, independent of the change in the input fields. For each of these pipes, several pipe instances are produced. These pipes' inputs can be altered.
+
+By default, all pipelines are pure. However, as demonstrated below, you can specify impure pipes using the pure property.
+
+
+@Pipe({
+    name: 'impurePipe',
+    pure: false/true    
+})
+export class ImpurePipe {}
+
+A pure pipe is only re-evaluated when either the input to the pipe changes or the pipe itself is destroyed. An impure pipe is re-evaluated every time change detection runs.
+=======================
+
+A stateful pipe is a pipe that maintains state between invocations. This is necessary for certain types of pipes that need to keep track of data across multiple invocations, such as a sorting pipe that needs to remember the last sort order so that it can toggle between ascending and descending.
+
+==========================
+
+Yes, it is possible to pass parameters to a pipe in Angular. In order to do so, you need to specify the parameters you want to pass in within the pipe’s signature. For example, if you want to pass in a string and an integer, you would do so like this:
+
+myPipe(string: string, integer: number) {
+// …
+========================
+The async pipe is used to automatically subscribe and unsubscribe from an observable in Angular. This is helpful in cases where you are using observables to fetch data from a remote source, as it will handle the subscription automatically.
+
+Async pipe is used when you have a data stream that you want to automatically unsubscribe from when the component is destroyed. This is useful for when you are using observables or RxJS in your Angular application. For example, you could use the async pipe to automatically unsubscribe from a timer observable when the component is destroyed.
+
+The AsyncPipe subscribes to an observable or promise and returns the latest value it has emitted. When a new value is emitted, the pipe marks the component to be checked for changes.
+
+Let's take a time observable which continuously updates the view for every 2 seconds with the current time.
+
+@Component({
+  selector: 'async-observable-pipe',
+  template: `<div><code>observable|async</code>:
+       Time: {{ time | async }}</div>`
+})
+export class AsyncObservablePipeComponent {
+  time = new Observable(observer =>
+    setInterval(() => observer.next(new Date().toString()), 2000)
+  );
+}
+
+=======================
+
+Pipes are a great way to make your Angular application more modular and efficient. By breaking up your application into smaller pieces, you can more easily reuse code and make changes without affecting the entire application. Pipes also make it easy to format data for display, which can be a big help when working with large data sets.
+====================
+
+Pipes are used for transforming data before it is displayed to the user, while filters are used for formatting data that is already displayed to the user. If you need to modify the data in some way before it is displayed, then you should use a pipe. If you just need to format the data that is already being displayed, then you should use a filter.
+=========================
+Angular pipes can only handle a single return value. If a function or method returns multiple values, then Angular will only take the first value and ignore the rest.
+==========================
+
+ Applying two formats by chaining pipes
+----------------------------------------
+Chain pipes so that the output of one pipe becomes the input to the next.
+
+In the following example, chained pipes first apply a format to a date value, then convert the formatted date to uppercase characters. The first tab for the src/app/app.component.html template chains DatePipe and UpperCasePipe to display the birthday as APR 15, 1988. The second tab for the src/app/app.component.html template passes the fullDate parameter to date before chaining to uppercase, which produces FRIDAY, APRIL 15, 1988.
+
+The chained hero's birthday is
+{{ birthday | date | uppercase}}
+
+===================================
+
+Pipes and precedence
+The pipe operator has a higher precedence than the ternary operator (?:), which means a ? b : c | x is parsed as a ? b : (c | x). The pipe operator cannot be used without parentheses in the first and second operands of ?:.
+
+Due to precedence, if you want a pipe to apply to the result of a ternary, wrap the entire expression in parentheses; for example, (a ? b : c) | x.
+
+src/app/precedence.component.html

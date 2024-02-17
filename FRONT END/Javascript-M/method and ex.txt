@@ -1,0 +1,228 @@
+
+Prototype chaining 
+=====================
+
+Prototype chaining is used to build new types of objects based on existing ones. It is similar to inheritance in a class based language.
+
+The prototype on object instance is available through Object.getPrototypeOf(object) 
+or **proto** property whereas prototype on constructors function is available through Object.prototype.
+
+Each object has a private property which holds a link to another object called its prototype.
+That prototype object has a prototype of its own, and so on until an object is reached with null as its prototype.
+
+Because a prototype is an object, a prototype has its own prototype. 
+
+The hasOwnProperty() method is defined in Object.prototype, that can be accessed by Dog.prototype, which can then be accessed by variable “duck”. 
+It clearly explains the prototype chain. In this prototype chain, “Dog” is the supertype for “duck”, while “duck” is the subtype.
+The object is a supertype for both “Dog” and “duck”.
+We take an Object is a supertype for all objects in JavaScript. Any object can use the hasOwnProperty() JavaScript method.
+ 
+let duck = new Dog("Donald");
+duck.hasOwnProperty("name"); // yields true
+
+The constructor function is nothing more than a normal function. You may notice that we are referencing this in the constructor function above. 
+this is not specific to constructor functions, 
+and can be referenced in any function. Normally it points to the function’s scope of execution.
+
+Every object has a prototype, including the prototype object. This “chain” goes all the way back until it reaches an object that has no prototype,
+ usually Object‘s prototype. 
+Prototype’s version of “Inheritance” involves adding another link to the end of this prototype chain.
+When an attribute is called on an object, the object is first checked for that attribute, and if it doesn’t exist,
+ then each link in its prototype chain is traversed until the attribute is found or the end is reached.
+ 
+prototype, which is itself an object, inherits from its parent’s prototype, which inherits from its parent’s prototype, and and so on. 
+This is often referred to as the prototype chain. Object.prototype, which is always at the end of the prototype chain (i.e., at the top of the prototypal inheritance tree),
+ contains methods like toString(), hasProperty(), isPrototypeOf(), and so on.
+ 
+Each function’s prototype can be extended to define its own custom methods and properties.
+
+When you instantiate an object (by invoking the function using the new operator), it inherits all the properties in the prototype of that function. 
+Keep in mind, though, that those instances will not have direct access to the prototype object but only to its properties.
+
+function Person(firstName, lastName) {
+  this.firstName = firstName;
+  this.lastName = lastName;
+}
+
+var p1 = new Person('John', 'Doe');
+var p2 = new Person('Robert', 'Doe');
+
+console.log(p1 instanceof Person); // prints 'true'
+console.log(p2 instanceof Person); // prints 'true'
+console.log(p1 === p2);            // prints 'false'
+
+// Extending the Person prototype from our earlier example to
+// also include a 'getFullName' method:
+Person.prototype.getFullName = function() {
+  return this.firstName + ' ' + this.lastName;
+}
+
+// Referencing the p1 object from our earlier example
+console.log(p1.getFullName());            // prints 'John Doe'
+// but p1 can’t directly access the 'prototype' object...
+console.log(p1.prototype);                // prints 'undefined'
+console.log(p1.prototype.getFullName());  // generates an error
+
+
+it’s also possible to dynamically change an object’s prototype. 
+
+When using prototypal inheritance, remember to define properties in the prototype after having either 
+inherited from the parent class or specified an alternate prototype.
+
+If the object has a property with the given name, that value is returned. (The hasOwnProperty method can be used to 
+check if an object has a particular named property.)
+If the object does not have the named property, the object’s prototype is checked
+Since the prototype is an object as well, if it does not contain the property either, its parent’s prototype is checked.
+This process continues up the prototype chain until the property is found.
+If Object.prototype is reached and it does not have the property either, the property is considered undefined.
+
+
+scope chain
+===========
+
+JavaScript, there are two types of execution contexts:
+
+Global context, created when a JavaScript process is launched
+Local context, created when a function is invoked
+
+Execution contexts are organized into a stack. At the bottom of the stack, there is always the global context, 
+that is unique for each JavaScript program. Each time a function is encountered, a new execution context is created and pushed onto the top of the stack. 
+Once the function has finished executing, its context is popped off the stack.
+
+// global context
+var message = 'Hello World';
+
+var sayHello = function(n){
+  // local context 1 created and pushed onto context stack
+  var i = 0;
+  var innerSayHello = function() {
+    // local context 2 created and pushed onto context stack
+    console.log((i + 1) + ':  ' + message);
+    // local context 2 popped off of context stack
+  }
+  for (i = 0; i < n; i++) {
+    innerSayHello();
+  }
+  // local context 1 popped off of context stack
+};
+
+sayHello(3);
+// Prints:
+// 1:  Hello World
+// 2:  Hello World
+// 3:  Hello World
+
+
+Within each execution context is a special object called a scope chain which is used to resolve variables. 
+A scope chain is essentially a stack of currently accessible scopes, from the most immediate context to the global context. 
+When attempting to resolve variables via the scope chain, the immediate context is first checked for a matching variable. 
+If no match is found, the next context object in the scope chain is checked, and so on, until a match is found. If no match is found, a ReferenceError is thrown.
+
+
+
+Methods and examples:
+=========================
+
+slice() 
+============
+
+The slice() method returns the selected elements in an array as a new array object. 
+It selects the elements starting at the given start argument, 
+and ends at the given optional end argument without including the last element. 
+If you omit the second argument then it selects till the end.
+
+The slice() method does not change the original array.
+slice method won't mutate the original array but it returns the subset as a new array.
+
+let arrayIntegers = [1, 2, 3, 4, 5];
+let arrayIntegers1 = arrayIntegers.slice(0, 2); // returns [1,2]
+let arrayIntegers2 = arrayIntegers.slice(2, 3); // returns [3]
+let arrayIntegers3 = arrayIntegers.slice(4); //returns [5]
+
+const animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+
+console.log(animals.slice(2));
+// expected output: Array ["camel", "duck", "elephant"]
+console.log(animals.slice(2, 4));
+// expected output: Array ["camel", "duck"]
+console.log(animals.slice(1, 5));
+// expected output: Array ["bison", "camel", "duck", "elephant"]
+console.log(animals.slice(-2));
+// expected output: Array ["duck", "elephant"]
+console.log(animals.slice(2, -1));
+// expected output: Array ["camel", "duck"]
+console.log(animals.slice());
+// expected output: Array ["ant", "bison", "camel", "duck", "elephant"]
+
+slice(start, end)
+
+start Optional- including the start index
+Zero-based index at which to start extraction.
+A negative index can be used, indicating an offset from the end of the sequence. slice(-2) extracts the last two elements in the sequence.
+If start is omitted or undefined, slice starts from the index 0.
+If start is greater than the length of the sequence, an empty array is returned.
+
+end Optional - excluding the end index
+The index of the first element to exclude from the returned array. slice extracts up to but not including end.
+For example, slice(1,4) extracts the second element through the fourth element (elements indexed 1, 2, and 3).
+A negative index can be used, indicating an offset from the end of the sequence. slice(2,-1) 
+extracts the third element through the second-to-last element in the sequence.
+If end is omitted or undefined, slice extracts through the end of the sequence (arr.length).
+If end is greater than the length of the sequence, slice extracts through to the end of the sequence (arr.length).
+
+The slice() method is a copying method. It does not alter this but instead returns a shallow copy that contains some 
+of the same elements as the ones from the original array.
+
+A shallow copy of an object is a copy whose properties share the same references (point to the same underlying values) as those of the source object 
+from which the copy was made. As a result, when you change either the source or the copy, you may also cause the other object to change too — 
+and so, you may end up unintentionally causing changes to the source or copy that you don't expect.
+
+
+The slice() method preserves empty slots. If the sliced portion is sparse, the returned array is sparse as well.
+
+Splice
+==========
+
+The splice() method is used either adds/removes items to/from an array, and then returns the removed item. 
+The first argument specifies the array position for insertion or deletion
+whereas the optional second argument indicates the number of elements to be deleted. Each additional argument is added to the array.
+
+Splice method modifies the original array and returns the deleted array.
+
+let arrayIntegersOriginal1 = [1, 2, 3, 4, 5];
+let arrayIntegersOriginal2 = [1, 2, 3, 4, 5];
+let arrayIntegersOriginal3 = [1, 2, 3, 4, 5];
+
+let arrayIntegers1 = arrayIntegersOriginal1.splice(0, 2); // returns [1, 2]; original array: [3, 4, 5]
+let arrayIntegers2 = arrayIntegersOriginal2.splice(3); // returns [4, 5]; original array: [1, 2, 3]
+let arrayIntegers3 = arrayIntegersOriginal3.splice(3, 1, "a", "b", "c"); //returns [4]; original array: [1, 2, 3, "a", "b", "c", 5]
+
+The splice() method changes the contents of an array by removing or replacing existing elements and/or adding new elements in place
+
+start
+The index at which to start changing the array.
+If greater than the length of the array, start will be set to the length of the array. In this case, no element will be deleted
+ but the method will behave as an adding function, adding as many elements as items provided.
+If negative, it will begin that many elements from the end of the array. (In this case, the origin is -1,
+ meaning -n is the index of the nth last element, and is therefore equivalent to the index of array.length - n.)
+ If start is -Infinity, it will begin from index 0.
+
+deleteCount Optional
+
+An integer indicating the number of elements in the array to remove from start.
+If deleteCount is omitted, or if its value is equal to or larger than array.length - start (that is, if it is equal to or greater than the number
+ of elements left in the array, starting at start), then all the elements from start to the end of the array will be deleted. 
+ However, it must not be omitted if there is any item1 parameter.
+If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
+
+item1, …, itemN Optional
+
+The elements to add to the array, beginning from start.
+If you do not specify any elements, splice() will only remove elements from the array.
+
+
+Slice	                                                       Splice
+Doesn't modify the original array(immutable)	Modifies the original array(mutable)
+Returns the subset of original array	        Returns the deleted elements as array
+Used to pick the elements from array	        Used to insert or delete elements to/from array
+

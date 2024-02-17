@@ -1,0 +1,437 @@
+
+The window.history object contains the browser's history. You can load previous and next URLs in the history using back() and next() methods.
+
+function goBack() {
+  window.history.back();
+}
+function goForward() {
+  window.history.forward();
+}
+Note: You can also access history without window prefix.
+------------------
+
+The mouseEvent getModifierState() is used to return a boolean value that indicates whether the specified modifier key is activated or not. 
+The modifiers such as CapsLock, ScrollLock and NumLock are activated when they are clicked, and deactivated when they are clicked again.
+
+Let's take an input element to detect the CapsLock on/off behavior with an example,
+
+<input type="password" onmousedown="enterInput(event)" />
+
+<p id="feedback"></p>
+
+<script>
+  function enterInput(e) {
+    var flag = e.getModifierState("CapsLock");
+    if (flag) {
+      document.getElementById("feedback").innerHTML = "CapsLock activated";
+    } else {
+      document.getElementById("feedback").innerHTML =
+        "CapsLock not activated";
+    }
+  }
+</script>
+
+isNaN
+----------
+The isNaN() function is used to determine whether a value is an illegal number (Not-a-Number) or not. i.e, 
+This function returns true if the value equates to NaN. Otherwise it returns false.
+
+isNaN("Hello"); //true
+isNaN("100"); //false
+
+
+Below are the major differences between undeclared(not defined) and undefined variables,
+--------------------------
+
+undeclared	
+undefined
+These variables do not exist in a program and are not declared	
+These variables declared in the program but have not assigned any value
+
+If you try to read the value of an undeclared variable, then a runtime error is encountered	
+If you try to read the value of an undefined variable, an undefined value is returned.
+
+global variables
+-------------
+Global variables are those that are available throughout the length of the code without any scope.
+ The var keyword is used to declare a local variable but if you omit it then it will become global variable
+
+msg = "Hello"; // var is missing, it becomes global variable
+
+The problem with global variables is the conflict of variable names of local and global scope. 
+It is also difficult to debug and test the code that relies on global variables.
+
+ isFinite function
+----------------------
+The isFinite() function is used to determine whether a number is a finite, legal number.
+It returns false if the value is +infinity, -infinity, or NaN (Not-a-Number), otherwise it returns true.
+
+isFinite(Infinity); // false
+isFinite(NaN); // false
+isFinite(-Infinity); // false
+
+isFinite(100); // true
+
+
+Event flow
+==============
+Events are "things" that happen to HTML elements. When JavaScript is used in HTML pages, JavaScript can react on these events. 
+Some of the examples of HTML events are,
+
+Web page has finished loading
+Input field was changed
+Button was clicked
+
+Event flow is the order in which event is received on the web page. 
+When you click an element that is nested in various other elements, before your click actually reaches its destination, or target element, 
+it must trigger the click event for each of its parent elements first, starting at the top with the global window object. 
+There are two ways of event flow
+ It must trigger the click event each of its parent elements first, starting at the top with the global window object. 
+ By default, every element of HTML is child of the window object.
+
+Top to Bottom(Event Capturing)
+Bottom to Top (Event Bubbling)
+
+Events are responsible for interaction of JavaScript with HTML web pages. The general definition of event is any act can occur by someone.
+To react to an event, you attach an event handler to it. This is a block of code (usually a JavaScript function that you as a programmer create)
+ that runs when the event fires. 
+ The listener listens out for the event happening, and the handler is the code that is run in response to it happening.
+ 
+ btn.addEventListener('click', () => {
+  const rndCol = `rgb(${random(255)}, ${random(255)}, ${random(255)})`;
+  document.body.style.backgroundColor = rndCol;
+});
+
+btn.removeEventListener('click', changeBackground);
+
+
+Event bubbling 
+===============
+Is a type of event propagation where the event first triggers on the innermost target element, 
+and then successively triggers on the ancestors (parents) of the target element in the same nesting hierarchy till it reaches the outermost DOM element.
+
+If you want to stop the event bubbling, this can be achieved by the use of the event.stopPropagation() method. 
+
+<body>
+  <div id="container">
+    <button>Click me!</button>
+  </div>
+  <pre id="output"></pre>
+</body>
+
+In this case:
+
+the click on the button fires first
+followed by the click on its parent (the <div> element)
+followed by the <div> element's parent (the <body> element).
+We describe this by saying that the event bubbles up from the innermost element that was clicked.
+
+
+event.stopPropagation() stops the move upwards, but on the current element all other handlers will run.
+To stop the bubbling and prevent handlers on the current element from running, there’s a method event.stopImmediatePropagation().
+ After it no other handlers execute.
+
+event capturing
+====================
+Event capturing is a type of event propagation where the event is first captured by the outermost element, 
+and then successively triggers on the descendants (children) of the target element in the same nesting hierarchy till it reaches the innermost DOM element.
+
+
+In the capturing phase:
+----------------------------
+The browser checks to see if the element's outer-most ancestor (<html>) has a click event handler registered on it for the capturing phase, and runs it if so.
+Then it moves on to the next element inside <html> and does the same thing, then the next one, and so on until it reaches 
+the direct parent of the element that was actually clicked.
+
+In the target phase:
+------------------------
+The browser checks to see if the target property has an event handler for the click event registered on it, and runs it if so.
+Then, if bubbles is true, it propagates the event to the direct parent of the clicked element, then the next one, 
+and so on until it reaches the <html> element. Otherwise, if bubbles is false, it doesn't propagate the event to any ancestors of the target.
+
+In the bubbling phase, the exact opposite of the capturing phase occurs:
+--------------------------
+The browser checks to see if the direct parent of the clicked element has a click event handler registered on it for the bubbling phase, and runs it if so.
+Then it moves on to the next immediate ancestor element and does the same thing, then the next one, and so on until it reaches the <html> element.
+
+event.target
+A handler on a parent element can always get the details about where it actually happened.
+The most deeply nested element that caused the event is called a target element, accessible as event.target.
+
+Note the differences from this (=event.currentTarget):
+
+event.target – is the “target” element that initiated the event, it doesn’t change through the bubbling process.
+this – is the “current” element, the one that has a currently running handler on it.
+
+Event delegation
+==================
+Event bubbling isn't just annoying though: it can be very useful. In particular, it enables a practice called event delegation. 
+when we want some code to run when the user interacts with any one of a large number of child elements, we set the event listener on their parent 
+and have events that happen on them bubble up to their parent rather than having to set the event listener on every child individually.
+
+Event delegation is a technique for listening to events where you delegate a parent element as the listener for all of the events that happen inside it.
+For example, if you wanted to detect field changes in inside a specific form, you can use event delegation technique,
+
+var form = document.querySelector("#registration-form");
+
+// Listen for changes to fields inside the form
+form.addEventListener(
+  "input",
+  function (event) {
+    // Log the field that was changed
+    console.log(event.target);
+  },
+  false
+);
+
+preventDefault method
+===============================
+The preventDefault() method cancels the event if it is cancelable, meaning that the default action or behaviour that belongs to the event will not occur.
+For example, prevent form submission when clicking on submit button and prevent opening the page URL when clicking on hyperlink are some common use cases.
+
+document
+  .getElementById("link")
+  .addEventListener("click", function (event) {
+    event.preventDefault();
+  });
+  
+Note: Remember that not all events are cancelable.
+
+-------------------------------------------------
+
+The window.navigator object contains information about the visitor's browser OS details. Some of the OS properties are available under platform property,
+
+console.log(navigator.platform);
+
+document load and DOMContentLoaded events
+ ---------------------
+The DOMContentLoaded event is fired when the initial HTML document has been completely loaded and parsed, 
+without waiting for assets(stylesheets, images, and subframes) to finish loading. 
+
+addEventListener('DOMContentLoaded', (event) => {});
+onDOMContentLoaded = (event) => { };
+
+Advantages of using DOMContentLoaded event:
+
+It helps in improving user experience as it shows messages or content much faster.
+It takes lesser time in loading the page.
+
+Whereas The load event is fired when the whole page has loaded, including all dependent resources(stylesheets, images).
+the load event helps in knowing when the page has fully-loaded.
+
+document.addEventListener("load", function(e) {
+  console.log("The page has completely loaded.");
+});
+
+
+difference between native, host and user objects
+--------------------------------------------------
+Native objects 
+---------------
+are objects that are part of the JavaScript language defined by the ECMAScript specification. 
+For example, String, Math, RegExp, Object, Function etc core objects defined in the ECMAScript spec. 
+Native javascript objects are standard javascript objects which are provided by javascript itself. 
+They are also known as built-in objects, pre-defined objects, or global objects. 
+These objects work in the same fashion and are available to all users, irrespective of the machine and the environment. 
+Their functionalities do not change with the change in the machine or environment 
+and can be used as both, constructors (like String(), Array(), Object()) and primitive values (like true, 999). 
+
+Host objects 
+----------------
+are objects provided by the browser or runtime environment (Node). 
+For example, window, XmlHttpRequest, DOM nodes etc are considered as host objects.
+Host javascript objects are environment-specific javascript objects, and may vary as per the environment of the machine in which the javascript is being used. 
+Objects provided by one environment, may or may not be present in another environment.
+ For example, most browsers provide window objects or navigator objects, but these objects are not present in the server running node.js.  
+we can say that the host objects are host specific and may differ from one host (environment) to other.
+
+For example:
+window
+NodeList
+console
+
+
+User objects 
+---------------
+are objects defined in the javascript code. 
+these are objects which you have created in your program or application.
+For example, User objects created for profile information.
+
+
+Native Objects
+Host Objects
+
+These are standard global javascript objects which are the same and provided by javascript itself.	
+These are the host (environment) specific javascript objects and differ from one environment to another.
+
+These are available to all users globally.	
+The objects offered by one environment may not be present in the other environment
+
+Example: String(), Array(), Number(), false, “Hello World”	
+Example: window, console, navigator, NodeList
+
+------------------------------------------
+
+You can use below tools or techniques for debugging javascript
+
+Chrome Devtools
+debugger statement
+Good old console.log statement
+
+----------------------------------
+
+Below are the list of pros and cons of promises over callbacks,
+
+Pros:
+
+It avoids callback hell which is unreadable
+Easy to write sequential asynchronous code with .then()
+Easy to write parallel asynchronous code with Promise.all()
+Solves some of the common problems of callbacks(call the callback too late, too early, many times and swallow errors/exceptions)
+Cons:
+
+It makes little complex code
+You need to load a polyfill if ES6 is not supported
+
+-------------------------------------------
+
+difference between an attribute and a property
+====================================================
+Attributes are defined on the HTML markup whereas properties are defined on the DOM. 
+The attributes have a data type of string. So no matter the value of the attribute, it will always return a string. 
+In contrast to the attributes, which are defined in HTML, properties belong to the DOM. Since DOM is an object in JavaScript, we can get and set properties.
+
+For example, the below HTML element has 2 attributes type and value,
+
+<input type="text" value="Name:">
+
+You can retrieve the attribute value as below,
+const input = document.querySelector("input");
+console.log(input.getAttribute("value")); // Good morning
+console.log(input.value); // Good morning
+
+And after you change the value of the text field to "Good evening", it becomes like
+console.log(input.getAttribute("value")); // Good evening
+console.log(input.value); // Good evening
+
+
+Attribute	
+Property
+
+Attributes are defined by HTML.	
+Properties are defined by the DOM.
+
+The value of an attribute is constant.	
+The value of a property is variable.
+
+------------------------------------------
+same-origin policy
+=====================
+The same-origin policy is a policy that prevents JavaScript from making requests across domain boundaries.
+An origin is defined as a combination of URI scheme, hostname, and port number. 
+If you enable this policy then it prevents a malicious script on one page from obtaining access to sensitive data on another web page using Document Object Model(DOM).
+
+void 0
+-----------
+Void(0) is used to prevent the page from refreshing. 
+This will be helpful to eliminate the unwanted side-effect, because it will return the undefined primitive value.
+It is commonly used for HTML documents that use href="JavaScript:Void(0);" within an <a> element. i.e, when you click a link, 
+the browser loads a new page or refreshes the same page. 
+But this behavior will be prevented using this expression. 
+
+For example, the below link notify the message without reloading the page
+
+<a href="JavaScript:void(0);" onclick="alert('Well done!')">
+  Click Me!
+</a>
+-----------------------
+
+JavaScript is an interpreted language, not a compiled language. An interpreter in the browser reads over the JavaScript code, interprets each line, and runs it. 
+Nowadays modern browsers use a technology known as Just-In-Time (JIT) compilation, which compiles JavaScript to executable bytecode just as it is about to run.
+
+Yes, JavaScript is a case sensitive language. The language keywords, variables, function & object names, 
+and any other identifiers must always be typed with a consistent capitalization of letters.
+
+relation between Java and JavaScript
+No, they are entirely two different programming languages and have nothing to do with each other. 
+But both of them are Object Oriented Programming languages and like many other languages, 
+they follow similar syntax for basic features(if, else, for, switch, break, continue etc).
+
+return false usage
+The return false statement in event handlers performs the below steps,
+
+First it stops the browser's default action or behaviour.
+It prevents the event from propagating the DOM
+Stops callback execution and returns immediately when called.
+
+JavaScript is a single-threaded language. 
+Because the language specification does not allow the programmer to write code so that the interpreter can run parts of it in parallel 
+in multiple threads or processes. Whereas languages like java, go, C++ can make multi-threaded and multi-process programs.
+
+
+ECMAScript is the scripting language that forms the basis of JavaScript. ECMAScript standardized by the ECMA International standards organization
+ in the ECMA-262 and ECMA-402 specifications. The first edition of ECMAScript was released in 1997.
+ 
+ 
+setTimeout
+----------------
+The setTimeout() method is used to call a function or evaluate an expression after a specified number of milliseconds.
+ For example, let's log a message after 2 seconds using setTimeout method,
+
+setTimeout(function () {
+  console.log("Good morning");
+}, 2000);
+
+setInterval
+-------------
+The setInterval() method is used to call a function or evaluate an expression at specified intervals (in milliseconds). 
+For example, let's log a message after 2 seconds using setInterval method,
+
+setInterval(function () {
+  console.log("Good morning");
+}, 2000);
+
+
+clearTimeout method
+--------------------
+The clearTimeout() function is used in javascript to clear the timeout which has been set by setTimeout()function before that. i.e,
+ The return value of setTimeout() function is stored in a variable and it’s passed into the clearTimeout() function to clear the timer.
+
+For example, the below setTimeout method is used to display the message after 3 seconds. This timeout can be cleared by the clearTimeout() method.
+
+<script>
+var msg;
+function greeting() {
+   alert('Good morning');
+}
+function start() {
+  msg =setTimeout(greeting, 3000);
+
+}
+
+function stop() {
+    clearTimeout(msg);
+}
+</script>
+
+clearInterval method
+-----------------------
+The clearInterval() function is used in javascript to clear the interval which has been set by setInterval() function. i.e,
+ The return value returned by setInterval() function is stored in a variable and it’s passed into the clearInterval() function to clear the interval.
+
+For example, the below setInterval method is used to display the message for every 3 seconds. This interval can be cleared by the clearInterval() method.
+
+<script>
+var msg;
+function greeting() {
+   alert('Good morning');
+}
+function start() {
+  msg = setInterval(greeting, 3000);
+
+}
+
+function stop() {
+    clearInterval(msg);
+}
+</script>

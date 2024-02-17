@@ -1,0 +1,580 @@
+
+Cookie
+=======
+
+A cookie is a piece of data that is stored on your computer to be accessed by your browser.
+Cookies are small strings of data that are stored directly in the browser. 
+Cookies are saved as key/value pairs. For example, you can create a cookie named username as below,
+
+document.cookie = "username=John";
+
+Cookies are used to remember information about the user profile(such as username). It basically involves two steps,
+---------------------------
+When a user visits a web page, the user profile can be stored in a cookie.
+Next time the user visits the page, the cookie remembers the user profile.
+
+One of the most widespread use cases is authentication:
+
+Upon sign in, the server uses the Set-Cookie HTTP-header in the response to set a cookie with a unique “session identifier”.
+Next time when the request is sent to the same domain, the browser sends the cookie over the net using the Cookie HTTP-header.
+So the server knows who made the request.
+
+There are few below options available for a cookie,
+------------------------------------------------
+By default, the cookie is deleted when the browser is closed but you can change this behavior by setting expiry date (in UTC time).
+document.cookie = "username=John; expires=Sat, 8 Jun 2019 12:00:00 UTC";
+By default, the cookie belongs to a current page. But you can tell the browser what path the cookie belongs to using a path parameter.
+document.cookie = "username=John; path=/services";
+
+path
+path=/mypath
+The url path prefix must be absolute. It makes the cookie accessible for pages under that path. By default, it’s the current path.
+If a cookie is set with path=/admin, it’s visible at pages /admin and /admin/something, but not at /home or /adminpage.
+
+Usually, we should set path to the root: path=/ to make the cookie accessible from all website pages.
+
+domain
+domain=site.com
+A domain defines where the cookie is accessible. In practice though, there are limitations. We can’t set any domain.
+It’s a safety restriction, to allow us to store sensitive data in cookies that should be available only on one site.
+By default, a cookie is accessible only at the domain that set it.
+
+expires, max-age
+By default, if a cookie doesn’t have one of these options, it disappears when the browser is closed. Such cookies are called “session cookies”
+To let cookies survive a browser close, we can set either the expires or max-age option.
+expires=Tue, 19 Jan 2038 03:14:07 GMT
+The cookie expiration date defines the time, when the browser will automatically delete it.
+The date must be exactly in this format, in the GMT timezone. We can use date.toUTCString to get it. 
+
+// +1 day from now
+let date = new Date(Date.now() + 86400e3);
+date = date.toUTCString();
+document.cookie = "user=John; expires=" + date;
+
+If we set expires to a date in the past, the cookie is deleted.
+
+max-age=3600
+It’s an alternative to expires and specifies the cookie’s expiration in seconds from the current moment.
+// cookie will die in +1 hour from now
+document.cookie = "user=John; max-age=3600";
+
+// delete cookie (let it expire right now)
+document.cookie = "user=John; max-age=0";
+If set to zero or a negative value, the cookie is deleted
+
+secure
+The cookie should be transferred only over HTTPS.
+ if a cookie has sensitive content that should never be sent over unencrypted HTTP, the secure flag is the right thing.
+ 
+// assuming we're on https:// now
+// set the cookie to be secure (only accessible over HTTPS)
+document.cookie = "user=John; secure";
+
+samesite forbids the browser to send the cookie with requests coming from outside the site. This helps to prevent XSRF attacks.
+
+You can delete a cookie by setting the expiry date as a passed date. 
+You don't need to specify a cookie value in this case. For example, you can delete a username cookie in the current page as below.
+
+document.cookie ="username=; expires=Fri, 07 Jun 2019 00:00:00 UTC; path=/;";
+
+Note: You should define the cookie path option to ensure that you delete the right cookie. 
+Some browsers doesn't allow to delete a cookie unless you specify a path parameter.
+
+Cookies are usually set by a web-server using the response Set-Cookie HTTP-header. 
+Then, the browser automatically adds them to (almost) every request to the same domain using the Cookie HTTP-header.
+
+
+
+Below are some of the differences between cookie, local storage and session storage,
+
+                                         Feature Cookie	                                     Local storage	                           Session storage
+Accessed on client or server side	  Both server-side & client-side	                     client-side only	                       client-side only
+Lifetime	                          As configured using Expires option	                  until deleted	                           until tab is closed
+SSL support	                                   Supported	                                 Not supported	                             Not supported
+Maximum data size	                                    4KB	                                      5 MB	                                        5MB
+
+LocalStorage is the same as SessionStorage but it persists the data even when the browser is closed and reopened(i.e it has no expiration time)
+ whereas in sessionStorage data gets cleared when the page session ends
+ 
+The Window object implements the WindowLocalStorage and WindowSessionStorage objects 
+which has localStorage(window.localStorage) and sessionStorage(window.sessionStorage) properties respectively. 
+These properties create an instance of the Storage object, through which data items can be set, retrieved and removed for a specific domain and storage type 
+(session or local). For example, you can read and write on local storage objects as below.
+localStorage.setItem("logo", document.getElementById("logo").value);
+localStorage.getItem("logo");
+
+The session storage provided methods for reading, writing and clearing the session data
+
+// Save data to sessionStorage
+sessionStorage.setItem("key", "value");
+
+// Get saved data from sessionStorage
+let data = sessionStorage.getItem("key");
+
+// Remove saved data from sessionStorage
+sessionStorage.removeItem("key");
+
+// Remove all saved data from sessionStorage
+sessionStorage.clear();
+
+Web storage is more secure, and large amounts of data can be stored locally, without affecting website performance.
+Also, the information is never transferred to the server. Hence this is a more recommended approach than Cookies.
+
+You need to check browser support for localStorage and sessionStorage before using web storage,
+
+if (typeof Storage !== "undefined") {
+  // Code for localStorage/sessionStorage.
+} else {
+  // Sorry! No Web Storage support..
+}
+
+StorageEvent
+==================
+The StorageEvent is an event that fires when a storage area has been changed in the context of another document. 
+Whereas onstorage property is an EventHandler for processing storage events. The syntax would be as below
+window.onstorage = functionRef;
+
+Let's take the example usage of onstorage event handler which logs the storage key and it's values
+
+window.onstorage = function (e) {
+  console.log(
+    "The " +
+      e.key +
+      " key has been changed from " +
+      e.oldValue +
+      " to " +
+      e.newValue +
+      "."
+  );
+};
+
+web workers 
+============
+
+You need to check browser support for web workers before using it
+
+if (typeof Worker !== "undefined") {
+  // code for Web worker support.
+} else {
+  // Sorry! No Web Worker support..
+}
+
+WebWorkers don't have access to below javascript objects since they are defined in an external files
+
+Window object
+Document object
+Parent object
+
+callbacks
+=========
+
+The callbacks are needed because javascript is an event driven language. 
+That means instead of waiting for a response javascript will keep executing while listening for other events. 
+
+function firstFunction() {
+  // Simulate a code delay
+  setTimeout(function () {
+    console.log("First function called");
+  }, 1000);
+}
+function secondFunction() {
+  console.log("Second function called");
+}
+firstFunction();
+secondFunction();
+
+Output;
+// Second function called
+// First function called
+
+As observed from the output, javascript didn't wait for the response of the first function and the remaining code block got executed. 
+callbacks are used in a way to make sure that certain code doesn’t execute until the other code finishes execution.
+
+A callback function is a function passed into another function as an argument, 
+which is then invoked inside the outer function to complete some kind of routine or action.
+A callback's primary purpose is to execute code in response to an event. 
+These events might be user-initiated, such as mouse clicks or typing.
+ With a callback, you may instruct your application to "execute this code every time the user clicks a key on the keyboard."
+ function greeting(name) {
+  alert(`Hello, ${name}`);
+}
+
+function processUserInput(callback) {
+  const name = prompt("Please enter your name.");
+  callback(name);
+}
+
+processUserInput(greeting);
+
+Callback Hell is an anti-pattern with multiple nested callbacks which makes code hard to read and debug when dealing with asynchronous logic. 
+-------------
+async1(function(){
+    async2(function(){
+        async3(function(){
+            async4(function(){
+                ....
+            });
+        });
+    });
+});
+
+
+You can nest one callback inside in another callback to execute the actions sequentially one by one. This is known as callbacks in callbacks.
+------------------------
+
+loadScript("/script1.js", function (script) {
+  console.log("first script is loaded");
+
+  loadScript("/script2.js", function (script) {
+    console.log("second script is loaded");
+
+    loadScript("/script3.js", function (script) {
+      console.log("third script is loaded");
+      // after all scripts are loaded
+    });
+  });
+});
+
+server-sent events
+==================
+
+Server-sent events (SSE) is a server push technology enabling a browser to receive automatic updates from a server via HTTP connection without resorting to polling. 
+These are a one way communications channel - events flow from server to client only. 
+This has been used in Facebook/Twitter updates, stock price updates, news feeds etc.
+
+Server sent events(SSE) is a pushing technology that enables pushing notification/message/events from the server to the client(s) via HTTP connection.
+
+three different ways to perform server-to-client updates: Client polling, Web Socket, Server-Sent Events (SSE).
+
+Client Polling
+The client sends requests to the server at regular intervals for new updates.
+
+Web Socket
+Websocket is a very popular technology that provides bi-directional data transfer for client and server communication on real-time applications.
+
+Server-Sent Events
+SSE is a technology that provides asynchronous communication with event stream from server to the client over HTTP for web applications.
+The server can send un-directional messages/events to the client and can update the client asynchronously.
+ SSE can be used in all web applications where users need real-near time information.
+ 
+The EventSource object is used to receive server-sent event notifications. For example, you can receive messages from server as below,
+
+if (typeof EventSource !== "undefined") {
+  var source = new EventSource("sse_generator.js");
+  source.onmessage = function (event) {
+    document.getElementById("output").innerHTML += event.data + "<br>";
+  };
+}
+
+you can perform browser support for server-sent events before using it as below,
+
+if (typeof EventSource !== "undefined") {
+  // Server-sent events supported. Let's have some code here!
+} else {
+  // No server-sent events supported
+}
+
+Below are the list of events available for server sent events
+
+Event	Description
+onopen	It is used when a connection to the server is opened
+onmessage	This event is used when a message is received
+onerror	It happens when an error occurs
+
+
+strict mode in javascript
+=========================
+Strict Mode is a new feature in ECMAScript 5 that allows you to place a program, or a function, in a “strict” operating context. 
+This way it prevents certain actions from being taken and throws more exceptions. 
+The literal expression "use strict"; instructs the browser to use the javascript code in the Strict mode.
+
+Strict mode is useful to write "secure" JavaScript by notifying "bad syntax" into real errors.
+For example, it eliminates accidentally creating a global variable by throwing an error and also throws an error for assignment to a non-writable property,
+ a getter-only property, a non-existing property, a non-existing variable, or a non-existing object.
+ 
+The strict mode is declared by adding "use strict"; to the beginning of a script or a function. If declared at the beginning of a script, it has global scope.
+
+"use strict";
+x = 3.14; // This will cause an error because x is not declared
+and if you declare inside a function, it has local scope
+
+x = 3.14; // This will not cause an error.
+myFunction();
+
+function myFunction() {
+  "use strict";
+  y = 3.14; // This will cause an error
+}
+
+Characteristics of strict mode in javascript
+
+Duplicate arguments are not allowed by developers.
+In strict mode, you won't be able to use the JavaScript keyword as a parameter or function name.
+The 'use strict' keyword is used to define strict mode at the start of the script. Strict mode is supported by all browsers.
+Engineers will not be allowed to create global variables in 'Strict Mode.
+
+----------------
+
+The double exclamation or negation(!!) 
+--------------------------------------
+ensures the resulting type is a boolean. If it was falsey (e.g. 0, null, undefined, etc.),
+ it will be false, otherwise, true. For example, you can test IE version using this expression as below,
+
+let isIE8 = false;
+isIE8 = !!navigator.userAgent.match(/MSIE 8.0/);
+console.log(isIE8); // returns true or false
+If you don't use this expression then it returns the original value.
+
+console.log(navigator.userAgent.match(/MSIE 8.0/)); // returns either an Array or null
+Note: The expression !! is not an operator, but it is just twice of ! operator.
+
+Delete operator
+-------------------
+The delete keyword is used to delete the property as well as its value.
+
+var user = { name: "John", age: 20 };
+delete user.age;
+
+console.log(user); // {name: "John"}
+
+typeof operator
+-----------------
+You can use the JavaScript typeof operator to find the type of a JavaScript variable. It returns the type of a variable or an expression.
+
+typeof "John Abraham"; // Returns "string"
+typeof (1 + 2); // Returns "number"
+
+undefined property
+---------------------
+The undefined property indicates that a variable has not been assigned a value, or declared but not initialized at all.
+ The type of undefined value is undefined too.
+
+var user; // Value is undefined, type is undefined
+console.log(typeof user); //undefined
+Any variable can be emptied by setting the value to undefined.
+
+user = undefined;
+
+null value
+------------
+The value null represents the intentional absence of any object value.
+ It is one of JavaScript's primitive values. The type of null value is object.
+ You can empty the variable by setting the value to null.
+
+var user = null;
+console.log(typeof user); //object
+
+Below are the main differences between null and undefined,
+------------------------------------------------
+Null	
+Undefined
+
+It is an assignment value which indicates that variable points to no object.	
+It is not an assignment value where a variable has been declared but has not yet been assigned a value.
+
+Type of null is object	
+Type of undefined is undefined
+
+The null value is a primitive value that represents the null, empty, or non-existent reference.	
+The undefined value is a primitive value used when a variable has not been assigned a value.
+
+Indicates the absence of a value for a variable	
+Indicates absence of variable itself
+
+Converted to zero (0) while performing primitive operations	
+Converted to NaN while performing primitive operations
+
+eval
+--------
+The eval() function evaluates JavaScript code represented as a string. 
+The string can be a JavaScript expression, variable, statement, or sequence of statements.
+
+The eval() function is used to evaluates the expression. If the argument represents one or more JavaScript statements, eval() evaluates the statements. 
+We do not call eval() to evaluate an arithmetic expression.JavaScript evaluates arithmetic expressions automatically. 
+
+console.log(eval("1 + 2")); //  3
+
+console.log(eval('2 + 2'));
+// expected output: 4
+
+console.log(eval(new String('2 + 2')));
+// expected output: 2 + 2
+
+console.log(eval('2 + 2') === eval('4'));
+// expected output: true
+
+console.log(eval('2 + 2') === eval(new String('2 + 2')));
+// expected output: false
+
+eval() is a dangerous function, which executes the code it's passed with the privileges of the caller. 
+If you run eval() with a string that could be affected by a malicious party, you may end up running 
+malicious code on the user's machine with the permissions of your webpage / extension.
+More importantly, a third-party code can see the scope in which eval() was invoked (if it's a direct eval),
+ which can lead to possible attacks in ways to which the similar Function is not susceptible.
+ 
+No, it allows arbitrary code to be run which causes a security problem.
+ As we know that the eval() function is used to run text as code. In most of the cases, it should not be necessary to use it.
+
+Below are the main differences between window and document,
+-----------------------------------------------------------------
+
+Window	
+Document
+It is the root level element in any web page	
+It is the direct child of the window object. This is also known as Document Object Model(DOM)
+
+By default window object is available implicitly in the page	
+You can access it via window.document or document.
+
+It has methods like alert(), confirm() and properties like document, location	
+It provides methods like getElementById, getElementsByTagName, createElement etc
+
+The window object represents a window/tab containing a DOM document
+Document object is property of window object that points to the DOM document loaded in that window.
+
+It is the very first object that is loaded in the browser.
+It is loaded inside the window
+
+Global objects, functions, and variables of JavaScript are members of the window object.
+All the tags, elements with attributes in HTML are part of the document.
+
+The window is part of BOM, not DOM.
+The document is part of BOM (browser object model) and dom (Document object model)
+
+Properties of the window object cannot be accessed by the document object.
+Properties of document objects such as title, body, cookies, etc can also be accessed by a window like this window. document.title
+
+
+Document Object: 
+----------------
+The document object represent a web page that is loaded in the browser. 
+By accessing the document object, we can access the element in the HTML page. 
+With the help of document objects, we can add dynamic content to our web page. 
+The document object can be accessed with a window.document or just document.
+
+When a web page is loaded, the browser creates a Document Object Model of the page.
+The document object represents the whole html document as a tree of Objects(HTML, HEAD, BODY, and other HTML tags). 
+It is the root element that represents the html document.
+ 
+Each HTML document that gets loaded into a window becomes a document object. 
+The document contains the contents of the page. Using document object, JavaScript can modify, add and delete the HTML elements, attributes CSS styles in the page
+
+document.property_name;
+
+Properties of document:
+
+activeElement: It returns the currently active elements in the document.
+body: It returns the contents of the body element.
+anchors: It returns all <a> elements that have a name attribute.
+baseURI: It returns a string value that represents the base URI of the document.
+cookie: It returns the cookie of the current document.
+charSet: It returns a string, representing the document’s character encoding.
+defaultView: It returns the current Window Object.
+designMode: It is used to set documents as editable or read-only.
+domain: It returns the domain name of the document server.
+doctype: It returns the document’s doctype.
+embeds: It returns the collection of all embedded elements.
+URL: It returns the complete URL of the document.
+forms: It returns all the elements of the form.
+fullScreenElement: It returns the element that is currently present in full-screen mode.
+title: It returns the title element of the document.
+head: It returns the head element of the document.
+links: It returns all <area> and <a> elements that have a href attribute.
+lastModified: It returns the date and time of the current document that was last modified.
+images: It returns the collection of <img> elements in the document.
+implementation: It returns the DOMImplementation object associated with the current document.
+readyState: It returns the loading status of the current document.
+referrer: It returns the URI of the page that is linked to the current page.
+scripts: It returns all script elements present in the document.
+strictErrorChecking: It sets or returns whether strict error checking can be enforced on a document or not.
+
+document.method_name;
+
+createElement(): It is used to create HTML element .
+createEvent(): It is used to create a new events object.
+createTextNode(): It is used to create a textnode.
+execCommand(): It is used to execute a command specified by the user on the editable selected section. It returns a Boolean value.
+fullscreenEnabled(): It is used to check whether the document can be viewed in fullscreen mode or not. It returns a boolean value.
+getElementById(): It returns the object of the given ID. If no object with that id exists then it returns null.
+getElementsByClassName(): It returns an object containing all the elements with the specified class names in the document as objects.
+getElementsByName(): It returns an object containing all the elements with the specified name in the document as objects.
+getElementsByTagName(): It returns an object containing all the elements with the specified tag names in the document as objects.
+
+Window Object: 
+---------------
+The window object is the topmost object of the DOM hierarchy. 
+It represents a browser window or frame that displays the contents of the webpage. 
+Whenever a window appears on the screen to display the contents of the document, the window object is created. 
+It is the top most object and outermost element of the object
+
+window.property_name;
+
+Properties of the window:
+
+Closed: It holds a Boolean value that represents whether the window is closed or not.
+console: It returns a reference to the console object which provides access to the browser’s debugging console.
+defaultStatus: It is used to define the default message that will be displayed in the status bar when no activity is carried on by the browser.
+controllers: It returns the XUL controller objects for the current Chrome window.
+customElements: It returns a reference to the CustomElementRegistry object, which can be used to register new custom elements and also get information about already registered custom elements.
+crypto: It returns the browser crypto object.
+devicePixelRatio: It returns the ratio between physical pixels and device-independent pixels in the current display.
+Document: It returns a reference to the document object of that window.
+DOMMatrix: It returns a reference to a DOMMatrix object, which represents 4×4 matrices, suitable for 2D and 3D operations.
+frames[]: It represents an array that contains all the frames of a given window.
+DOMPoint: It returns a reference to a DOMPoint object, which represents a 2D or 3D point in a coordinate system.
+History: It provides information on the URLs visited in the current window.
+Length: It represents the number of frames in the current window.
+fullScreen: This property indicates whether the window is displayed on full screen or not.
+Location: It contains the URL of the current window.
+innerHeight: It is used to get the height of the content area of the browser window.
+innerWidth: It is used to get the width of the content area of the browser window.
+Name: It contains the name of the referenced window.
+Window: It returns the current window or frame.
+Navigator: It returns a reference to the navigator object.
+outerHeight: It will get the height of the outside of the browser window.
+outerWidth: It will get the width of the outside of the browser window.
+Status: It overrides the default status and places a message in the status bar
+Parent: It refers to the frameset in which the current frame is contained.
+Screen: It refers to the screen object
+Self: It provides another way to refer to the current window.
+
+window.method_name;
+
+The methods of Window objects that are commonly used are listed in the below table:
+
+alert(): It is used to display an alert box. It displays a specified message along with an OK button and is generally used to make sure that the information comes through the user.
+atob(): It is used for decoding a base-64 encoded string. It is used to decode a string of data that has been encoded using the btoa() method.
+blur(): It is used to remove focus from the current window.
+btoa(): It is used for encoding a string in base-64 format.
+clearInterval(): It clears the interval which has been set by the setInterval() function before that.
+clearTimeout(): It clears the timeout which has been set by the setTimeout()function before that.
+close(): It is used for closing a certain window or tab of the browser which was previously opened.
+confirm(): It is used to display a modal dialog with an optional message and two buttons i.e. OK and Cancel. It returns true if the user clicks “OK”, and false otherwise.
+focus(): It is used to give focus to an element in the current window.
+prompt(): It is used to display a dialog with an optional message prompting the user to input some text
+resizeBy(): It is used to resize a window by the specified amount.
+resizeTo(): It is used to resize a window to the specified width and height.
+scrollBy(): It is used to scroll the document by the given number of pixels.
+scrollTo(): It is used to scroll to a particular set of coordinates in the document.
+setInterval(): It repeats a given function at every given time interval.
+setTimeout(): It executes a function, after waiting a specified number of milliseconds.
+stop(): It is used to stop the window from loading resources in the current browsing context
+
+Browser Object Model (BOM)
+-------------------
+The Browser Object Model contains objects that represent the current browser window or tab. 
+The topmost object in the BOM is the window object representing the window or tab or an iframe sometimes. 
+Window object has properties like browser history, location and the device’s screen etc. In case of multi tab browser, a window object represents a single tab, 
+but some of its properties like innerHeight, innerWidth and methods like resizeTo() will affect the whole browser window.
+
+
+The Browser Object Model (BOM) allows JavaScript to "talk to" the browser. 
+It consists of the objects navigator, history, screen, location and document which are children of the window. 
+The Browser Object Model is not standardized and can change based on different browsers.
+
+window.open() opens a new tab or window and document.open() creates a blank document within the window.
+
+Screen
+----------
+Screen is the window property that holds information of browser screen. 
+It refers to screen object associated with that window object. Used to display screen width, height, colorDepth, pixelDepth etc

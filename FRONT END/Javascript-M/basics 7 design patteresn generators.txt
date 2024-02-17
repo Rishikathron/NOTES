@@ -1,0 +1,300 @@
+
+Generator functions
+===================
+
+generator functions are a special class of functions.
+
+They can be stopped midway and then continue from where they had stopped.
+Generator functions are declared with the function* keyword instead of the normal function keyword:
+
+function* genFunc(){
+  // Perform operation
+}
+
+In normal functions, we use the return keyword to return a value and as soon as the return statement gets executed, the function execution stops:
+function normalFunc(){
+  return 22;
+  console.log(2); // This line of code does not get executed
+}
+In the case of generator functions, when called, they do not execute the code, instead, they return a generator object. 
+This generator object handles the execution.
+
+function* genFunc(){
+  yield 3;
+  yield 4;
+}
+genFunc(); // Returns Object [Generator] {}
+
+The generator object consists of a method called next(), this method when called, executes the code until the nearest yield statement, and returns the yield value.
+For example, if we run the next() method on the above code:
+
+genFunc().next(); // Returns {value: 3, done:false}
+
+As one can see the next method returns an object consisting of a value and done properties.  
+Value property represents the yielded value. 
+Done property tells us whether the function code is finished or not. (Returns true if finished).
+
+Generator functions are used to return iterators. Let’s see an example where an iterator is returned:
+
+function* iteratorFunc() {
+  let count = 0;
+  for (let i = 0; i < 2; i++) {
+      count++;
+      yield i;
+  }
+  return count;
+}
+
+let iterator = iteratorFunc();
+console.log(iterator.next()); // {value:0,done:false}
+console.log(iterator.next()); // {value:1,done:false}
+console.log(iterator.next()); // {value:2,done:true}
+
+As you can see in the code above, the last line returns done:true, since the code reaches the return statement.
+
+Generator functions are run by their generator yield by yield which means one output at a time, 
+whereas Async-await functions are executed sequentially one after another.
+Async/await provides a certain use case for Generators easier to execute.
+The output result of the Generator function is always value: X, done: Boolean, 
+but the return value of the Async function is always an assurance or throws an error
+
+WeakSet in javascript
+=====================
+
+In javascript, a Set is a collection of unique and ordered elements. Just like Set, 
+WeakSet is also a collection of unique and ordered elements with some key differences:
+
+Weakset contains only objects and no other type.
+An object inside the weakset is referenced weakly. This means, that if the object inside the weakset does not have a reference, it will be garbage collected.
+Unlike Set, WeakSet only has three methods, add() , delete() and has() .
+
+const newSet = new Set([4, 5, 6, 7]);
+console.log(newSet);// Outputs Set {4,5,6,7}
+
+const newSet2 = new WeakSet([3, 4, 5]); //Throws an error
+
+
+let obj1 = {message:"Hello world"};
+const newSet3 = new WeakSet([obj1]);
+console.log(newSet3.has(obj1)); // true
+
+WeakMap in javascript
+=====================
+
+In javascript, Map is used to store key-value pairs. 
+The key-value pairs can be of both primitive and non-primitive types. WeakMap is similar to Map with key differences:
+
+The keys and values in weakmap should always be an object.
+If there are no references to the object, the object will be garbage collected.
+
+const map1 = new Map();
+map1.set('Value', 1);
+
+const map2 = new WeakMap();
+map2.set('Value', 2.3); // Throws an error
+
+let obj = {name:"Vivek"};
+const map3 = new WeakMap();
+map3.set(obj, {age:23});
+
+ Object Destructuring
+======================
+
+Object destructuring is a new way to extract elements from an object or an array.
+
+const classDetails = {
+  strength: 78,
+  benches: 39,
+  blackBoard:1
+}
+
+const {strength:classStrength, benches:classBenches,blackBoard:classBlackBoard} = classDetails;
+
+console.log(classStrength); // Outputs 78
+console.log(classBenches); // Outputs 39
+console.log(classBlackBoard); // Outputs 1
+
+As one can see, using object destructuring we have extracted all the elements inside an object in one line of code. 
+If we want our new variable to have the same name as the property of an object we can remove the colon
+
+const {strength:strength} = classDetails;
+// The above line of code can be written as:
+const {strength} = classDetails;
+
+const arr = [1, 2, 3, 4];
+const [first,second,third,fourth] = arr;
+console.log(first); // Outputs 1
+console.log(second); // Outputs 2
+console.log(third); // Outputs 3
+console.log(fourth); // Outputs 4
+
+there are two kinds of destructuring patterns: binding pattern and assignment pattern, with slightly different syntaxes.
+
+In binding patterns, the pattern starts with a declaration keyword (var, let, or const). 
+Then, each individual property must either be bound to a variable or further destructured.
+
+const obj = { a: 1, b: { c: 2 } };
+const { a, b: { c: d } } = obj;
+// Two variables are bound: `a` and `d`
+
+In assignment patterns, the pattern does not start with a keyword. Each destructured property is assigned to a target of assignment — which may either be declared
+ beforehand with var or let, or is a property of another object — in general, anything that can appear on the left-hand side of an assignment expression.
+ 
+ const numbers = [];
+const obj = { a: 1, b: 2 };
+({ a: numbers[0], b: numbers[1] } = obj);
+// The properties `a` and `b` are assigned to properties of `numbers`
+
+
+JavaScript design patterns
+===========================
+
+JavaScript design patterns are repeatable approaches for errors that arise sometimes when building JavaScript browser applications. 
+They truly assist us in making our code more stable.
+They are more like ideas, opinions, and abstractions that can be useful in certain situations to solve a particular kind of problem.
+
+They are divided mainly into 3 categories 
+
+Creational Design Pattern
+Structural Design Pattern
+Behavioral Design Pattern.
+
+Creational Design Pattern: 
+--------------------------------
+The object generation mechanism is addressed by the JavaScript Creational Design Pattern. 
+They aim to make items that are appropriate for a certain scenario.
+Creational patterns consist of different mechanisms used to create objects.
+
+Singleton Pattern
+Singleton is a design pattern that ensures that a class has only one immutable instance. 
+ the singleton pattern consists of an object that can't be copied or modified. 
+ It's often useful when we want to have some immutable single point of truth for our application.
+ 
+ const Config = {
+  start: () => console.log('App has started'),
+  update: () => console.log('App has updated'),
+}
+// We freeze the object to prevent new properties being added and existing properties being modified or removed
+Object.freeze(Config)
+Config.start() // "App has started"
+Config.update() // "App has updated"
+Config.name = "Robert" // We try to add a new key
+console.log(Config) // And verify it doesn't work: { start: [Function: start], update: [Function: update] }
+
+.................
+
+class Config {
+    constructor() {}
+    start(){ console.log('App has started') }  
+    update(){ console.log('App has updated') }
+}
+const instance = new Config()
+Object.freeze(instance)
+
+
+Factory Method Pattern
+The Factory method pattern provides an interface for creating objects that can be modified after creation. 
+the logic for creating our objects is centralized in a single place, simplifying and better organizing our code.
+
+class Alien {
+    constructor (name, phrase) {
+        this.name = name
+        this.phrase = phrase
+        this.species = "alien"
+    }
+    fly = () => console.log("Zzzzzziiiiiinnnnnggggg!!")
+    sayPhrase = () => console.log(this.phrase)
+}
+const alien1 = new Alien("Ali", "I'm Ali the alien!")
+console.log(alien1.name) // output: "Ali"
+
+Builder Pattern
+The Builder pattern is used to create objects in "steps". 
+ we separate the creation of properties and methods into different entities.
+ 
+// We declare our objects
+const bug1 = {
+    name: "Buggy McFly",
+    phrase: "Your debugger doesn't work with me!"
+}
+const bug2 = {
+    name: "Martiniano Buggland",
+    phrase: "Can't touch this! Na na na na..."
+}
+// These functions take an object as parameter and add a method to them
+const addFlyingAbility = obj => {
+    obj.fly = () => console.log(`Now ${obj.name} can fly!`)
+}
+const addSpeechAbility = obj => {
+    obj.saySmthg = () => console.log(`${obj.name} walks the walk and talks the talk!`)
+}
+// Finally we call the builder functions passing the objects as parameters
+addFlyingAbility(bug1)
+bug1.fly() // output: "Now Buggy McFly can fly!"
+addSpeechAbility(bug2)
+bug2.saySmthg() // output: "Martiniano Buggland walks the walk and talks the talk!"
+
+Prototype Pattern// We declare our prototype object with two methods
+const enemy = {
+    attack: () => console.log("Pim Pam Pum!"),
+    flyAway: () => console.log("Flyyyy like an eagle!")
+}
+// We declare another object that will inherit from our prototype
+const bug1 = {
+    name: "Buggy McFly",
+    phrase: "Your debugger doesn't work with me!"
+}
+// With setPrototypeOf we set the prototype of our object
+Object.setPrototypeOf(bug1, enemy)
+
+// With getPrototypeOf we read the prototype and confirm the previous has worked
+console.log(Object.getPrototypeOf(bug1)) // { attack: [Function: attack], flyAway: [Function: flyAway] }
+
+console.log(bug1.phrase) // Your debugger doesn't work with me!
+console.log(bug1.attack()) // Pim Pam Pum!
+console.log(bug1.flyAway()) // Flyyyy like an eagle!
+The Prototype pattern allows you to create an object using another object as a blueprint, inheriting its properties and methods.
+
+
+
+Structural Design Pattern: 
+-----------------------------
+The JavaScript Structural Design Pattern explains how the classes and objects we've generated so far can be combined to construct bigger frameworks. 
+This pattern makes it easier to create relationships between items by defining a straightforward way to do so.
+Structural patterns refer to how to assemble objects and classes into larger structures.
+
+Adapter Pattern
+---------------
+The Adapter allows two objects with incompatible interfaces to interact with each other.
+
+Decorator Pattern
+-----------------
+The Decorator pattern lets you attach new behaviors to objects by placing them inside wrapper objects that contain the behaviors.
+
+Facade Pattern
+--------------
+The Facade pattern provides a simplified interface to a library, a framework, or any other complex set of classes.
+
+Proxy Pattern
+-------------
+The Proxy pattern provides a substitute or placeholder for another object. 
+The idea is to control access to the original object, performing some kind of action before or after the request gets to the actual original object.
+
+Behavioral Design Pattern: 
+---------------------------
+This design pattern highlights typical patterns of communication between objects in JavaScript. 
+As a result, the communication may be carried out with greater freedom
+Behavioral patterns control communication and the assignment of responsibilities between different objects.
+
+Chain of Responsibility Pattern
+-------------------------------
+The Chain of Responsibility passes requests along a chain of handlers. 
+Each handler decides either to process the request or to pass it to the next handler in the chain.
+
+Iterator Pattern
+----------------
+The iterator is used to traverse elements of a collection. 
+
+Observer Pattern
+---------------
+The observer pattern lets you define a subscription mechanism to notify multiple objects about any events that happen to the object they’re observing.

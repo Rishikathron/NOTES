@@ -1,0 +1,145 @@
+ Promises and Observables in Angular
+=========================================
+
+While both the concepts deal with Asynchronous events in Angular, Promises handle one such event at a time while observables handle a sequence of events over some time. 
+
+Promises
+==========
+They emit a single value at a time. They execute immediately after creation and are not cancellable. They are Push errors to the child promises. 
+A promise is an object that may produce a single value some time in the future with either a resolved value or a reason that it’s not resolved(for example, network error). 
+Promises in Angular provide an easy way to execute asynchronous functions that use callbacks, while emitting and completing (resolving or rejecting) one value at a time. When using an Angular Promise, you are enabled to emit a single event from the API. Then, the controller (or the directive) takes on, registering up to three callbacks – success, error, and/or notifications.
+
+There are four states of the Angular Promise:
+
+fulfilled - action is fulfilled
+rejected - action failed
+pending - action hasn’t succeeded or failed yet
+settled - action is either fulfilled or rejected
+Something to remember is that Angular Promise is more passive compared to the Observable and cannot be cancelled once it is started. In other words, when you pass the callback to the Promise constructor (controller or directive), it will either resolve or reject the function.
+
+Now, there are several disadvantages with the Angular Promise.
+
+Promises aren’t cancellable and you have to wait until the callback returns error or success.
+Not suitable for centralized and predictable error handling as errors are sent to the child promise.
+They don’t provide any operations.
+Promises execute an async value only once.
+Cannot be used for multiple values over time.
+They become hard to manage with larger applications.
+They cannot be retried.
+
+const promise = new Promise(() => {
+resolve(10);
+});
+
+promise.then((value) => value * 2);
+
+promise.then((value) => {
+console.log(value)
+});
+
+A promise must follow a specific set of rules,
+
+A promise is an object that supplies a standard-compliant .then() method
+A pending promise may transition into either fulfilled or rejected state
+A fulfilled or rejected promise is settled and it must not transition into any other state.
+Once a promise is settled, the value must not change.
+
+The process of executing a sequence of asynchronous tasks one after another using promises is known as Promise chaining.
+
+new Promise(function (resolve, reject) {
+  setTimeout(() => resolve(1), 1000);
+})
+  .then(function (result) {
+    console.log(result); // 1
+    return result * 2;
+  })
+  .then(function (result) {
+    console.log(result); // 2
+    return result * 3;
+  })
+  .then(function (result) {
+    console.log(result); // 6
+    return result * 4;
+  });
+
+In the above handlers, the result is passed to the chain of .then() handlers with the below work flow,
+
+The initial promise resolves in 1 second,
+After that .then handler is called by logging the result(1) and then return a promise with the value of result * 2.
+After that the value passed to the next .then handler by logging the result(2) and return a promise with result * 3.
+Finally the value passed to the last .then handler by logging the result(6) and return a promise with result * 4.
+
+Promise.all is a promise that takes an array of promises as an input (an iterable), and it gets resolved when all the promises get resolved or any one of them gets rejected. 
+............
+
+Promise.all([Promise1, Promise2, Promise3]) .then(result) => {   console.log(result) }) .catch(error => console.log(`Error in promises ${error}`))
+
+ Remember that the order of the promises(output the result) is maintained as per input order.
+
+Promise.race() method will return the promise instance which is firstly resolved or rejected. 
+..............
+
+var promise1 = new Promise(function (resolve, reject) {
+  setTimeout(resolve, 500, "one");
+});
+var promise2 = new Promise(function (resolve, reject) {
+  setTimeout(resolve, 100, "two");
+});
+
+Promise.race([promise1, promise2]).then(function (value) {
+  console.log(value); // "two" // Both promises will resolve, but promise2 is faster
+});
+
+
+Observables
+============
+They are only executed when subscribed to them using the subscribe() method. They emit multiple values over a period of time. They help perform operations like forEach, filter, and retry, among others. They deliver errors to the subscribers. When the unsubscribe() method is called, the listener stops receiving further values.
+
+Observables provide more capabilities to you as they let developers run functions asynchronously and synchronously. They represent a stream of values that can handle 0, 1, or multiple events, using the same API for each. The thing that I personally like about Angular Observables is the number of operators simplifying coding, including: retry(), or replay(), map, forEach, reduce and more.
+
+Just like Angular Promises, Observables in Angular also have their disadvantages.
+
+Observables aren’t natively supported by browsers.
+They require RxJS operators to get a new tailored stream of values.
+Debugging the code with observables may be a bit more challenging.
+You must have the know-how of extra tools and techniques to test the RxJS code.
+
+const obs = new Observable((observer) => {
+observer.next(10);
+}) ;
+
+Obs.pipe(map(value) => value * 2);
+
+const sub = obs.subscribe((value) => {
+console.log(value)
+});
+
+sub.unsubscribe();
+
+Observables	
+Promises
+-------------
+Emit multiple values over a period of time.	
+Emit a single value at a time.
+
+Are lazy: they’re not executed until we subscribe to them using the subscribe() method.	
+Are not lazy: execute immediately after creation.
+
+Have subscriptions that are cancellable using the unsubscribe() method, which stops the listener from receiving further values.	
+Are not cancellable.
+
+Provide the map for forEach, filter, reduce, retry, and retryWhen operators.	
+Don’t provide any operations.
+
+Deliver errors to the subscribers.	
+Push errors to the child promises.
+
+Observables are often compared to promises. Here are some key differences:
+--------------------------------------------------------------------------
+Observables are declarative; computation does not start until subscription. Promises execute immediately on creation. This makes observables useful for defining recipes that can be run whenever you need the result.
+
+Observables provide many values. Promises provide one. This makes observables useful for getting multiple values over time.
+
+Observables differentiate between chaining and subscription. Promises only have .then() clauses. This makes observables useful for creating complex transformation recipes to be used by other part of the system, without causing the work to be executed.
+
+Observables subscribe() is responsible for handling errors. Promises push errors to the child promises. This makes observables useful for centralized and predictable error handling.

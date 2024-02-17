@@ -1,0 +1,172 @@
+Forms in Angular
+================
+
+Applications use forms to enable users to log in, to update a profile, to enter sensitive information, and to perform many other data-entry tasks.
+
+Angular provides two different approaches to handling user input through forms: reactive and template-driven. Both capture user input events from the view, validate the user input, create a form model and data model to update, and provide a way to track changes.
+
+Reactive forms	
+
+Provide direct, explicit access to the underlying form's object model. Compared to template-driven forms, they are more robust: they're more scalable, reusable, and testable. If forms are a key part of your application, or you're already using reactive patterns for building your application, use reactive forms.
+Explicit, created in component class
+Structured and immutable
+Synchronous
+Functions
+
+
+import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
+
+@Component({
+  selector: 'app-reactive-favorite-color',
+  template: `
+    Favorite Color: <input type="text" [formControl]="favoriteColorControl">
+  `
+})
+export class FavoriteColorComponent {
+  favoriteColorControl = new FormControl('');
+}
+
+The [formControl] directive links the explicitly created FormControl instance to a specific form element in the view, using an internal value accessor.
+
+The user types a value into the input element, in this case the favorite color Blue.
+The form input element emits an "input" event with the latest value.
+The user calls the favoriteColorControl.setValue() method, which updates the FormControl value.
+The FormControl instance emits the new value through the valueChanges observable.
+Any subscribers to the valueChanges observable receive the new value.
+The control value accessor on the form input element updates the element with the new value.
+
+Define custom validators as functions that receive a control to validate
+---
+
+Reactive forms provide a model-driven approach to handling form inputs whose values change over time. 
+
+Reactive forms are built around observable streams, where form inputs and values are provided as streams of input values, which can be accessed synchronously.
+
+To use reactive form controls, import ReactiveFormsModule from the @angular/forms package and add it to your NgModule's imports array.
+Use the constructor of FormControl to set its initial value, which in this case is an empty string. By creating these controls in your component class, you get immediate access to listen for, update, and validate the state of the form input.
+After you create the control in the component class, you must associate it with a form control element in the template. Update the template with the form control using the formControl binding provided by FormControlDirective, which is also included in the ReactiveFormsModule.
+
+A form control instance provides a setValue() method that updates the value of the form control and validates the structure of the value provided against the control's structure.
+
+updateName() {
+  this.name.setValue('Nancy');
+}
+
+Form group	Defines a form with a fixed set of controls that you can manage together. Form group basics are discussed in this section. You can also nest form groups to create more complex forms.
+
+Form array	Defines a dynamic form, where you can add and remove controls at run time. You can also nest form arrays to create more complex forms. For more about this option, see Creating dynamic forms.
+
+ profileForm = new FormGroup({
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
+  });
+
+ <form [formGroup]="profileForm"  (ngSubmit)="onSubmit()">
+
+  <label for="first-name">First Name: </label>
+  <input id="first-name" type="text" formControlName="firstName">
+
+  <label for="last-name">Last Name: </label>
+  <input id="last-name" type="text" formControlName="lastName">
+
+</form>
+The onSubmit() method in the ProfileEditor component captures the current value of profileForm. Use EventEmitter to keep the form encapsulated and to provide the form value outside the component. 
+
+
+nested form groups
+
+ profileForm = new FormGroup({
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
+    address: new FormGroup({
+      street: new FormControl(''),
+      city: new FormControl(''),
+      state: new FormControl(''),
+      zip: new FormControl('')
+    })
+  });
+
+<div formGroupName="address">
+  <h2>Address</h2>
+
+  <label for="street">Street: </label>
+  <input id="street" type="text" formControlName="street">
+
+  <label for="city">City: </label>
+  <input id="city" type="text" formControlName="city">
+
+  <label for="state">State: </label>
+  <input id="state" type="text" formControlName="state">
+
+  <label for="zip">Zip Code: </label>
+  <input id="zip" type="text" formControlName="zip">
+</div>
+
+
+setValue()	Set a new value for an individual control. The setValue() method strictly adheres to the structure of the form group and replaces the entire value for the control.
+patchValue()	Replace any properties defined in the object that have changed in the form model.
+
+-------------------
+Template-driven forms
+
+Rely on directives in the template to create and manipulate the underlying object model. They are useful for adding a simple form to an app, such as an email list signup form. They're straightforward to add to an app, but they don't scale as well as reactive forms. If you have very basic form requirements and logic that can be managed solely in the template, template-driven forms could be a good fit.
+Implicit, created by directives
+Unstructured and mutable
+Asynchronous
+Directives
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-template-favorite-color',
+  template: `
+    Favorite Color: <input type="text" [(ngModel)]="favoriteColor">
+  `
+})
+export class FavoriteColorComponent {
+  favoriteColor = '';
+}
+
+ The directive NgModel creates and manages a FormControl instance for a given form element.
+
+The favoriteColor value is updated in the component.
+Change detection begins.
+During change detection, the ngOnChanges lifecycle hook is called on the NgModel directive instance because the value of one of its inputs has changed.
+The ngOnChanges() method queues an async task to set the value for the internal FormControl instance.
+Change detection completes.
+On the next tick, the task to set the FormControl instance value is executed.
+The FormControl instance emits the latest value through the valueChanges observable.
+Any subscribers to the valueChanges observable receive the new value.
+The control value accessor updates the form input element in the view with the latest favoriteColor value.
+
+Tied to template directives, and must provide custom validator directives that wrap validation functions
+
+Reactive forms are more scalable than template-driven forms. They provide direct access to the underlying form API, and use synchronous data flow between the view and the data model, which makes creating large-scale forms easier. Reactive forms require less setup for testing, and testing does not require deep understanding of change detection to properly test form updates and validation.
+
+Template-driven forms focus on simple scenarios and are not as reusable. They abstract away the underlying form API, and use asynchronous data flow between the view and the data model. The abstraction of template-driven forms also affects testing. Tests are deeply reliant on manual change detection execution to run properly, and require more setup.
+
+
+FormControl	Tracks the value and validation status of an individual form control.
+FormGroup	Tracks the same values and status for a collection of form controls.
+FormArray	Tracks the same values and status for an array of form controls.
+ControlValueAccessor	Creates a bridge between Angular FormControl instances and built-in DOM elements.
+
+--------------------------------------
+
+Template-driven approach
+
+In this method, the conventional form tag is used to create forms. Angular automatically interprets and creates a form object representation for the tag. 
+Controls can be added to the form using the NGModel tag. Multiple controls can be grouped using the NGControlGroup module. 
+A form value can be generated using the “form.value” object. Form data is exported as JSON values when the submit method is called. 
+Basic HTML validations can be used to validate the form fields. In the case of custom validations, directives can be used. 
+Arguably, this method is the simplest way to create an Angular App. 
+
+Reactive Form Approach
+
+This approach is the programming paradigm oriented around data flows and propagation of change. 
+With Reactive forms, the component directly manages the data flows between the form controls and the data models. 
+Reactive forms are code-driven, unlike the template-driven approach. 
+Reactive forms break from the traditional declarative approach. 
+Reactive forms eliminate the anti-pattern of updating the data model via two-way data binding.
+Typically, Reactive form control creation is synchronous and can be unit tested with synchronous programming techniques. 

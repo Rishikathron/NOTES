@@ -1,0 +1,570 @@
+
+Variables in Javascript:
+========================
+
+Variables are containers that store values. Variables are used to store this information.
+
+You start by declaring a variable with the let keyword, followed by the name you give to the variable:
+let myVariable;
+A semicolon at the end of a line indicates where a statement ends. It is only required when you need to separate statements on a single line. 
+
+One special thing about variables is that they can contain just about anything — not just strings and numbers.
+ Variables can also contain complex data and even entire functions to do amazing things.
+
+JavaScript is case sensitive. This means myVariable is not the same as myvariable.
+
+After declaring a variable, you can give it a value:
+myVariable = "Bob";
+
+Also, you can do both these operations on the same line:
+let myVariable = "Bob";
+
+You retrieve the value by calling the variable name:
+myVariable;
+
+After assigning a value to a variable, you can change it later in the code:
+let myVariable = "Bob";
+myVariable = "Steve";
+
+We can also declare multiple variables in one line:
+let user = 'John', age = 25, message = 'Hello';
+
+A variable should be declared only once.
+A repeated declaration of the same variable is an error
+
+There are two limitations on variable names in JavaScript:
+-------------------------------------------------------
+The name must contain only letters, digits, or the symbols $ and _.
+The first character must not be a digit.
+There is a list of reserved words, which cannot be used as variable names because they are used by the language itself.
+For example: let, class, return, and function are reserved.
+
+Normally, we need to define a variable before using it. But in the old times, it was technically possible to create a variable by a mere assignment of the value without using let.
+This still works now if we don’t put use strict in our scripts to maintain compatibility with old scripts.
+The directive looks like a string: "use strict" or 'use strict'. When it is located at the top of a script, the whole script works the “modern” way.
+Please make sure that "use strict" is at the top of your scripts, otherwise strict mode may not be enabled.
+
+
+Constants
+===========
+
+To declare a constant (unchanging) variable, use const instead of let:
+const myBirthday = '18.04.1982';
+They cannot be reassigned. An attempt to do so would cause an error:
+When a programmer is sure that a variable will never change, they can declare it with const to guarantee and clearly communicate that fact to everyone.
+
+Var
+====
+different way to declare variables, using the var keyword
+
+var myName;
+var myAge;
+
+Back when JavaScript was first created, this was the only way to declare variables. The design of var is confusing and error-prone.+
+if you write a multiline JavaScript program that declares and initializes a variable, you can actually declare a variable with var after you initialize it and it will still work.
+Secondly, when you use var, you can declare the same variable as many times as you like, but with let you can't.
+
+
+let allows you to declare variables that are limited to the scope of a block statement, or expression on which it is used, 
+unlike the var keyword, which declares a variable globally, or locally to an entire function regardless of block scope. 
+
+The other difference between var and let is that the latter can only be accessed after its declaration is reached (see temporal dead zone).
+ For this reason, let declarations are commonly regarded as non-hoisted.
+
+Unlike var, let begins declarations, not statements. That means you cannot use a lone let declaration as the body of a block
+
+Variables declared by let have their scope in the block for which they are declared, as well as in any contained sub-blocks. 
+In this way, let works very much like var. The main difference is that the scope of a var variable is the entire enclosing function:
+
+function varTest() {
+  var x = 1;
+  {
+    var x = 2;  // same variable!
+    console.log(x);  // 2
+  }
+  console.log(x);  // 2
+}
+
+function letTest() {
+  let x = 1;
+  {
+    let x = 2;  // different variable
+    console.log(x);  // 2
+  }
+  console.log(x);  // 1
+}
+
+-------------------
+var x = 'global';
+let y = 'global';
+console.log(this.x); // "global"
+console.log(this.y); // undefined
+-------------------
+if (x) {
+  let foo;
+  let foo; // SyntaxError thrown.
+}
+------------------------
+let x = 1;
+switch(x) {
+  case 0:
+    let foo;
+    break;
+
+  case 1:
+    let foo; // SyntaxError for redeclaration.
+    break;
+}
+
+However, it's important to point out that a block nested inside a case clause will create a new block scoped lexical environment,
+ which will not produce the redeclaration errors shown above.
+ 
+let x = 1;
+
+switch(x) {
+  case 0: {
+    let foo;
+    break;
+  }
+  case 1: {
+    let foo;
+    break;
+  }
+}
+------------------
+Temporal dead zone (TDZ)
+
+A let or const variable is said to be in a "temporal dead zone" (TDZ) from the start of the block until code execution reaches
+ the line where the variable is declared and initialized.
+ 
+While inside the TDZ, the variable has not been initialized with a value, and any attempt to access it will result in a ReferenceError.
+ The variable is initialized with a value when execution reaches the line of code where it was declared. 
+ 
+If no initial value was specified with the variable declaration, it will be initialized with a value of undefined.
+This differs from var variables, which will return a value of undefined if they are accessed before they are declared. 
+
+{ // TDZ starts at beginning of scope
+  console.log(bar); // undefined
+  console.log(foo); // ReferenceError
+  var bar = 1;
+  let foo = 2; // End of TDZ (for foo)
+}
+
+The term "temporal" is used because the zone depends on the order of execution (time) rather than the order in which the code is written (position).
+
+function go(n) {
+  // n here is defined!
+  console.log(n); // Object {a: [1,2,3]}
+
+  for (let n of n.a) { // ReferenceError
+    console.log(n);
+  }
+}
+
+go({a: [1, 2, 3]});
+
+-------------
+
+var a = 1;
+var b = 2;
+
+if (a === 1) {
+  var a = 11; // the scope is global
+  let b = 22; // the scope is inside the if-block
+
+  console.log(a);  // 11
+  console.log(b);  // 22
+}
+
+console.log(a); // 11
+console.log(b); // 2
+
+----------------
+
+let x = 1;
+
+{
+  var x = 2; // SyntaxError for re-declaration
+}
+
+========================
+
+Data types present in javascript::
+----------------------------------
+There are two basic groups of data types -  
+
+Reference type- These are complex types of data that can mainly include dates and strings. 
+Primitive type- These are the types of data that include numbers
+
+These are the different types of data that JavaScript supports:
+
+Boolean - For true and false values
+=======
+The boolean type has only two values: true and false.
+This type is commonly used to store yes/no values: true means “yes, correct”, and false means “no, incorrect”.
+--------------------------------
+Null - For empty or unknown values
+====
+The special null value does not belong to any of the types described above.
+It forms a separate type of its own which contains only the null value:
+let age = null;
+
+In JavaScript, null is not a “reference to a non-existing object” or a “null pointer” like in some other languages.
+It’s just a special value which represents “nothing”, “empty” or “value unknown”.
+---------------------------
+Undefined -
+============
+For variables that are only declared and not defined or initialized
+The special value undefined also stands apart. It makes a type of its own, just like null.
+The meaning of undefined is “value is not assigned”.
+If a variable is declared, but not assigned, then its value is undefined:
+
+let age;
+alert(age); // shows "undefined"
+
+Normally, one uses null to assign an “empty” or “unknown” value to a variable, while undefined is reserved as a default initial value for unassigned things.
+-----------------------
+Number - 
+=========
+For integer and floating-point numbers
+
+The number type represents both integer and floating point numbers.
+
+There are many operations for numbers, e.g. multiplication *, division /, addition +, subtraction -, and so on.
+Besides regular numbers, there are so-called “special numeric values” which also belong to this data type: Infinity, -Infinity and NaN.
+NaN represents a computational error. It is a result of an incorrect or an undefined mathematical operation, for instance:
+NaN is sticky. Any further mathematical operation on NaN returns NaN
+alert( NaN + 1 ); // NaN
+alert( 3 * NaN ); // NaN
+alert( "not a number" / 2 - 1 ); // NaN
+---------------------------------
+String -
+======== 
+For characters and alphanumeric values
+This is a sequence of text known as a string. To signify that the value is a string, enclose it in single quote marks.
+let str = "Hello";
+let str2 = 'Single quotes are ok too';
+let phrase = `can embed another ${str}`;
+
+In JavaScript, there are 3 types of quotes.
+
+Double quotes: "Hello".
+Single quotes: 'Hello'.
+Backticks: `Hello`.
+
+Backticks are “extended functionality” quotes. They allow us to embed variables and expressions into a string by wrapping them in ${…}
+
+-----------------------------------
+Object - 
+=========
+For collections or complex values
+
+The object type is special.
+
+All other types are called “primitive” because their values can contain only a single thing (be it a string or a number or whatever).
+ In contrast, objects are used to store collections of data and more complex entities.
+Being that important, objects deserve a special treatment.
+
+let dog = { name : 'Spot', breed : 'Dalmatian' };
+
+An object is a collection of related data and/or functionality. These usually consist of several variables and functions 
+
+accessed the object's properties and methods using dot notation
+dog.name
+Bracket notation provides an alternative way to access object properties. 
+dog["name"]
+
+set (update) the value of object members
+person.age = 45;
+person["name"]["last"] = "Cratchit";
+
+bracket notation is that it can be used to set not only member values dynamically, but member names too.
+
+const myDataName = nameInput.value;
+const myDataValue = nameValue.value;
+
+person[myDataName] = myDataValue;
+
+const myDataName = "height";
+const myDataValue = "1.75m";
+person[myDataName] = myDataValue;
+
+---------------------------------
+Symbols - 
+==========
+For unique identifiers for objects
+
+The symbol type is used to create unique identifiers for objects. We have to mention it here for the sake of completeness,
+ but also postpone the details till we know objects.
+ 
+ ================
+ 
+The typeof operator allows us to see which type is stored in a variable.
+
+Usually used as typeof x, but typeof(x) is also possible.
+Returns a string with the name of the type, like "string".
+For null returns "object" – this is an error in the language, it’s not actually an object.
+
+typeof undefined // "undefined"
+typeof 0 // "number"
+typeof 10n // "bigint"
+typeof true // "boolean"
+typeof "foo" // "string"
+typeof Symbol("id") // "symbol"
+typeof Math // "object"  (1)
+typeof null // "object"  (2)
+typeof alert // "function"  (3)
+
+typeof is an operator, not a function. The parentheses here aren’t a part of typeof. It’s the kind of parentheses used for mathematical grouping.
+
+Arrays
+=========
+Arrays are generally described as "list-like objects"; they are basically single objects that contain multiple values stored in a list.
+An array is a single object that contains multiple values enclosed in square brackets and separated by commas.
+
+let myNameArray = ['Chris', 'Bob', 'Jim'];
+let myNumberArray = [10, 15, 40];
+
+Once these arrays are defined, you can access each value by their location within the array.
+ myNameArray[0];
+ 
+In an array we can store various data types — strings, numbers, objects, and even other arrays.
+const random = ['tree', 795, [0, 1, 2]];
+ 
+You can find out the length of an array (how many items are in it) in exactly the same way as you find out the length (in characters) of a string 
+— by using the length property.
+const shopping = ['bread', 'milk', 'cheese', 'hummus', 'noodles'];
+console.log(shopping.length);
+
+You can find the index of a particular item using the indexOf() method. 
+============================================================================
+This takes an item as an argument and returns the index, or -1 if the item was not found in the array:
+const birds = ['Parrot', 'Falcon', 'Owl'];
+console.log(birds.indexOf('Owl'));   //  2
+console.log(birds.indexOf('Rabbit')); // -1
+
+indexOf(searchElement, fromIndex)
+
+searchElement
+Element to locate in the array.
+
+fromIndex Optional
+The index to start the search at.
+If the index is greater than or equal to the array's length, -1 is returned, which means the array will not be searched.
+If the provided index value is a negative number, it is taken as the offset from the end of the array
+if the provided index is negative, the array is still searched from front to back. If the provided index is 0, then the whole array will be searched.
+
+The indexOf() method skips empty slots in sparse arrays.
+The indexOf() method is generic. It only expects the this value to have a length property and integer-keyed properties.
+
+const array = [2, 9, 9];
+array.indexOf(2);     // 0
+array.indexOf(7);     // -1
+array.indexOf(9, 2);  // 2
+array.indexOf(2, -1); // -1
+array.indexOf(2, -3); // 0
+
+You cannot use indexOf() to search for empty slots in sparse arrays.
+console.log([1, , 3].indexOf(undefined)); // -1
+
+
+const arrayLike = {
+  length: 3,
+  0: 2,
+  1: 3,
+  2: 4,
+};
+console.log(Array.prototype.indexOf.call(arrayLike, 2));
+// 0
+console.log(Array.prototype.indexOf.call(arrayLike, 5));
+// -1
+
+
+Sparse Arrays:
+==============
+Arrays can contain "empty slots", which are not the same as slots filled with the value undefined
+
+const a = Array(5); // [ <5 empty items> ]
+const b = [1, 2, , , 5]; // [ 1, 2, <2 empty items>, 5 ]
+const c = [1, 2];
+c[4] = 5; // [ 1, 2, <2 empty items>, 5 ]
+const d = [1, 2];
+d.length = 5; // [ 1, 2, <3 empty items> ]
+const e = [1, 2, 3, 4, 5];
+delete e[2]; // [ 1, 2, <1 empty item>, 4, 5 ]
+
+In some operations, empty slots behave as if they are filled with undefined
+
+const arr = [1, 2, , , 5]; // Create a sparse array
+// Indexed access
+console.log(arr[2]); // Logs "undefined"
+// For...of
+for (const i of arr) console.log(i);
+// Logs "1 2 undefined undefined 5"
+// Spreading
+const another = [...arr]; // "another" is [ 1, 2, undefined, undefined, 5 ]
+
+But in others (most notably array iteration methods), empty slots are skipped.
+
+const mapped = arr.map((i) => i + 1); // [ 2, 3, <2 empty items>, 6 ]
+arr.forEach((i) => console.log(i)); // Logs "1 2 5"
+const filtered = arr.filter(() => true); // [ 1, 2, 5 ]
+const hasFalsy = arr.some((k) => !k); // false
+
+// Property enumeration
+const keys = Object.keys(arr); // [ '0', '1', '4' ]
+for (const key in arr) console.log(key); // Logs "0 1 4"
+// Spreading into an object uses property enumeration, not the array's iterator
+const objectSpread = { ...arr }; // { '0': 1, '1': 2, '4': 5 }
+
+
+To add one or more items to the end of an array we can use push().
+====================================================================
+
+const cities = ['Manchester', 'Liverpool'];
+cities.push('Cardiff');
+console.log(cities);      // [ "Manchester", "Liverpool", "Cardiff" ]
+cities.push('Bradford', 'Brighton');
+console.log(cities);      // [ "Manchester", "Liverpool", "Cardiff", "Bradford", "Brighton" ]
+
+push(element0, element1, /* … ,*/ elementN)
+
+elementN
+The element(s) to add to the end of the array.
+
+Although strings are also array-like, this method is not suitable to be applied on them, as strings are immutable.
+
+const sports = ['soccer', 'baseball'];
+const total = sports.push('football', 'swimming');
+
+console.log(sports); // ['soccer', 'baseball', 'football', 'swimming']
+console.log(total); // 4
+
+uses spread syntax to push all elements from a second array into the first one.
+
+const vegetables = ['parsnip', 'potato'];
+const moreVegs = ['celery', 'beetroot'];
+
+// Merge the second array into the first one
+vegetables.push(...moreVegs);
+
+console.log(vegetables); // ['parsnip', 'potato', 'celery', 'beetroot']
+
+To add an item to the start of the array, use unshift()
+===========================================================
+const cities = ['Manchester', 'Liverpool'];
+cities.unshift('Edinburgh');
+console.log(cities);     // [ "Edinburgh", "Manchester", "Liverpool" ]
+
+unshift(element0, element1, /* … ,*/ elementN)
+
+elementN
+The elements to add to the front of the arr.
+
+let arr = [4, 5, 6];
+
+arr.unshift(1, 2, 3);
+console.log(arr);
+// [1, 2, 3, 4, 5, 6]
+
+arr = [4, 5, 6]; // resetting the array
+
+arr.unshift(1);
+arr.unshift(2);
+arr.unshift(3);
+
+console.log(arr);
+// [3, 2, 1, 4, 5, 6]
+
+
+
+To remove the last item from the array, use pop().
+======================================================
+const cities = ['Manchester', 'Liverpool'];
+cities.pop();
+console.log(cities);     // [ "Manchester" ]
+
+The pop() method removes the last element from an array and returns that value to the caller. If you call pop() on an empty array, it returns undefined.
+
+const myFish = ['angel', 'clown', 'mandarin', 'sturgeon'];
+const popped = myFish.pop();
+console.log(myFish); // ['angel', 'clown', 'mandarin' ]
+console.log(popped); // 'sturgeon'
+
+
+To remove the first item from an array, use shift()
+======================================================
+const cities = ['Manchester', 'Liverpool'];
+cities.shift();
+console.log(cities);     // [ "Liverpool" ]
+
+The shift() method removes the element at the zeroth index and shifts the values at consecutive indexes down, 
+then returns the removed value. If the length property is 0, undefined is returned.
+
+
+If you know the index of an item, you can remove it from the array using splice():
+==================================================================================
+
+const cities = ['Manchester', 'Liverpool', 'Edinburgh', 'Carlisle'];
+const index = cities.indexOf('Liverpool');
+if (index !== -1) {
+  cities.splice(index, 1);
+}
+console.log(cities);     // [ "Manchester", "Edinburgh", "Carlisle" ]
+
+In this call to splice(), the first argument says where to start removing items, and the second argument says how many items should be removed. 
+
+splice(start)
+If greater than the length of the array, start will be set to the length of the array.
+In this case, no element will be deleted but the method will behave as an adding function, adding as many elements as items provided.
+ 
+If negative, it will begin that many elements from the end of the array.
+
+splice(start, deleteCount)
+If deleteCount is omitted, or if its value is equal to or larger than array.length - start.
+then all the elements from start to the end of the array will be deleted. 
+If deleteCount is 0 or negative, no elements are removed.
+
+splice(start, deleteCount, item1)
+splice(start, deleteCount, item1, item2, itemN)
+The elements to add to the array, beginning from start.
+
+
+const months = ['Jan', 'March', 'April', 'June'];
+months.splice(1, 0, 'Feb');
+// inserts at index 1
+console.log(months);
+// expected output: Array ["Jan", "Feb", "March", "April", "June"]
+months.splice(4, 1, 'May');
+// replaces 1 element at index 4
+console.log(months);
+// expected output: Array ["Jan", "Feb", "March", "April", "May"]
+
+
+const myFish = ['angel', 'clown', 'mandarin', 'sturgeon'];
+const removed = myFish.splice(2, 0, 'drum');
+// myFish is ["angel", "clown", "drum", "mandarin", "sturgeon"]
+// removed is [], no elements removed
+
+const arr = [1, , 3, 4, , 6];
+console.log(arr.splice(1, 2)); // [empty, 3]
+console.log(arr); // [1, 4, empty, 6]
+
+
+--------------------
+Converting an array to a string is to use the toString() method
+
+const dogNames = ['Rocket','Flash','Bella','Slugger'];
+dogNames.toString(); // Rocket,Flash,Bella,Slugger
+
+Converting an string to a array 
+const cities = data.split(',');
+cities;
+
+const commaSeparated = cities.join(',');
+commaSeparated;
+
+------------------
+
+JavaScript is a "dynamically typed language", which means that, unlike some other languages,
+ you don't need to specify what data type a variable will contain (numbers, strings, arrays, etc.).

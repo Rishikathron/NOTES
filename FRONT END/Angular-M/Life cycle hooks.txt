@@ -1,0 +1,112 @@
+Lifecycle hooks
+-----------------
+
+A component instance has a lifecycle that starts when Angular instantiates the component class and renders the component view along with its child views. 
+The lifecycle continues with change detection, as Angular checks to see when data-bound properties change, and updates both the view and the component instance as needed. 
+The lifecycle ends when Angular destroys the component instance and removes its rendered template from the DOM. 
+Directives have a similar lifecycle, as Angular creates, updates, and destroys instances in the course of execution.
+
+Your application can use lifecycle hook methods to tap into key events in the lifecycle of a component or directive to initialize new instances, initiate change detection when needed, respond to updates during change detection, and clean up before deletion of instances.
+
+Angular Lifecycle hooks are used to check the phases and trigger changes at specific phases during the entire duration.
+The hooks give you the opportunity to act on a component or directive instance at the appropriate moment, as Angular creates, updates, or destroys that instance.
+
+Angular executes hook methods in the following sequence.
+
+ngOnChanges()
+
+This method is called when one or more input properties of the component are changed. The hook receives a SimpleChanges object containing the previous and current values of the property.
+If your component has no inputs or you use it without providing any inputs, the framework will not call ngOnChanges().
+Angular calls ngOnChanges() before ngOnInit(), but also many times after that. It only calls ngOnInit() once.
+Angular calls the ngOnChanges() method of a component or directive whenever it detects changes to the input properties.
+The ngOnChanges() method takes an object that maps each changed property name to a SimpleChange object holding the current and previous property values. This hook iterates over the changed properties and logs them.
+
+ngOnChanges(changes: SimpleChanges) {
+  for (const propName in changes) {
+    const chng = changes[propName];
+    const cur  = JSON.stringify(chng.currentValue);
+    const prev = JSON.stringify(chng.previousValue);
+    this.changeLog.push(`${propName}: currentValue = ${cur}, previousValue = ${prev}`);
+  }
+}
+
+ngOnInit()
+
+This is the second lifecycle hook. It is called once, after the ngOnChanges hook. It is used to initialize the component and sets the input properties of the component.
+Initialize the directive or component after Angular first displays the data-bound properties and sets the directive or component's input properties.
+Perform complex initializations outside of the constructor.
+An ngOnInit() is a good place for a component to fetch its initial data.
+
+ngDoCheck()
+
+This hook is called after ngOnChanges and ngOnInit and is used to detect and act on changes that Angular cannot detect. In this hook, we can implement our change detection algorithm.
+Detect and act upon changes that Angular can't or won't detect on its own.
+
+To monitor changes that occur where ngOnChanges() won't catch them, implement your own change check, as shown in the DoCheck example. This example shows how to use the ngDoCheck() hook to detect and act upon changes that Angular doesn't catch on its own.
+
+ngAfterContentInit()
+
+This hook is called after the first ngDoCheck hook. This hook responds after the content gets projected inside the component.
+Respond after Angular projects external content into the component's view, or into the view that a directive is in.
+
+ngAfterContentChecked()
+
+This hook is called after ngAfterContentInit and every subsequent ngDoCheck. It responds after the projected content is checked.
+Respond after Angular checks the content projected into the directive or component.
+
+Content projection is a way to import HTML content from outside the component and insert that content into the component's template in a designated spot. Identify content projection in a template by looking for the following constructs.
+
+HTML between component element tags
+The presence of <ng-content> tags in the component's template
+
+The AfterContent sample explores the AfterContentInit() and AfterContentChecked() hooks that Angular calls after Angular projects external content into the component.
+
+AfterContent hooks are similar to the AfterView hooks. The key difference is in the child component.
+
+The AfterView hooks concern ViewChildren, the child components whose element tags appear within the component's template
+The AfterContent hooks concern ContentChildren, the child components that Angular projected into the component
+The following AfterContent hooks take action based on changing values in a content child, which can only be reached by querying for them using the property decorated with @ContentChild.
+--
+ngAfterViewInit()
+
+This hook is called after a component's view or initializing a child component's view.
+Respond after Angular initializes the component's views and child views, or the view that contains the directive.
+
+ngAfterViewChecked()
+
+This hook is called after ngAfterViewInit. It responds after the component's view or when the child component's view is checked.
+Respond after Angular checks the component's views and child views, or the view that contains the directive.
+Called after the ngAfterViewInit() and every subsequent ngAfterContentChecked()
+---
+As Angular traverses the view hierarchy during change detection, it needs to be sure that a change in a child does not attempt to cause a change in its own parent. Such a change would not be rendered properly, because of how unidirectional data flow works.
+
+If you need to make a change that inverts the expected data flow, you must trigger a new change detection cycle to allow that change to be rendered. The examples illustrate how to make such changes safely.
+
+The AfterView sample explores the AfterViewInit() and AfterViewChecked() hooks that Angular calls after it creates a component's child views.
+
+When you run the AfterView sample, notice how frequently Angular calls AfterViewChecked() - often when there are no changes of interest.
+
+ngOnDestroy()
+
+This hook is called just before Angular destroys the component. This is used to clean up the code and detach event handlers.
+Cleanup just before Angular destroys the directive or component. Unsubscribe Observables and detach event handlers to avoid memory leaks.
+This is the place to free resources that won't be garbage-collected automatically. You risk memory leaks if you neglect to do so.
+
+Unsubscribe from Observables and DOM events
+Stop interval timers
+Unregister all callbacks that the directive registered with global or application services
+The ngOnDestroy() method is also the time to notify another part of the application that the component is going away.
+
+
+HOOK ORDER	LOG MESSAGE
+1	OnChanges
+2	OnInit
+3	DoCheck
+4	AfterContentInit
+5	AfterContentChecked
+6	AfterViewInit
+7	AfterViewChecked
+8	DoCheck
+9	AfterContentChecked
+10	AfterViewChecked
+11	OnDestroy

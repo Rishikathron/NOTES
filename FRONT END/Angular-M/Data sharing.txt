@@ -1,0 +1,266 @@
+Sharing data between components:
+
+In an Angular application, we may have multiple components with a variety of functionality/features and while developing an application we may come across a situation where we need to share or pass the data from one component to another one, in that case, we can achieve that by using the concept of data sharing between the components, and for that in Angular, there are some provisions or ways to achieve the same.
+
+There are five ways to share data between components:
+
+Parent to child component
+Child to parent component
+Sharing data between sibling components
+Sharing data using ViewChild property
+Sharing data between not related components
+
+A common pattern in Angular is sharing data between a parent component and one or more child components. Implement this pattern with the @Input() and @Output() decorators.
+@Input() and @Output() give a child component a way to communicate with its parent component.
+@Input() lets a parent component update data in the child component. Conversely, @Output() lets the child send data to a parent component.
+
+Parent to child component:
+==========================
+The @Input() decorator in a child component or directive signifies that the property can receive its value from its parent component.
+When you define @Input() in the child component it will receive value from the master or parent component.
+
+          Input
+Parent ------------------> Child
+
+@Input() properties can have any type, such as number, string, boolean, or object
+child component
+
+import { Component, Input } from '@angular/core'; // First, import Input
+export class ItemDetailComponent {
+  @Input() item = ''; // decorate the property with @Input()
+}
+
+<p>
+  Today's item: {{item}}       ---- o/p - Today's item Television - value is from parent component
+</p>
+parent componentt 
+
+export class AppComponent {
+  currentItem = 'Television';
+}
+                Input from child
+<app-item-detail [item]="currentItem"></app-item-detail>
+child selector   Target  property from parent
+
+The target in the square brackets, [], is the property you decorate with @Input() in the child component. The binding source, the part to the right of the equal sign, is the data that the parent component passes to the nested component.
+
+Child to Parent component: 
+==========================
+
+The @Output() decorator in a child component or directive lets data flow from the child to the parent.
+@Output() marks a property in a child component as a doorway through which data can travel from the child to the parent.
+
+The child component uses the @Output() property to raise an event to notify the parent of the change. To raise an event, an @Output() must have the type of EventEmitter, which is a class in @angular/core that you use to emit custom events.
+          
+            @Output
+Child ------------------> Parent
+
+For sharing data from child to parent we need output decorator. In child component we have to define output decorator.
+
+
+child component
+
+import { Output, EventEmitter } from '@angular/core';
+export class ItemOutputComponent {
+
+  @Output() newItemEvent = new EventEmitter<string>();--Tells Angular to create a new event emitter and that the data it emits is of type string.
+
+  addNewItem(value: string) {
+    this.newItemEvent.emit(value);
+  }
+}
+
+<label for="item-input">Add an item:</label>
+<input type="text" id="item-input" #newItem>
+<button type="button" (click)="addNewItem(newItem.value)">Add to parent's list</button>
+<ul>
+  <li *ngFor="let item of items">{{item}}</li>
+</ul>
+
+
+The first is an HTML <input> with a template reference variable, #newItem, where the user types in an item name. The value property of the #newItem variable stores what the user types into the <input>.
+
+The second element is a <button> with a click event binding.
+
+The (click) event is bound to the addNewItem() method in the child component class. The addNewItem() method takes as its argument the value of the #newItem.value property.
+
+parent component
+
+export class AppComponent {
+  items = ['item1', 'item2', 'item3', 'item4'];
+
+  addItem(newItem: string) {
+    this.items.push(newItem);
+  }
+}
+
+<app-item-output (newItemEvent)="addItem($event)"></app-item-output>
+
+Put the child selector, here <app-item-output>, within the parent component's template, app.component.html.
+The event binding, (newItemEvent)='addItem($event)', connects the event in the child, newItemEvent, to the method in the parent, addItem().
+
+The $event contains the data that the user types into the <input> in the child template UI.
+
+Sharing data between sibling components: 
+=============================================
+Sharing data between siblings can be done by using points 1 and 2. 
+First share data between the child to parent using output decorator and EventEmitter.
+Once received data in parent component share it to another child component using Input decorator. 
+So siblings can talk each other via parent components.
+
+Sharing data using ViewChild decorator: 
+=============================================
+
+            @ViewChild
+Child ------------------> Parent
+
+ViewChild allows child component to be injected in parent component. So this make ViewChild more powerful.
+It allows parents to controls the child's methods and properties. 
+But a parent can get access to the properties after view init event. 
+That means we have to implement ngAfterViewInit life cycle hook in order to get the properties from parent components.
+
+parent.component.ts
+
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { ChildComponent } from "../child/child.component";
+
+@Component({
+  selector: 'app-parent',
+  template: `
+    Message: {{ message }}
+    <app-child></app-child>
+  `,
+  styleUrls: ['./parent.component.css']
+})
+export class ParentComponent implements AfterViewInit {
+
+  @ViewChild(ChildComponent) child;
+
+  constructor() { }
+
+  message:string;
+
+  ngAfterViewInit() {
+    this.message = this.child.message
+  }
+}
+
+child.component.ts
+import { Component} from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  template: `
+  `,
+  styleUrls: ['./child.component.css']
+})
+export class ChildComponent {
+
+  message = 'Hola Mundo!';
+
+  constructor() { }
+
+}
+
+
+Sharing data between not related components: 
+
+When there is no relation between the component we can not pass the data using the above four methods. 
+This happens when your components are in different modules.
+
+In these kinds of scenarios, we have to use data service to share data between components.
+
+When passing data between components that lack a direct connection, such as siblings, grandchildren, etc, you should have a shared service. When you have data that should aways been in sync, I find the RxJS BehaviorSubject very useful in this situation.
+
+You can also use a regular RxJS Subject for sharing data via the service, but here’s why I prefer a BehaviorSubject.
+
+It will always return the current value on subscription - there is no need to call onnext
+It has a getValue() function to extract the last value as raw data.
+It ensures that the component always receives the most recent data.
+In the service, we create a private BehaviorSubject that will hold the current value of the message. We define a currentMessage variable handle this data stream as an observable that will be used by the components. Lastly, we create function that calls next on the BehaviorSubject to change its value.
+
+The parent, child, and sibling components all receive the same treatment. We inject the DataService in the constructor, then subscribe to the currentMessage observable and set its value equal to the message variable.
+
+Now if we create a function in any one of these components that changes the value of the message. when this function is executed the new data it’s automatically broadcast to all other components.
+
+data.service.ts
+
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+@Injectable()
+export class DataService {
+
+  private messageSource = new BehaviorSubject('default message');
+  currentMessage = this.messageSource.asObservable();
+
+  constructor() { }
+
+  changeMessage(message: string) {
+    this.messageSource.next(message)
+  }
+
+}
+parent.component.ts
+
+import { Component, OnInit } from '@angular/core';
+import { DataService } from "../data.service";
+import { Subscription } from 'rxjs';
+
+@Component({
+  selector: 'app-parent',
+  template: `
+    {{message}}
+  `,
+  styleUrls: ['./sibling.component.css']
+})
+export class ParentComponent implements OnInit, OnDestroy {
+
+  message:string;
+  subscription: Subscription;
+
+  constructor(private data: DataService) { }
+
+  ngOnInit() {
+    this.subscription = this.data.currentMessage.subscribe(message => this.message = message)
+  }
+  
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+}
+sibling.component.ts
+
+import { Component, OnInit } from '@angular/core';
+import { DataService } from "../data.service";
+import { Subscription } from 'rxjs';
+
+@Component({
+  selector: 'app-sibling',
+  template: `
+    {{message}}
+    <button (click)="newMessage()">New Message</button>
+  `,
+  styleUrls: ['./sibling.component.css']
+})
+export class SiblingComponent implements OnInit, OnDestroy {
+
+  message:string;
+  subscription: Subscription;
+
+  constructor(private data: DataService) { }
+
+  ngOnInit() {
+    this.subscription = this.data.currentMessage.subscribe(message => this.message = message)
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  newMessage() {
+    this.data.changeMessage("Hello from Sibling")
+  }
+
+}

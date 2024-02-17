@@ -1,0 +1,190 @@
+Angular change detection :
+============================
+
+Change detection is the process through which Angular checks to see whether your application state has changed, and if any DOM needs to be updated.
+At a high level, Angular walks your components from top to bottom, looking for changes. 
+Angular runs its change detection mechanism periodically so that changes to the data model are reflected in an application’s view. 
+Change detection can be triggered either manually or through an asynchronous event (for example, a user interaction or an XMLHttpRequest completion).
+
+Change detection is a highly optimized performant, but it can still cause slowdowns if the application runs it too frequently.
+the part of the Angular framework that makes sure the view and the data model are in sync with each other is known as the change detector.
+Angular can detect data changes in the component, and then automatically re-render the view to reflect the change.
+
+The change detector checks the component for the data change and re-renders the view to project the updated data.
+
+
+-----------------------
+Zone.js is a signaling mechanism that Angular uses to detect when an application state might have changed. It captures asynchronous operations like setTimeout, network requests, and event listeners. Angular schedules change detection based on signals from Zone.js
+
+There are cases in which scheduled tasks or microtasks don’t make any changes in the data model, which makes running change detection unnecessary. Common examples are:
+
+requestAnimationFrame, setTimeout or setInterval
+Task or microtask scheduling by third-party libraries
+
+You can detect unnecessary change detection calls using Angular DevTools. Often they appear as consecutive bars in the profiler’s timeline with source setTimeout, setInterval, requestAnimationFrame, or an event handler. When you have limited calls within your application of these APIs, the change detection invocation is usually caused by a third-party library.
+
+In such cases, we can instruct Angular to avoid calling change detection for tasks scheduled by a given piece of code using NgZone.
+======
+On every change detection cycle, Angular synchronously:
+
+Evaluates all template expressions in all components, unless specified otherwise, based on that each component's detection strategy
+Executes the ngDoCheck, ngAfterContentChecked, ngAfterViewChecked, and ngOnChanges lifecycle hooks. A single slow computation within a template or a lifecycle hook can slow down the entire change detection process because Angular runs the computations sequentially.
+
+There are several techniques to eliminate slow computations:
+
+Optimizing the underlying algorithm. This is the recommended approach; if you can speed up the algorithm that is causing the problem, you can speed up the entire change detection mechanism.
+Caching using pure pipes. You can move the heavy computation to a pure pipe. Angular will reevaluate a pure pipe only if it detects that its inputs changed, compared to the previous time Angular called it.
+Using memoization. Memoization is a similar technique to pure pipes, with the difference that pure pipes preserve only the last result from the computation where memoization could store multiple results.
+Avoid repaints/reflows in lifecycle hooks. Certain operations cause the browser to either synchronously recalculate the layout of the page or re-render it. Since reflows and repaints are generally slow, we want to avoid performing them in every change detection cycle.
+======
+JavaScript, by default, uses mutable data structures that you can reference from multiple different components. Angular runs change detection over your entire component tree to make sure that the most up-to-date state of your data structures is reflected in the DOM.
+
+Change detection is sufficiently fast for most applications. However, when an application has an especially large component tree, running change detection across the whole application can cause performance issues. You can address this by configuring change detection to only run on a subset of the component tree.
+
+If you are confident that a part of the application is not affected by a state change, you can use OnPush to skip change detection in an entire component subtree.
+------------------
+Using OnPush
+====================
+OnPush change detection instructs Angular to run change detection for a component subtree only when:
+
+The root component of the subtree receives new inputs as the result of a template binding. Angular compares the current and past value of the input with ==
+Angular handles an event (e.g. using event binding, output binding, or @HostListener) in the subtree's root component or any of its children whether they are using OnPush change detection or not.
+You can set the change detection strategy of a component to OnPush in the @Component decorator:
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class MyComponent {}
+
+If Angular handles an event within a component without OnPush strategy, the framework executes change detection on the entire component tree. Angular will skip descendant component subtrees with roots using OnPush, which have not received new inputs.
+
+If Angular handles an event within a component with OnPush strategy, the framework will execute change detection within the entire component tree. Angular will ignore component subtrees with roots using OnPush, which have not received new inputs and are outside the component which handled the event.
+
+If Angular handles an event in a component with OnPush, the framework will execute change detection in the entire component tree, including the component’s ancestors.
+
+Angular will run change detection within a child component with OnPush setting an input property as result of a template binding
+
+Modifying input properties in TypeScript code. When you use an API like @ViewChild or @ContentChild to get a reference to a component in TypeScript and manually modify an @Input property, Angular will not automatically run change detection for OnPush components. If you need Angular to run change detection, you can inject ChangeDetectorRef in your component and call changeDetectorRef.markForCheck() to tell Angular to schedule a change detection.
+Modifying object references. In case an input receives a mutable object as value and you modify the object but preserve the reference, Angular will not invoke change detection. That’s the expected behavior because the previous and the current value of the input point to the same reference.
+
+------------------------------------
+
+
+When Change Detector Runs
+======================================
+Angular assumes that the data in the component or the whole application state changes due to the following reasons, hence it runs the change detector when either of the following happens:
+
+An event, such as click or submit, gets fired
+An XHR is call to work with an API
+An asynchronous JavaScript function, such as setTimeOut() or setInterval(), gets executed
+
+ What notifies Angular of these asynchronous operations?
+
+So, there is something called ngZone in Angular whose responsibility is to inform Angular about any asynchronous operations. 
+
+
+Change Detector Tree
+================================
+Each component in Angular has its own change detector.
+
+component to change detector is 1:1
+
+The change detector can be referred inside the component using the ChageDetectorRef service, and if required you can inject the ChageDetectorRef in a component by making a reference of it in the constructor as shown in next code listing:
+
+export class AppComponent implements OnInit {
+
+  constructor(private cd: ChangeDetectorRef) {
+    console.log(this.cd);
+  }
+
+  ngOnInit() {
+    console.log('init life cycle hook');
+  }
+}
+
+The ChangeDetectorRef provides various APIs to work with the change detector, but before working with them effectively, you need to understand the component tree.
+
+Each component in Angular has its own change detector, and you can see the whole Angular application as a component tree. A component tree is a directed graph, and Angular runs the change detector from top to bottom in the tree.
+==============================
+The change detector works from top to bottom in the component tree, and even if an event gets fired in any child node component, Angular always runs the change detector from the root component. For example, in the above change detector tree, if an event gets fired in the component CC-121, which is the bottom node component in the tree, Angular still runs the change detector from the root component node and for all the components.
+
+It may come to your mind that, if for a single event somewhere in the application, Angular runs the change detector for all the components, then perhaps it may have some performance issues. However, that is not true, because of the following reasons:
+
+Angular component tree is a directed graph, which means there is a unidirectional flow of the change detector from root to bottom. Angular knows in which direction the tree has to be traversed, and there is no circular or bidirectional traversing of the change detector tree.
+After a single pass, the change detection tree gets stable.
+Unlike AngularJS, in Angular, there is no generic function to update the view. Since here every component has its own change detector, JavaScript VM can optimize it for better performance.
+So, in Angular, there is no generic function to perform binding, and it generates the change detector class for each component individually at runtime. The definition of the generated change detector class is very particular for a specific component; hence JavaScript VM can optimize it for better performance.
+
+=====================================
+
+To optimize the number of checks, Angular provides two change detection strategies:
+
+Default strategy
+onPush strategy
+
+In the Default strategy, whenever any data to @Input() decorated properties are changed, Angular runs the change detector to update the view. In the onPush strategy, Angular runs change detector only when a new reference is passed to the @Input() decorated properties.
+
+So, for the default change detection strategy, you get the output as expected, but the challenge is, even for one event, Angular runs the change detector for the whole tree. If you wish, you can avoid it for a particular component and its subtree by setting ChangeDetectionStrategy to onPush.
+
+The onPush change detection strategy instructs Angular to run change detector on the component and its subtree only when a new reference is passed to the @Input decorated properties.
+
+As of now, AppComponent does not pass a new reference of the Counter object—it just changes the property values in it, so Angular would not run the change detector for the CountComponent; hence view would not show the updated value of the count.
+
+--------------------
+
+To run the change detector manually:
+
+Inject ChangeDetectorRef service in the component
+Use markForCheck in the subscription method to instruct Angular to check the component the next time change detectors run
+On the ngOnDestroy() life cycle hook, unsubscribe from the observable
+
+The ChangeDetectorRef has two more methods:
+
+detectChanges
+markForCheck
+The detectChanges method runs the change detector for the current component and its children. For once, it can even run change detection on a component that has detached change detector without reattaching it.
+======================
+
+With this strategy, Angular will only update the component if one or more of these conditions happens:
+
+The input reference changed
+An event from the component or one of its children.
+Async pipe linked to the template emits a new value.
+Manually triggered the change detection
+We can look for more details below.
+
+Input Reference
+================
+By default, angular will run the change detector every time @Input() data is changed or modified. But with OnPush strategy, the change detector is only triggered if the data passed on @Input() has a new reference. This is why using immutable objects is preferred, because immutable objects can be modified only by creating a new object reference. With immutable objects plus OnPush change detection strategy, we can guarantee that OnPush change detection is triggered for each change.
+
+Event Handler is Triggered
+=========================
+With OnPush change detection strategy, every time component or one of its child triggers an event handler, change detection will be triggered for all components in the component tree.
+
+Be mindful that the following actions do not trigger the change detection with OnPush change detection strategy:
+
+setTimeout
+setInterval
+Promises
+Any RxJS observable subscription
+
+Async Pipe
+===============
+Angular built-in AsyncPipe internally calls markForCheck each time a new value is emitted, which will be explained later on how to manually trigger the change detection. You can check the source code here. With how the AsyncPipe is implemented, AsyncPipe works automatically with OnPush change detection strategy.
+
+Trigger Change Detection Manually
+============================
+We can trigger change detection manually by using detectChanges(), ApplicationRef.tick(), and markForCheck() that we mentioned earlier on AsyncPipe.
+
+detectChanges() on ChangeDetectorRef which will run change detection on this view and its children.
+ApplicationRef.tick() which triggers change detection for every components in the component tree (basically whole application)
+markForCheck() on ChangeDetectorRef which marks all OnPush ancestors to be checked once, either on the current or next detection cycle. This method does not trigger the change detector directly.
+=======================
+
+ChangeDetectorRef class provides a few built-in methods we can use to manipulate the change detection tree:
+
+markForCheck() — marks the components as it was changed, so it can be checked again for an update
+detach() — excludes the view from the change detection tree, which means no check will be triggered until the view is re-attached again
+detectChanges() — checks the view and its child components
+checkNoChanges() — checks the view and its children and it will throw an error if some changes are detected
+reattach() — reattaches a view that was previously detached so that new changes can be detected

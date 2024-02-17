@@ -1,0 +1,349 @@
+
+Tree shaking
+=========================
+Tree shaking is a form of dead code elimination. 
+It means that unused modules will not be included in the bundle during the build process and for that it relies on the static structure of ES2015 module syntax,
+( i.e. import and export). Initially this has been popularized by the ES2015 module bundler rollup.
+
+Tree Shaking can significantly reduce the code size in any application. i.e, 
+The less code we send over the wire the more performant the application will be. 
+For example, if we just want to create a “Hello World” Application using SPA frameworks then it will take around a few MBs, 
+but by tree shaking it can bring down the size to just a few hundred KBs. 
+Tree shaking is implemented in Rollup and Webpack bundlers.
+
+The principle behind tree shaking is as follows:
+
+You declare all of your imports and exports for each of your modules
+Your bundler (Webpack, Rollup, and so on) analyzes your dependency tree during the compilation step
+Any provably unused code is dropped from the final bundle, or ‘tree-shaken’.
+
+Regular Expression
+====================
+
+A regular expression is a sequence of characters that forms a search pattern. 
+You can use this search pattern for searching data in a text. 
+These can be used to perform all types of text search and text replace operations. Let's see the syntax format now,
+
+/pattern/modifiers;
+For example, the regular expression or search pattern with case-insensitive username would be,
+
+/John/i;
+
+Regular Expressions has two string methods: search() and replace(). 
+
+The search() method uses an expression to search for a match, and returns the position of the match.
+var msg = "Hello John";
+var n = msg.search(/John/i); // 6
+
+The replace() method is used to return a modified string where the pattern is replaced.
+var msg = "Hello John";
+var n = msg.replace(/John/i, "Buttler"); // Hello Buttler
+
+i	Perform case-insensitive matching
+g	Perform a global match rather than stops at first match
+m	Perform multiline matching
+
+var text = "Learn JS one by one";
+var pattern = /one/g;
+var result = text.match(pattern); // one,one
+
+
+Regular Expressions provide a group of patterns in order to match characters. Basically they are categorized into 3 types,
+
+Brackets: These are used to find a range of characters. For example, below are some use cases,
+[abc]: Used to find any of the characters between the brackets(a,b,c)
+[0-9]: Used to find any of the digits between the brackets
+(a|b): Used to find any of the alternatives separated with |
+
+Metacharacters: These are characters with a special meaning For example, below are some use cases,
+\d: Used to find a digit
+\s: Used to find a whitespace character
+\b: Used to find a match at the beginning or ending of a word
+
+Quantifiers: These are useful to define quantities For example, below are some use cases,
+n+: Used to find matches for any string that contains at least one n
+n*: Used to find matches for any string that contains zero or more occurrences of n
+n?: Used to find matches for any string that contains zero or one occurrences of n
+
+
+RegExp object is a regular expression object with predefined properties and methods. Let's see the simple usage of RegExp object,
+
+var regexp = new RegExp("\\w+");
+console.log(regexp);
+// expected output: /\w+/
+
+You can use the test() method of regular expression in order to search a string for a pattern, and return true or false depending on the result.
+
+var pattern = /you/;
+console.log(pattern.test("How are you?")); //true
+
+The purpose of exec method is similar to test method but it executes a search for a match in a specified string and returns a result array,
+ or null instead of returning true/false.
+
+var pattern = /you/;
+console.log(pattern.exec("How are you?")); //["you", index: 8, input: "How are you?", groups: undefined]
+
+test () and exec () are RegExp expression methods used in javascript. 
+We'll use exec () to search a string for a specific pattern, and if it finds it, 
+it'll return the pattern directly; else, it'll return an 'empty' result.
+We will use a test () to find a string for a specific pattern. 
+It will return the Boolean value 'true' on finding the given text otherwise, it will return 'false'.
+
+debugger statement
+=======================
+
+The debugger statement invokes any available debugging functionality, such as setting a breakpoint. 
+You can set breakpoints in the javascript code once the debugger statement is executed and the debugger window pops up.
+At each breakpoint, javascript will stop executing, and let you examine the JavaScript values. 
+After examining values, you can resume the execution of code using the play button.
+
+--------------------------
+
+properties used to get size of window
+You can use innerWidth, innerHeight, clientWidth, clientHeight properties of windows, 
+document element and document body objects to find the size of a window. 
+Let's use them combination of these properties to calculate the size of a window or document,
+
+var width =
+  window.innerWidth ||
+  document.documentElement.clientWidth ||
+  document.body.clientWidth;
+
+var height =
+  window.innerHeight ||
+  document.documentElement.clientHeight ||
+  document.body.clientHeight;
+
+--------------------
+execute javascript after page load
+You can execute javascript after page load in many different ways,
+
+window.onload:
+window.onload = function ...
+document.onload:
+document.onload = function ...
+body onload:
+<body onload="script();">
+
+--------------
+
+difference between proto and prototype
+The __proto__ object is the actual object that is used in the lookup chain to resolve methods, etc. 
+Whereas prototype is the object that is used to build __proto__ when you create an object with new
+
+new Employee().__proto__ === Employee.prototype;
+new Employee().prototype === undefined;
+--------------------------------
+detect javascript disabled in the page
+You can use the <noscript> tag to detect javascript disabled or not. 
+The code block inside <noscript> gets executed when JavaScript is disabled, and is typically used to display 
+alternative content when the page generated in JavaScript.
+
+<script type="javascript">
+    // JS related code goes here
+</script>
+<noscript>
+    <a href="next_page.html?noJS=true">JavaScript is disabled in the page. Please click Next Page</a>
+</noscript>
+
+
+rest parameter
+====================
+
+Rest parameter is an improved way to handle function parameters which allows us to represent an indefinite number of arguments as an array. 
+The syntax would be as below,
+
+function f(a, b, ...theArgs) {
+  // ...
+}
+
+unction total(…args){
+let sum = 0;
+for(let i of args){
+sum+=i;
+}
+return sum;
+}
+console.log(fun(1,2)); //3
+console.log(fun(1,2,3)); //6
+console.log(fun(1,2,3,4)); //13
+console.log(fun(1,2,3,4,5)); //15
+
+The rest parameter should be the last argument, as its job is to collect all the remaining arguments into an array. 
+For example, if you define a function like below it doesn’t make any sense and will throw an error.
+
+function someFunc(a,…b,c){
+//You code goes here
+return;
+}
+
+
+It provides an improved way of handling the parameters of a function.
+Using the rest parameter syntax, we can create functions that can take a variable number of arguments.
+Any number of arguments will be converted into an array using the rest parameter.
+It also helps in extracting all or some parts of the arguments.
+Rest parameters can be used by applying three dots (...) before the parameters.
+
+
+ spread operator
+ =======================
+Spread operator allows iterables( arrays / objects / strings ) to be expanded into single arguments/elements.
+In cases where we require all the elements of an iterable or object to help us achieve a task, we use a spread operator.
+Note: There can be more than one spread operator in javascript functions.
+ Let's take an example to see this behavior,
+ 
+function calculateSum(x, y, z) {
+  return x + y + z;
+}
+
+const numbers = [1, 2, 3];
+
+console.log(calculateSum(...numbers)); // 6
+
+    var array1 = [10, 20, 30, 40, 50];
+    var array2 = [60, 70, 80, 90, 100];
+    var array3 = [...array1, ...array2];
+
+The main difference between rest and spread is that the rest operator puts the rest of some specific user-supplied values into a JavaScript array.
+ But the spread syntax expands iterables into individual elements.
+ 
+Key differences between rest parameter and spread operator:
+
+Rest parameter is used to take a variable number of arguments and turns them into an array while the spread operator takes an array or an object and spreads it
+Rest parameter is used in function declaration whereas the spread operator is used in function calls.
+
+ 
+proxy object
+======================
+The Proxy object is used to define custom behavior for fundamental operations such as property lookup, assignment, enumeration, function invocation, etc.
+ The syntax would be as follows,
+
+var p = new Proxy(target, handler);
+
+Let's take an example of proxy object,
+var handler = {
+  get: function (obj, prop) {
+    return prop in obj ? obj[prop] : 100;
+  },
+};
+
+var p = new Proxy({}, handler);
+p.a = 10;
+p.b = null;
+console.log(p.a, p.b); // 10, null
+console.log("c" in p, p.c); // false, 100
+
+In the above code, it uses get handler which define the behavior of the proxy when an operation is performed on it
+
+-----------------------------
+
+differences between freeze and seal methods
+
+If an object is frozen using the Object.freeze() method then its properties become immutable and no changes can be made in them 
+whereas if an object is sealed using the Object.seal() method then the changes can be made in the existing properties of the object.
+
+---------
+
+The Object.entries() method is used to return an array of a given object's own enumerable string-keyed property [key, value] pairs,
+ in the same order as that provided by a for...in loop. Let's see the functionality of object.entries() method in an example,
+
+const object = {
+  a: "Good morning",
+  b: 100,
+};
+
+for (let [key, value] of Object.entries(object)) {
+  console.log(`${key}: ${value}`); // a: 'Good morning'
+  // b: 100
+}
+
+The Object.values() method's behavior is similar to Object.entries() method but it returns an array of values instead [key,value] pairs.
+
+const object = {
+  a: "Good morning",
+  b: 100,
+};
+for (let value of Object.values(object)) {
+  console.log(`${value}`); // 'Good morning'
+  100;
+}
+
+You can use the Object.keys() method which is used to return an array of a given object's own property names, 
+in the same order as we get with a normal loop. For example, you can get the keys of a user object,
+
+const user = {
+  name: "John",
+  gender: "male",
+  age: 40,
+};
+console.log(Object.keys(user)); //['name', 'gender', 'age']
+
+The Object.create() method is used to create a new object with the specified prototype object and properties. i.e, 
+It uses an existing object as the prototype of the newly created object. It returns a new object with the specified prototype object and properties.
+
+const user = {
+  name: "John",
+  printInfo: function () {
+    console.log(`My name is ${this.name}.`);
+  },
+};
+const admin = Object.create(user);
+admin.name = "Nick"; // Remember that "name" is a property set on "admin" but not on "user" object
+admin.printInfo(); // My name is Nick
+
+=========================================
+passed by value and passed by reference
+----------------------------------------
+
+var x = 2;
+
+In the above example, we created a variable x and assigned it a value of “2”.
+In the background, the “=” (assign operator) allocates some space in the memory, stores the value “2” and returns the location of the allocated memory space. 
+Therefore, the variable x in the above code points to the location of the memory space instead of pointing to the value 2 directly.
+
+Assign operator behaves differently when dealing with primitive and non-primitive data types,
+
+var y = 234;
+var z = y;
+
+var y = #8454; // y pointing to address of the value 234
+var z = y; 
+var z = #5411; // z pointing to a completely new address of the value 234    
+// Changing the value of y
+y = 23;
+console.log(z);  // Returns 234, since z points to a new address in the memory so changes in y will not effect z
+
+we can see that primitive data types when passed to another variable, are passed by value. 
+Instead of just assigning the same address to another variable, the value is passed and new space of memory is created.
+
+var obj = { name: "Vivek", surname: "Bisht" };
+var obj2 = obj;
+
+var obj = #8711;  // obj pointing to address of { name: "Vivek", surname: "Bisht" }
+var obj2 = obj;
+var obj2 = #8711; // obj2 pointing to the same address 
+// changing the value of obj1       
+obj1.name = "Akki";
+console.log(obj2);        
+// Returns {name:"Akki", surname:"Bisht"} since both the variables are pointing to the same address.
+
+while passing non-primitive data types, the assign operator directly passes the address (reference).
+Therefore, non-primitive data types are always passed by reference.
+
+ “this” keyword
+==================
+
+The “this” keyword refers to the object that the function is a property of.
+The value of the “this” keyword will always depend on the object that is invoking the function.
+
+ prototype design pattern
+================================
+The Prototype Pattern produces different objects, but instead of returning uninitialized objects,
+ it produces objects that have values replicated from a template – or sample – object.
+ Also known as the Properties pattern, the Prototype pattern is used to create prototypes.
+
+The introduction of business objects with parameters that match the database's default settings is a good example of where the Prototype pattern comes in handy. 
+The default settings for a newly generated business object are stored in the prototype object.
+
+The Prototype pattern is hardly used in traditional languages, however, it is used in the development of new objects and templates in JavaScript, 
+which is a prototypal language.

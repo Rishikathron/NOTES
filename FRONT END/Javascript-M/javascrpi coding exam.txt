@@ -1,0 +1,384 @@
+
+
+Javascript Coding Questions
+============================
+
+ callback function andsimple example
+ -------------------------------------
+ 
+A callback function is a function that is passed to another function as an argument and is executed after some operation has been completed.
+
+function mainfun(name,callbackfunc){
+    console.log('my name '+name);
+    callbackfunc(name);
+}
+function greetfunc(ff){
+    console.log('In callback '+ff);
+}
+mainfun('manasa',greetfunc)
+
+..................................
+function mainfun(name){
+    console.log('calling after set time out');
+}
+function greetfunc(){
+    console.log('In callback before set time out');
+}
+setTimeout(mainfun,3000);
+greetfunc();
+
+........................................
+
+function modifyArray(arr, callback) {
+  // do something to arr here
+  arr.push(100);
+  // then execute the callback function that was passed
+  callback();
+}
+var arr = [1, 2, 3, 4, 5];
+
+modifyArray(arr, function() {
+  console.log("array has been modified", arr);
+});
+
+ string, reverse each word in the sentence
+=============================================
+Without using any builtin methods
+
+var string = 'you are a good girl';
+var splitstring = string.split(' ');
+var reversestring='';
+
+for(let i =splitstring.length-1;i>0;i--){
+    console.log(splitstring[i]);
+    reversestring += splitstring[i]+' ';
+}
+console.log(reversestring);
+
+.............................
+
+using  builtin method
+
+var string = 'you are a good girl';
+function reverse(splitstring){
+    return splitstring.split(' ').reverse().join(' ');
+}
+console.log(reverse(string))
+
+to check if an object is an array or not
+============================================
+var arrayList = [1 , 2, 3];
+console.log(typeof(arrayList)) //object
+console.log(Array.isArray(arrayList)) // true
+
+to empty an array in JavaScript
+================================
+var arrayList = [1 , 2, 3];
+arrayList.length=0;
+ or
+arrayList = []; 
+ or
+arrayList.splice(0,arrayList.length)
+ or
+while(arrayList.length) {
+  arrayList.pop();
+}
+or
+console.log(arrayList)// []
+
+Implement enqueue and dequeue using only two stacks
+=================================================
+var inputStack = []; // First stack
+var outputStack = []; // Second stack
+// For enqueue, just push the item into the first stack
+function enqueue(stackInput, item) {
+  return stackInput.push(item);
+}
+function dequeue(stackInput, stackOutput) {
+  // Reverse the stack such that the first element of the output stack is the
+  // last element of the input stack. After that, pop the top of the output to
+  // get the first element that was ever pushed into the input stack
+  if (stackOutput.length <= 0) {
+    while(stackInput.length > 0) {
+      var elementToOutput = stackInput.pop();
+      stackOutput.push(elementToOutput);
+    }
+  }
+  return stackOutput.pop();
+}
+
+//currying
+=======================
+console.log(multiply(1)(2)(3))
+
+function multiply(n1){
+    return function(n2){
+        return function(n3){
+            return n1*n2*n3;
+        }
+    }
+}
+Create a for loop that iterates up to 100 while outputting "fizz" at multiples of 3, "buzz" at multiples of 5 and "fizzbuzz" at multiples of 3 and 5.
+=======================================
+
+for(let i =0;i<=100;i++){
+    if(i%3==0&&i%5==0){
+        console.log('fizzbuzz')
+    }
+    else if(i%3==0){
+        console.log('fizz')
+    } 
+    else if(i%5==0){
+        console.log('buzz')
+    }else{
+        console.log(i)
+    }
+}
+      or
+	  
+for (let i = 1; i <= 100; i++) {
+  let f = i % 3 == 0,
+    b = i % 5 == 0;
+  console.log(f ? (b ? 'FizzBuzz' : 'Fizz') : b ? 'Buzz' : i);
+}
+
+ two strings, return true if they are anagrams of one another
+=======================================================
+
+Mary is an anagram of Army
+
+
+function checkStringsAnagram(a, b) {
+   let len1 = a.length;
+   let len2 = b.length;
+   if(len1 !== len2){
+      console.log('Invalid Input');
+      return
+   }
+   let str1 = a.split('').sort().join('');
+   let str2 = b.split('').sort().join('');
+   if(str1 === str2){
+      console.log("True");
+   } else { 
+      console.log("False");
+   }
+}
+checkStringsAnagram("indian","ndiani")
+
+            or
+			let NO_OF_CHARS = 256;
+ 
+/* Function to check whether two strings
+   are anagram of each other */
+function areAnagram(str1, str2)
+{
+    // Create 2 count arrays and initialize
+    // all values as 0
+    let count1 = new Array(NO_OF_CHARS);
+    let count2 = new Array(NO_OF_CHARS);
+    for(let i = 0; i < NO_OF_CHARS; i++)
+    {
+        count1[i] = 0;
+        count2[i] = 0;
+    }
+         
+    let i;
+  
+    // For each character in input strings,
+    // increment count in the corresponding
+    // count array
+    for (i = 0; i < str1.length &&
+         i < str2.length; i++)
+    {
+        count1[str1[i].charCodeAt(0)]++;
+        count2[str2[i].charCodeAt(0)]++;
+    }
+  
+    // If both strings are of different length.
+    // Removing this condition will make the
+    // program fail for strings like "aaca"
+    // and "aca"
+    if (str1.length != str2.length)
+        return false;
+  
+    // Compare count arrays
+    for (i = 0; i < NO_OF_CHARS; i++)
+    if (count1[i] != count2[i])
+        return false;
+  
+    return true;
+}
+
+let str1 =
+("ofreee").split("");
+let str2 =
+("foeeer").split("");
+
+console.log(areAnagram(str1, str2))
+
+use a closure to create a private counter
+==========================================
+function privateclosure(){
+    var count =0;
+    return{
+    add: function(increment) { count += increment; },
+    retrieve: function() { return 'The counter is currently at: ' + count; }
+
+    }
+}
+// error if we try to access the private variable like below
+//console.log(count)
+var pvc = privateclosure();
+pvc.add(3);
+pvc.add(3);
+
+// now we can access the private variable in the following way
+console.log(pvc.retrieve()); //The counter is currently at: 6
+
+looping through and priniting based on diff methods
+----------------------------------------------------
+const passengers = [
+    {
+      id: 1,
+      passengerName: "Freddie Mercury",
+      isVegetarianOrVegan: false,
+      connectedFlights: 2,
+    },
+    {
+      id: 2,
+      passengerName: "Amy Winehouse",
+      isVegetarianOrVegan: true,
+      connectedFlights: 4,
+    },
+      {
+      id: 3,
+      passengerName: "Kurt Cobain",
+      isVegetarianOrVegan: true,
+      connectedFlights: 3,
+    },
+       {
+      id: 3,
+      passengerName: "Michael Jackson",
+      isVegetarianOrVegan: true,
+      connectedFlights: 1,
+    },
+  ];
+
+  var passengerNamesforloop=[];
+  var passengerNamesforeach =[]
+
+  for(let i =0;i<passengers.length;i++){
+    passengerNamesforloop.push(passengers[i].passengerName);
+  }
+          or
+  passengers.forEach((item)=>{
+    passengerNamesforeach.push(item.passengerName);
+  })
+             or
+  const passengerNames = passengers.map((passenger) => passenger.passengerName);
+
+  console.log(passengerNamesforloop)
+  console.log(passengerNamesforeach)
+ console.log(passengerNames)
+
+const passengerNames = passengers.filter((passenger) => passenger.isVegetarianOrVegan).map((passenger) => passenger.passengerName);
+
+
+rotate the string 'w3resource' in right direction by periodically removing one letter from the end of the string and attaching it to the front.
+----------------------------------
+
+var str='w3resource';
+
+for(var i=0;i<str.length;i++){
+  str = str[str.length - 1] + str.substring(0, str.length - 1);
+  console.log(str);
+}
+
+to find the most frequent item of an array.
+-----------------------------------------
+
+var arr1=[3, 'a', 'a', 'a', 2, 3, 'a', 3, 'a', 2, 4, 9, 3];
+var mf = 1;
+var m = 0;
+var item;
+for (var i=0; i<arr1.length; i++)
+{
+        for (var j=i; j<arr1.length; j++)
+        {
+                if (arr1[i] == arr1[j])
+                 m++;
+                if (mf<m)
+                {
+                  mf=m; 
+                  item = arr1[i];
+                }
+        }
+        m=0;
+}
+console.log(item+" ( " +mf +" times ) ") ;
+
+
+
+Outputbased Questions
+----------------------
+
+var y = 1;
+if (function f() {}) {
+  y += typeof f;
+}
+console.log(y);
+
+//output 1undefined
+
+If condition statement evaluate using eval so eval(function f() {}) which return function f() {} which is true so inside if statement code execute. 
+typeof f return undefined because if statement code execute at run time, so statement inside if condition evaluated at run time.
+
+-----------------------
+
+(function() {
+  var a = b = 5;
+})();
+
+console.log(b);//output 5 
+
+is interpreted the following way:
+var a = b;
+b = 5;
+
+
+But b is not declared anywhere in the function with var so it is set equal to 5 in the global scope.
+
+ Find the frequency of elements in array
+-------------------------------------------------
+var array = ['hello','ma','lk','hello','kl','hello']
+
+function countword(p){
+  let red=p.reduce((allnames,name)=>{
+    if(name in allnames){
+      allnames[name]++;
+    }else{
+      allnames[name]=1;
+    }
+    return allnames;
+  },{});
+  return red;
+}
+
+console.log(countword(array))
+
+or
+
+function countword(p){
+  var count={};
+ p.forEach(item => {
+  if(count[item]){
+    count[item]++;
+  }else{
+    count[item]=1;
+  }
+ })
+ 
+ return count;
+}
+
+console.log(countword(array))

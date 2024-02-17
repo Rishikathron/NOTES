@@ -1,0 +1,908 @@
+
+ compare Object and Map
+ =========================
+Objects are similar to Maps in that both let you set keys to values, retrieve those values, delete keys, and detect whether something is stored at a key.
+ Due to this reason, Objects have been used as Maps historically. But there are important differences that make using a Map preferable in certain cases.
+
+The keys of an Object are Strings and Symbols, whereas they can be any value for a Map, including functions, objects, and any primitive.
+The keys in Map are ordered while keys added to Object are not. Thus, when iterating over it, a Map object returns keys in order of insertion.
+You can get the size of a Map easily with the size property, while the number of properties in an Object must be determined manually.
+A Map is an iterable and can thus be directly iterated, whereas iterating over an Object requires obtaining its keys in some fashion and iterating over them.
+An Object has a prototype, so there are default keys in the map that could collide with your keys if you're not careful. 
+As of ES5 this can be bypassed by using map = Object.create(null), but this is seldom done.
+A Map may perform better in scenarios involving frequent addition and removal of key pairs.
+
+
+difference between == and === operators
+===========================================
+JavaScript provides both strict(===, !==) and type-converting(==, !=) equality comparison. 
+The strict operators take type of variable in consideration, while non-strict operators make type correction/conversion based upon values of variables. 
+ The strict operators follow the below conditions for different types,
+ 
+Two strings are strictly equal when they have the same sequence of characters, same length, and same characters in corresponding positions.
+Two numbers are strictly equal when they are numerically equal. i.e, Having the same number value. There are two special cases in this,
+NaN is not equal to anything, including NaN.
+Positive and negative zeros are equal to one another.
+Two Boolean operands are strictly equal if both are true or both are false.
+Two objects are strictly equal if they refer to the same Object.
+Null and Undefined types are not equal with ===, but equal with ==. i.e, null===undefined --> false but null==undefined --> true
+
+ == operator does the type conversion of the operands before comparison,
+ whereas the === operator compares the values as well as the data types of the operands.
+ 
+ The == and != operators is also known as the loose equality operator because it checks abstract equality, i.e.,
+ it tends to convert the data types of operands in order to carry the comparison when two operands aren't of the same data type.
+
+0 == false   // true
+0 === false  // false
+1 == "1"     // true
+1 === "1"    // false
+null == undefined // true
+null === undefined // false
+'0' == false // true
+'0' === false // false
+[]==[] or []===[] //false, refer different objects in memory
+{}=={} or {}==={} //false, refer different objects in memory
+
+
+var one = 1;
+var one_again = 1;
+var one_string = "1";  // note: this is a string
+
+console.log(one != one_again);  // false
+console.log(one != one_string); // false
+console.log(one !== one_string);// true. Types are different
+
+var a1 = [1,2,3,4,5]
+var a2 = [1,2,3,4,5]
+
+console.log(a1 ==  a2); // false
+console.log(a1 === a2); // false
+
+console.log(+0 === -0);   // true 
+console.log(NaN === NaN); // false
+
+ lambda or arrow functions
+ ===========================
+These are anonymous functions with their own special syntax that accept a fixed number of arguments,
+ and operate in the context of their enclosing scope - ie the function or other code where they are defined.
+ 
+An arrow function is a shorter syntax for a function expression and does not have its own this, arguments, super, or new.target. 
+These functions are best suited for non-method functions, and they cannot be used as constructors.
+
+There are differences between arrow functions and traditional functions, as well as some limitations:
+
+Arrow functions don't have their own bindings to this, arguments or super, and should not be used as methods.
+Arrow functions don't have access to the new.target keyword.
+Arrow functions aren't suitable for call, apply and bind methods, which generally rely on establishing a scope.
+Arrow functions cannot be used as constructors.
+Arrow functions cannot use yield, within its body.
+Arrow functions do not have a prototype property.
+
+param => expression
+(param) => expression
+
+The parentheses are optional with one single parameter
+Multiple params require parentheses. Multiline statements require body braces and return
+
+const arrowfun= (a,b) =>a+b;
+
+(a) => {
+  return a + 100;
+};
+a => a + 100;
+// Arrow Function
+(a, b) => a + b + 100;
+
+// Arrow Function (no arguments)
+() => a + b + 100;
+
+Rest parameters are supported, and always require parentheses:
+(a, b, ...r) => expression
+Default parameters are supported, and always require parentheses
+(a=400, b=20, c) => expression
+Destructuring within params is supported, and always requires parentheses:
+
+([a, b] = [10, 20]) => a + b;  // result is 30
+({ a, b } = { a: 10, b: 20 }) => a + b; // result is 30
+
+ arrow function expressions are best suited for non-method functions
+ 
+const obj = { // does not create a new scope
+  i: 10,
+  b: () => console.log(this.i, this),
+  c() {
+    console.log(this.i, this);
+  },
+}
+
+obj.b(); // prints undefined, Window { /* … */ } (or the global object)
+obj.c(); // prints 10, Object { /* … */ }
+............................
+
+const obj = {
+  a: 10,
+};
+
+Object.defineProperty(obj, 'b', {
+  get: () => {
+    console.log(this.a, typeof this.a, this); // undefined 'undefined' Window { /* … */ } (or the global object)
+    return this.a + 10; // represents global object 'Window', therefore 'this.a' returns 'undefined'
+  },
+});
+
+Because a class's body has a this context, arrow functions as class fields close over the class's this context and the this 
+inside the arrow function's body will correctly point to the instance (or the class itself, for static fields).
+
+Perhaps the greatest benefit of using Arrow functions is with methods like setTimeout() and EventTarget.prototype.addEventListener() 
+that usually require some kind of closure, call, apply or bind to ensure that the function is executed in the proper scope.
+
+
+// this looks pretty nice when you change something like:
+[1,2,3,4].filter(function (value) {return value % 2 === 0});
+// to:
+[1,2,3,4].filter(value => value % 2 === 0);
+
+First class function
+====================
+In Javascript, functions are first class objects. First-class functions means when functions in that language are treated like any other variable.
+For example, in such a language, a function can be passed as an argument to other functions,
+ can be returned by another function and can be assigned as a value to a variable.
+
+const handler = () => console.log("This is a click handler function");
+document.addEventListener("click", handler);
+
+Assigning function to a variable
+......................................
+
+const foo = () => {
+  console.log("foobar");
+};
+foo(); // Invoke it using the variable
+// foobar
+
+Passed as an argument to other functions
+..........................................
+
+function sayHello() {
+  return "Hello, ";
+}
+function greeting(helloMessage, name) {
+  console.log(helloMessage() + name);
+}
+// Pass `sayHello` as an argument to `greeting` function
+greeting(sayHello, "JavaScript!");
+// Hello, JavaScript!
+
+returned by another function
+............................
+
+function sayHello() {
+  return () => {
+    console.log("Hello!");
+  };
+}
+
+
+ When you can treat a function in a programming language as simple as a variable, 
+ that language would be much more flexible and opens a lot of rooms for improvements\
+ 
+  FP will make your code more Predictable, Testable, Reusable, Customisable, Cacheable, Maintainable, Composable and Readable.
+  
+First order function
+=====================
+
+First-order function is a function that doesn’t accept another function as an argument and doesn’t return a function as its return value.
+
+const firstOrder = () => console.log("I am a first order function!");
+
+Higher order function
+=====================
+Higher-order function is a function that accepts another function as an argument or returns a function as a return value or both.
+
+const firstOrderFunc = () =>
+  console.log("Hello, I am a First order function");
+const higherOrder = (ReturnFirstOrderFunc) => ReturnFirstOrderFunc();
+higherOrder(firstOrderFunc);
+
+Functions are considered higher-order functions when they take functions as arguments, 
+(like most Array utilities, .map, .filter, .reduce, .every ) and/or return a function as a result (Exactly like makeCounter).
+
+function that receives another function as an argument or that returns a new function or both is called Higher-order functions. 
+Higher-order functions are only possible because of the First-class function.
+
+const greet =  function(name){
+    return function(m){
+   
+        console.log(`Hi!! ${name}, ${m}`);
+    }
+}
+ 
+const greet_message = greet('ABC');
+greet_message("Welcome To GeeksForGeeks")
+
+ We can also call the function like this also — greet(‘ABC’)(‘Welcome To GeeksForGeeks’), It will also give the same output.
+ 
+ o/p:Hi!! ABC, Welcome To GeeksForGeeks
+ 
+function greet(name){
+    return `Hi!! ${name} `;
+}
+ 
+function greet_name(greeting,message,name){
+       console.log(`${greeting(name)} ${message}`);
+}
+ 
+greet_name(greet,'Welcome To GeeksForGeeks','JavaScript');
+
+
+First-Order Function	
+Higher-Order Function
+
+Function are treated as a variable that can be assigned to any other variable or passed as an argument.	
+Function receives another function as an argument or returns First-order a new function or both.
+
+The “first-class” concept only has to do with functions in programming languages.	
+The “higher-order” concept can be applied to functions in general, like functions in the mathematical sense.
+
+The presence of the First-class function implies the presence of a higher-order function.	
+The presence of a Higher-order function does not imply the presence of a First-order function.
+
+
+ unary function
+ ===============
+ 
+Unary function (i.e. monadic) is a function that accepts exactly one argument. It stands for a single argument accepted by a function.
+const unaryFunction = (a) => console.log(a + 10); // Add 10 to the given argument and display the value
+
+currying function
+=================
+
+Currying is the process of taking a function with multiple arguments and turning it into a sequence of functions each with only a single argument. 
+ By applying currying, a n-ary function turns it into a unary function.
+ 
+function simpleFunction(param1, param2, param3, …..) => function curriedFunction(param1)(param2)(param3)(….
+
+The parent function takes the first provided argument and returns the function that takes
+ the next argument and this keeps on repeating till the number of arguments ends.
+ 
+Currying is a transformation of functions that translates a function from callable as f(a, b, c) into callable as f(a)(b)(c).
+
+Currying is a checking method to make sure that you get everything you need before you proceed
+It helps you to avoid passing the same variable again and again
+It divides your function into multiple smaller functions that can handle one responsibility.
+ This makes your function pure and less prone to errors and side effects
+It is used in functional programming to create a higher-order function
+This could be personal preference, but I love that it makes my code readable
+
+Noncurried version//
+const add = (a, b, c)=>{
+    return a+ b + c
+}
+console.log(add(2, 3, 5)) // 10
+
+Curried version//
+const addCurry =(a) => {
+    return (b)=>{
+        return (c)=>{
+            return a+b+c
+        }
+    }
+}
+console.log(addCurry(2)(3)(5)) // 10
+
+
+Currying can be used to manipulate the DOM in Javascript
+It can be used to trigger event listeners
+Currying can be used when you want to create a function that will receive only single arguments
+
+function curry(func) {
+  return function curried(...args) {
+    if (args.length >= func.length) {
+      return func.apply(this, args);
+    } else {
+      return function(...args2) {
+        return curried.apply(this, args.concat(args2));
+      }
+    }
+  };
+}
+
+
+const multiArgFunction = (a, b, c) => a + b + c;
+console.log(multiArgFunction(1, 2, 3)); // 6
+
+const curryUnaryFunction = (a) => (b) => (c) => a + b + c;
+curryUnaryFunction(1); // returns a function: b => c =>  1 + b + c
+curryUnaryFunction(1)(2); // returns a function: c => 3 + c
+curryUnaryFunction(1)(2)(3); // returns the number 6
+
+Currying: a function that accepts multiple arguments. 
+It will transform this function into a series of functions, where every little function will accept a single argument until all arguments are completed
+
+Partial application: 
+--------------------------
+a function is partially applied when it is given fewer arguments than it expects and returns a new function expecting the remaining arguments
+
+const addPartial=(x,y,z) => {
+    return x+y+z 
+}
+var partialFunc= addPartial.bind(this,2,3);
+partialFunc(5); //returns 10
+
+ function is called a partial application when some of the argument it passes is incomplete.
+ 
+pure function
+=================
+
+A Pure function is a function where the return value is only determined by its arguments without any side effects. i.e, 
+If you call a function with the same arguments 'n' number of times and 'n' number of places in the application then it will always return the same value.
+It does not depend on any state or data change during a program’s execution. Rather, it only depends on its input arguments.
+
+Also a pure function does not produce any observable side effects such as network requests or data mutation etc.
+
+//Impure
+let numberArray = [];
+const impureAddNumber = (number) => numberArray.push(number);
+//Pure
+const pureAddNumber = (number) => (argNumberArray) =>
+  argNumberArray.concat([number]);
+
+//Display the results
+console.log(impureAddNumber(6)); // returns 1
+console.log(numberArray); // returns [6]
+console.log(pureAddNumber(7)(numberArray)); // returns [6, 7]
+console.log(numberArray); // returns [6]
+
+ the Push function is impure itself by altering the array and returning a push number index independent of the parameter value. 
+  Whereas Concat on the other hand takes the array and concatenates it with the other array producing a whole new array without side effects.
+  Also, the return value is a concatenation of the previous array.
+  
+  Remember that Pure functions are important as they simplify unit testing without any side effects and no need for dependency injection. 
+  They also avoid tight coupling and make it harder to break your application by not having any side effects. 
+  hese principles are coming together with Immutability concept of ES6 by giving preference to const over let usage.
+  
+If a pure function calls a pure function, this isn’t a side effect and the calling function is still considered pure.
+ (Example: using Math.max() inside a function)
+ 
+var vs let
+==========
+The let statement declares a block scope local variable. 
+Hence the variables defined with let keyword are limited in scope to the block, statement, or expression on which it is used. 
+
+Whereas variables declared with the var keyword used to define a variable globally, or locally to an entire function regardless of block scope.
+
+let counter = 30;
+if (counter === 30) {
+  let counter = 31;
+  console.log(counter); // 31
+}
+console.log(counter); // 30 (because the variable in if block won't exist here)
+
+var	
+let
+It is been available from the beginning of JavaScript	
+Introduced as part of ES6
+
+It has function scope	
+It has block scope
+
+Variables will be hoisted	
+Hoisted but not initialized
+................................
+
+function userDetails(username) {
+  if (username) {
+    console.log(salary); // undefined due to hoisting
+    console.log(age); // ReferenceError: Cannot access 'age' before initialization
+    let age = 30;
+    var salary = 10000;
+  }
+  console.log(salary); //10000 (accessible to due function scope)
+  console.log(age); //error: age is not defined(due to block scope)
+}
+userDetails("John");
+
+...................................................
+
+If you try to redeclare variables in a switch block then it will cause errors because there is only one block. 
+For example, the below code block throws a syntax error as below,
+
+let counter = 1;
+switch (x) {
+  case 0:
+    let name;
+    break;
+
+  case 1:
+    let name; // SyntaxError for redeclaration.
+    break;
+}
+
+To avoid this error, you can create a nested block inside a case clause and create a new block scoped lexical environment.
+
+let counter = 1;
+switch (x) {
+  case 0: {
+    let name;
+    break;
+  }
+  case 1: {
+    let name; // No SyntaxError for redeclaration.
+    break;
+  }
+}
+
+Temporal Dead Zone
+------------------
+The Temporal Dead Zone is a behavior in JavaScript that occurs when declaring a variable with the let and const keywords, but not with var. 
+In ECMAScript 6, accessing a let or const variable before its declaration (within its scope) causes a ReferenceError. 
+The time span when that happens, between the creation of a variable’s binding and its declaration, is called the temporal dead zone.
+
+function somemethod() {
+  console.log(counter1); // undefined
+  console.log(counter2); // ReferenceError
+  var counter1 = 1;
+  let counter2 = 2;
+}
+
+ IIFE(Immediately Invoked Function Expression)
+===============================================
+It is a JavaScript function that runs as soon as it is defined. The signature of it would be as below,
+
+(function(){
+//logic
+})();
+
+The primary reason to use an IIFE is to obtain data privacy because any variables declared within the IIFE cannot be accessed by the outside world. i.e, 
+If you try to access variables with IIFE then it throws an error as below,
+
+(function () {
+  var message = "IIFE";
+  console.log(message);
+})();
+console.log(message); //Error: message is not defined
+
+It is a design pattern which is also known as a Self-Executing Anonymous Function and contains two major parts:
+
+The first is the anonymous function with lexical scope enclosed within the Grouping Operator (). 
+This prevents accessing variables within the IIFE idiom as well as polluting the global scope.
+The second part creates the immediately invoked function expression () through which the JavaScript engine will directly interpret the function.
+
+The parentheses surrounding the function definition lets JavaScript know that it will process a function expression. 
+The last pair of parentheses invoke the function.
+
+An async IIFE allows you to use await and for-await even in older browsers and JavaScript runtimes that have no top-level await:
+
+const getFileStream = async (url) => {
+  // implementation
+};
+
+(async () => {
+  const stream = await getFileStream("https://domain.name/path/file.ext");
+  for await (const chunk of stream) {
+    console.log({ chunk });
+  }
+})();
+
+
+We would also use IIFE to create private and public variables and methods. 
+IIFE follow their own scope like any other function/variable in JavaScript. 
+
+IIFEs can also have parameters.
+
+// Declaring the parameter required.
+(function(dt) {
+	console.log(dt.toLocaleTimeString());
+	// Passing the Parameter.
+})(new Date());
+
+Use Cases Of IIFE
+
+Avoid polluting the global namespace 
+To create closures
+Avoid conflict of variable names between libraries and programs.
+IIFE is used to create private and  public variables and methods
+It is used to execute async and await function
+It is used in JQuery Library
+It is used to work with require function
+
+This pattern has been used to alias global variables, make variables and functions private and to ensure asynchronous code in loops are executed correctly.
+
+decode or encode a URL in JavaScript
+====================================
+encodeURI() function is used to encode an URL. This function requires a URL string as a parameter and return that encoded string. 
+decodeURI() function is used to decode an URL. This function requires an encoded URL string as parameter and return that decoded string.
+
+Note: If you want to encode characters such as / ? : @ & = + $ # then you need to use encodeURIComponent().
+
+let uri = "employeeDetails?name=john&occupation=manager";
+let encoded_uri = encodeURI(uri);
+let decoded_uri = decodeURI(encoded_uri);
+
+Memoization
+=============
+
+Memoization is a programming technique which attempts to increase a function’s performance by caching its previously computed results.
+Each time a memoized function is called, its parameters are used to index the cache. 
+If the data is present, then it can be returned, without executing the entire function. 
+Otherwise the function is executed and then the result is added to the cache.
+
+Memoization is a technique for speeding up applications by caching the results of expensive function calls and returning them when the same inputs are used again.
+Cache: A cache is just a temporary data store that stores data in order to serve future requests for that data more quickly.
+
+const memoizAddition = () => {
+  let cache = {};
+  return (value) => {
+    if (value in cache) {
+      console.log("Fetching from cache");
+      return cache[value]; // Here, cache.value cannot be used as property name starts with the number which is not a valid JavaScript  identifier. Hence, can only be accessed using the square bracket notation.
+    } else {
+      console.log("Calculating result");
+      let result = value + 20;
+      cache[value] = result;
+      return result;
+    }
+  };
+};
+// returned function from memoizAddition
+const addition = memoizAddition();
+console.log(addition(20)); //output: 40 calculated
+console.log(addition(20)); //output: 40 cached
+
+
+The concept of memoization in JavaScript relies on two concepts:
+
+Closures: The combination of a function and the lexical environment within which that function was declared.
+Higher Order Functions: Functions that operate on other functions, either by taking them as arguments or by returning them. 
+
+const fib = (n, memo) => {
+    memo = memo || {}
+
+    if (memo[n]) return memo[n]
+
+    if (n <= 1) return 1
+    return memo[n] = fib(n-1, memo) + fib(n-2, memo)
+}
+
+
+// a simple function to add something
+const add = (n) => (n + 10);
+add(9);
+// a simple memoized function to add something
+const memoizedAdd = () => {
+  let cache = {};
+  return (n) => {
+    if (n in cache) {
+      console.log('Fetching from cache');
+      return cache[n];
+    }
+    else {
+      console.log('Calculating result');
+      let result = n + 10;
+      cache[n] = result;
+      return result;
+    }
+  }
+}
+// returned function from memoizedAdd
+const newAdd = memoizedAdd();
+console.log(newAdd(9)); // calculated
+console.log(newAdd(9)); // cached
+
+memoize has officially become a higher-order-function because it takes a function as input and/or returns a function as output. 
+
+
+Hoisting
+=============
+
+Hoisting is a JavaScript mechanism where variables, function declarations and classes are moved to the top of their scope before code execution.
+Basically, it gives us an advantage that no matter where functions and variables are declared, they are 
+moved to the top of their scope regardless of whether their scope is global or local. 
+Remember that JavaScript only hoists declarations, not initialisation. Let's take a simple example of variable hoisting,
+
+console.log(message); //output : undefined
+var message = "The variable Has been hoisted";
+
+The above code looks like as below to the interpreter,
+
+var message;
+console.log(message);
+message = "The variable Has been hoisted";
+
+In the same fashion, function declarations are hoisted too
+
+message("Good morning"); //Good morning
+
+function message(name) {
+  console.log(name);
+}
+This hoisting makes functions to be safely used in code before they are declared.
+
+Being able to use a variable's value in its scope before the line it is declared. ("Value hoisting")
+Being able to reference a variable in its scope before the line it is declared, 
+without throwing a ReferenceError, but the value is always undefined. ("Declaration hoisting") -- var declaration is hoisted with this type
+The declaration of the variable causes behavior changes in its scope before the line in which it is declared.-- let, const, and class 
+declarations (also collectively called lexical declarations) are hoisted with this type.
+
+const x = 1;
+{
+  console.log(x); // ReferenceError
+  const x = 2;
+}
+
+Variables declared with let and const are hoisted but not initialized with a default value. 
+Accessing a let or const variable before it's declared will result in a ReferenceError
+
+Note that only function declarations are hoisted, not function expressions. 
+This should make sense: as we just learned, variable assignments aren't hoisted.
+
+foo(); // Uncaught TypeError: foo is not a function
+var foo = function () { }
+
+bar(); // Uncaught ReferenceError: Cannot access 'bar' before initialization
+let bar = function () { }
+
+baz(); // Uncaught ReferenceError: Cannot access 'baz' before initialization
+const baz = function () { }
+
+ calling a function that is never declared, which throws a different ReferenceError
+ foo(); // Uncaught ReferenceError: baz is not defined
+
+ classes in ES6
+================
+In ES6, Javascript classes are primarily syntactic sugar over JavaScript’s existing prototype-based inheritance.
+For example, the prototype based inheritance written in function expression as below,
+
+function Bike(model, color) {
+  this.model = model;
+  this.color = color;
+}
+
+Bike.prototype.getDetails = function () {
+  return this.model + " bike has" + this.color + " color";
+};
+
+Whereas ES6 classes can be defined as an alternative
+
+class Bike {
+  constructor(color, model) {
+    this.color = color;
+    this.model = model;
+  }
+
+  getDetails() {
+    return this.model + " bike has" + this.color + " color";
+  }
+}
+
+Key points to remember about classes:
+
+Unlike functions, classes are not hoisted. A class cannot be used before it is declared.
+A class can inherit properties and methods from other classes by using the extend keyword.
+All the syntaxes inside the class must follow the strict mode(‘use strict’) of javascript.
+An error will be thrown if the strict mode rules are not followed
+
+Classes are a template for creating objects. They encapsulate data with code to work on that data. 
+Classes in JS are built on prototypes but also have some syntax and semantics that are not shared with ES5 class-like semantics.
+
+Classes are in fact "special functions", and just as you can define function expressions and function declarations, 
+the class syntax has two components: class expressions and class declarations.
+
+An important difference between function declarations and class declarations is that while functions can be called in code that appears before they are defined, 
+classes must be defined before they can be constructed.
+const p = new Rectangle(); // ReferenceError
+
+class Rectangle {}
+
+This occurs because while the class is hoisted its values are not initialized.
+
+A class expression is another way to define a class. Class expressions can be named or unnamed.
+// unnamed
+let Rectangle = class {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+};
+console.log(Rectangle.name); // "Rectangle"
+
+// named
+Rectangle = class Rectangle2 {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+};
+console.log(Rectangle.name); // "Rectangle2"
+
+The body of a class is the part that is in curly brackets {}. This is where you define class members, such as methods or constructor.
+
+Object: A real-time object entity means the presentation of any entity in real-time.
+Class: It is the before the plan of creating any objects which are known as blueprint of any objects which you want to create.
+Methods: It communicates between the objects.
+The class contains the Constructors and Functions. 
+The Constructors take responsibility for allocating memory for the objects of the class. 
+The function takes the responsibility of the action of the objects. Combing these two Constructor and Function to make the Class. 
+
+closures
+=========
+
+A closure is the combination of a function and the lexical environment within which that function was declared.
+ i.e, It is an inner function that has access to the outer or enclosing function’s variables. The closure has three scope chains
+
+Own scope where variables defined between its curly brackets
+Outer function’s variables
+Global variables
+
+function Welcome(name) {
+  var greetingInfo = function (message) {
+    console.log(message + " " + name);
+  };
+  return greetingInfo;
+}
+var myFunction = Welcome("John");
+myFunction("Welcome "); //Output: Welcome John
+myFunction("Hello Mr."); //output: Hello Mr.John
+
+The inner function(i.e, greetingInfo) has access to the variables in the outer function scope(i.e, Welcome) even after the outer function has returned.
+In JavaScript, closures are created every time a function is created, at function creation time.
+
+The word lexical refers to the fact that lexical scoping uses the location where a variable is declared within the source code to determine
+ where that variable is available. 
+ 
+ // Outer function
+function outer()
+{
+    var arr = [];
+    var i;
+    for (i = 0; i < 4; i++)
+    {
+        // storing anonymous function
+        arr[i] = function () { return i; }
+    }
+ 
+    // returning the array.
+    return arr;
+}
+ 
+var get_arr = outer();
+ 
+console.log(get_arr[0]());
+console.log(get_arr[1]());
+console.log(get_arr[2]());
+console.log(get_arr[3]());
+
+Closures are functions that refer to independent (free) variables. 
+In other words, the function defined in the closure ‘remembers’ the environment in which it was created.
+
+function sayHello() {
+  var say = function() { console.log(hello); }
+  // Local variable that ends up within the closure 
+  var hello = 'Hello, world!';
+  return say;
+}
+var sayHelloClosure = sayHello(); 
+sayHelloClosure(); // ‘Hello, world!’
+
+Execution context is an abstract concept used by the ECMAScript specification to track the runtime evaluation of code. 
+This can be the global context in which your code is first executed or when the flow of execution enters a function body.
+
+ every execution context has a Lexical Environment. 
+ 
+This Lexical environments holds variables and their associated values, and also has a reference to its outer environment.
+The scope rules the accessibility of variables. There can be a function or a block scope.
+The lexical scope allows a function scope to access statically the variables from the outer scopes.
+Closures allow event handlers, callbacks to capture variables. They're used in functional programming.
+
+
+modules
+=========
+Modules refer to small units of independent, reusable code and also act as the foundation of many JavaScript design patterns. 
+Most of the JavaScript modules export an object literal, a function, or a constructor
+
+Below are the list of benefits using modules in javascript ecosystem
+
+Maintainability
+Reusability
+Namespacing
+
+
+service worker
+==============
+A Service worker is basically a script (JavaScript file) that runs in the background,
+ separate from a web page and provides features that don't need a web page or user interaction.
+ 
+some of the major features of service workers are Rich offline experiences(offline first web application development), periodic background syncs, 
+push notifications, intercept and handle network requests and programmatically managing a cache of responses.
+
+Service workers essentially act as proxy servers that sit between web applications, the browser, and the network (when available). 
+Service Worker is a script that works on browser background without user interaction independently. 
+
+A service worker is an event-driven worker registered against an origin and a path. 
+It takes the form of a JavaScript file that can control the web-page/site that it is associated with, intercepting and modifying navigation and resource requests, 
+and caching resources in a very granular fashion to give you complete control over how your
+ app behaves in certain situations (the most obvious one being when the network is not available).
+
+A service worker is run in a worker context: it therefore has no DOM access, and runs on a different thread to the
+ main JavaScript that powers your app, so it is non-blocking. 
+
+Service workers only run over HTTPS, for security reasons. Most significantly, HTTP connections 
+are susceptible to malicious code injection by man in the middle attacks, and such attacks could be worse if allowed access to these powerful APIs. 
+
+A service worker is first registered using the ServiceWorkerContainer.register() method. If successful, your service worker will be downloaded to the client
+and attempt installation/activation for URLs accessed by the user inside the whole origin, or inside a subset specified by you.
+
+Service workers are also intended to be used for such things as:
+
+Background data synchronization.
+Responding to resource requests from other origins.
+Receiving centralized updates to expensive-to-calculate data such as geolocation or gyroscope, so multiple pages can make use of one set of data.
+Client-side compiling and dependency management of CoffeeScript, less, CJS/AMD modules, etc. for development purposes.
+Hooks for background services.
+Custom templating based on certain URL patterns.
+Performance enhancements, for example pre-fetching resources that the user is likely to need in the near future, such as the next few pictures in a photo album.
+
+Service worker can't access the DOM directly. 
+But it can communicate with the pages it controls by responding to messages sent via the postMessage interface, and those pages can manipulate the DOM.
+
+The problem with service worker is that it gets terminated when not in use, and restarted when it's next needed,
+so you cannot rely on global state within a service worker's onfetch and onmessage handlers. 
+In this case, service workers will have access to IndexedDB API in order to persist and reuse across restarts.\
+
+IndexedDB is a low-level API for client-side storage of larger amounts of structured data, including files/blobs. 
+This API uses indexes to enable high-performance searches of this data.
+
+
+web storage
+=============
+
+Web storage is an API that provides a mechanism by which browsers can store key/value pairs locally within the user's browser,
+ in a much more intuitive fashion than using cookies. 
+ 
+The web storage provides two mechanisms for storing data on the client.
+
+Local storage: 
+--------------
+It stores data for current origin with no expiration date.
+but persists even when the browser is closed and reopened.
+Stores data with no expiration date, and gets cleared only through JavaScript, or clearing the Browser cache / Locally Stored Data.
+Storage limit is the maximum amongst the two.
+
+window.localStorage.setItem("name", "Mehdi");
+console.log(window.localStorage.getItem("name")); 
+window.localStorage.removeItem("name");
+localStorage.clear();
+
+Session storage: 
+------------------
+It stores data for one session and the data is lost when the browser tab is closed.
+maintains a separate storage area for each given origin that's available for the duration of the page session
+ (as long as the browser is open, including page reloads and restores).
+Data is never transferred to the server.
+Storage limit is larger than a cookie (at most 5MB).
+
+window.sessionStorage.setItem("name" , "John Doe");
+console.log(sessionStorage.getItem("name"));
+sessionStorage.removeItem("name");
+
+These mechanisms are available via the Window.sessionStorage and Window.localStorage properties.
+
+post message
+-===============-
+Post message is a method that enables cross-origin communication between Window objects.
+(i.e, between a page and a pop-up that it spawned, or between a page and an iframe embedded within it). 
+
+Generally, scripts on different pages are allowed to access each other if and only if the pages follow same-origin policy
+(i.e, pages share the same protocol, port number, and host).
+
+window.postMessage() provides a controlled mechanism to securely circumvent this restriction 
+one window may obtain a reference to another (e.g., via targetWindow = window.opener), and then dispatch a MessageEvent on it with targetWindow.postMessage().
+
+window.addEventListener("message", (event) => {
+  if (event.origin !== "http://example.org:8080")
+    return;
+
+  // …
+}, false);
+ 

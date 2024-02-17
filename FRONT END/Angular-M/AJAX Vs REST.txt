@@ -1,0 +1,40 @@
+Application Programming Interface or API returns data in response to a request made by a client. An API is essentially an access point or endpoint that allows you to access a server’s database.
+
+
+ JSON stands for JavaScript Object Notation and it represents data in JavaScript Object. JavaScript objects are stored as key/value pairs. That data can then be used to do essentially all the CRUD functionality of Creating, Reading, Updating, and Deleting within web applications. 
+
+
+AJAX stands for “Asynchronous JavaScript and XML“.
+
+AJAX provides a way to retrieve content from a database and display it without having to refresh the entire page. AJAX or also known as Asynchronous JavaScript and XML is a crucial part of a single page application.
+
+AJAX is a technology for asynchronous execution of HTTP requests from client-side JavaScript code. JavaScript front-end apps use AJAX calls to access the back-end services and APIs and consume data from the Web server over the HTTP protocol.
+
+AJAX technology is used to consume RESTful APIs from the back-end server.
+
+The request that waits for the response from the server after requesting to proceed with the script execution’s next part is called a synchronous request.
+An asynchronous request in AJAX moves forward with the next line of script execution without waiting for the web server after a request. 
+
+
+Since AJAX request calls are in plain format, this may result in insecure access to the database.
+Anyone can view the data retrieved on a web page made using AJAX as the retrieved data is stored on the client browser.
+
+XMLHttpRequest is an API with various properties and methods that are used by several scripting language
+XMLHttpRequest supports various formats for transferring data, including JSON, XML, plain text, and binary content. With XMLHttpRequest, you can update different parts of a webpage without requiring reloading of the page.
+
+REST stands for “Representational State Transfer“. 
+
+We interact with APIs through a set of URLs. Each URL defines a resource that we request or take action on. REpresentational State Transfer or REST is essentially an architectural design pattern to structure URLs.
+
+It is an architectural concept and industry standard about how to build Web services.
+RESTful services typically implement the CRUD operations (create, read, update, delete) over а certain data collection.
+The HTTP methods GET, POST, PUT, PATCH, and DELETE are used to retrieve, create, replace, modify and delete data.
+
+ These services are lightweight, provide maintainability, scalability, support communication among multiple applications that are developed using different programming languages.
+They provide means of accessing resources present at server required for the client via the web browser by means of request headers, request body, response body, status codes, etc.
+
+Every content in the REST architecture is considered a resource.
+
+Uniform Resource Identifier is the full form of URI which is used for identifying each resource of the REST architecture. URI is of the format:
+
+<protocol>://<service-name>/<ResourceType>/<ResourceID>

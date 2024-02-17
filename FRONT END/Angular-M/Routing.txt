@@ -1,0 +1,348 @@
+Angular Routing:
+
+In a single-page app, you change what the user sees by showing or hiding portions of the display that correspond to particular components, rather than going out to the server to get a new page. As users perform application tasks, they need to move between the different views that you have defined.
+
+To handle the navigation from one view to the next, you use the Angular Router. The Router enables navigation by interpreting a browser URL as an instruction to change the view.
+
+In Angular, routing plays a vital role since it is essentially used to create Single Page Applications. These applications are loaded just once, and new content is added dynamically.
+Applications like Google, Facebook, Twitter, and Gmail are a few examples of SPA. The best advantage of SPA is that they provide an excellent user experience and you don’t have to wait for pages to load, and by extension, this makes the SPA fast and gives a desktop-like feel. 
+
+It generally specifies navigation with a forward slash followed by the path defining the new content. 
+
+Routing in Angular allows the users to create a single-page application with multiple views and allows navigation between them. Users can switch between these views without losing the application state and properties.
+
+ng new routing-app --routing --defaults
+
+Import the AppRoutingModule into AppModule and add it to the imports array.
+
+1.Import RouterModule and Routes into your routing module.
+
+The Angular CLI performs this step automatically. The CLI also sets up a Routes array for your routes and configures the imports and exports arrays for @NgModule().
+
+2.Define your routes in your Routes array.
+
+Each route in this array is a JavaScript object that contains two properties. The first property, path, defines the URL path for the route. The second property, component, defines the component Angular should use for the corresponding path.
+
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router'; // CLI imports router
+
+const routes: Routes = [
+  { path: 'first-component', component: FirstComponent },
+  { path: 'second-component', component: SecondComponent },
+];  // sets up routes constant where you define your routes
+
+// configures NgModule imports and exports
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+3.Add your routes to your application.
+
+Now that you have defined your routes, add them to your application. 
+First, add links to the two components. Assign the anchor tag that you want to add the route to the routerLink attribute. 
+Set the value of the attribute to the component to show when a user clicks on each link. 
+Next, update your component template to include <router-outlet>. 
+This element informs Angular to update the application view with the component for the selected route.
+
+<h1>Angular Router App</h1>
+<!-- This nav gives you links to click, which tells the router which route to use (defined in the routes constant in  AppRoutingModule) -->
+<nav>
+  <ul>
+    <li><a routerLink="/first-component" routerLinkActive="active" ariaCurrentWhenActive="page">First Component</a></li>
+    <li><a routerLink="/second-component" routerLinkActive="active" ariaCurrentWhenActive="page">Second Component</a></li>
+  </ul>
+</nav>
+<!-- The routed views render in the <router-outlet>-->
+<router-outlet></router-outlet>
+
+Route order
+================================
+The order of routes is important because the Router uses a first-match wins strategy when matching routes, so more specific routes should be placed above less specific routes. List routes with a static path first, followed by an empty path route, which matches the default route. The wildcard route comes last because it matches every URL and the Router selects it only if no other routes match first.
+
+Getting route information
+==========================
+
+Often, as a user navigates your application, you want to pass information from one component to another.
+
+To get information from a route:
+
+1.Import ActivatedRoute and ParamMap to your component.
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+
+Implements the Angular Router service , which enables navigation from one view to the next as users perform application tasks.
+Defines the Route object that maps a URL path to a component, and the RouterOutlet directive that you use to place a routed view in a template, as well as a complete API for configuring, querying, and controlling the router state.
+
+Provides access to information about a route associated with a component that is loaded in an outlet. Use to traverse the RouterState tree and extract information from nodes.
+
+A map that provides access to the required and optional parameters specific to a route. The map supports retrieving a single value with get() or multiple values with getAll().
+2.Inject an instance of ActivatedRoute by adding it to your application's constructor:
+
+constructor(
+  private route: ActivatedRoute,
+) {}
+3.Update the ngOnInit() method to access the ActivatedRoute and track the name parameter:
+
+ngOnInit() {
+  this.route.queryParams.subscribe(params => {
+    this.name = params['name'];
+  });
+}
+--
+this.heroes$ = this.route.paramMap.pipe(
+    switchMap(params => {
+      this.selectedId = Number(params.get('id'));
+      return this.service.getHeroes();
+    })
+  );
+----
+  const heroId = this.route.snapshot.paramMap.get('id');
+--------------
+
+
+=================
+wildcard routes
+----------------
+A well-functioning application should gracefully handle when users attempt to navigate to a part of your application that does not exist. To add this functionality to your application, you set up a wildcard route. The Angular router selects this route any time the requested URL doesn't match any router paths.
+
+To set up a wildcard route, add the following code to your routes definition.
+
+{ path: '**', component: <component-name> }
+A wildcard route is the last route because it matches any URL. 
+
+redirects
+====================
+
+To set up a redirect, configure a route with the path you want to redirect from, the component you want to redirect to, and a pathMatch value that tells the router how to match the URL.
+
+const routes: Routes = [
+  { path: 'first-component', component: FirstComponent },
+  { path: 'second-component', component: SecondComponent },
+  { path: '',   redirectTo: '/first-component', pathMatch: 'full' }, // redirect to `first-component`
+  { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
+];
+
+ pathMatch value is 'prefix' which tells the router to match the redirect route when the remaining URL begins with the redirect route's prefix path.
+Technically, pathMatch = 'full' results in a route hit when the remaining, unmatched segments of the URL match ''
+
+======================
+Nesting routes
+
+As your application grows more complex, you might want to create routes that are relative to a component other than your root component. These types of nested routes are called child routes. This means you're adding a second <router-outlet> to your app, because it is in addition to the <router-outlet> in AppComponent.
+
+const routes: Routes = [
+  {
+    path: 'first-component',
+    component: FirstComponent, // this is the component with the <router-outlet> in the template
+    children: [
+      {
+        path: 'child-a', // child route path
+        component: ChildAComponent, // child route component that the router renders
+      },
+      {
+        path: 'child-b',
+        component: ChildBComponent, // another child route component that the router renders
+      },
+    ],
+  },
+];
+
+page title
+Each page in your application should have a unique title so that they can be identified in the browser history. The Router sets the document's title using the title property from the Route config.
+
+const routes: Routes = [
+  {
+    path: 'first-component',
+    title: 'First component',
+    component: FirstComponent,
+
+You can also provide a custom title strategy by extending the TitleStrategy.
+
+--------------
+
+Relative paths let you define paths that are relative to the current URL segment. 
+<li><a routerLink="../second-component">Relative Route to second component</a>
+
+ relative route
+To specify a relative route, use the NavigationExtras relativeTo property. In the component class, import NavigationExtras from the @angular/router.
+goToItems() {
+  this.router.navigate(['items'], { relativeTo: this.route });
+}
+=================================
+Lazy loading
+====================
+You can configure your routes to lazy load modules, which means that Angular only loads modules as needed, rather than loading all modules when the application launches. Additionally, preload parts of your application in the background to improve the user experience.
+
+
+========================================
+
+Preventing unauthorized access
+----------------------------
+Use route guards to prevent users from navigating to parts of an application without authorization. The following route guards are available in Angular:
+
+CanActivate
+CanActivateChild
+CanDeactivate
+CanMatch
+Resolve
+CanLoad
+To use route guards, consider using component-less routes as this facilitates guarding child routes.
+
+ng generate guard your-guard
+
+{
+  path: '/your-path',
+  component: YourComponent,
+  canActivate: [YourGuard],
+}
+
+================================
+A link parameters array holds the following ingredients for router navigation:
+
+The path of the route to the destination component
+Required and optional route parameters that go into the route URL
+
+template: `
+  <h1 class="title">Angular Router</h1>
+  <nav>
+
+    <a [routerLink]="['/crisis-center']">Crisis Center</a>
+    <a [routerLink]="['/crisis-center/1', { foo: 'foo' }]">Dragon Crisis</a>
+    <a [routerLink]="['/crisis-center/2']">Shark Crisis</a>
+  </nav>
+  <router-outlet></router-outlet>
+`you can write applications with one, two or more levels of routing. The link parameters array affords the flexibility to represent any routing depth and any legal sequence of route paths, (required) router parameters, and (optional) route parameter objects.
+
+=======================
+
+When the router navigates to a new component view, it updates the browser's location and history with a URL for that view.
+
+Modern HTML5 browsers support history.pushState, a technique that changes a browser's location and history without triggering a server page request. The router can compose a "natural" URL that is indistinguishable from one that would otherwise require a page load.
+
+PathLocationStrategy	The default "HTML5 pushState" style.
+HashLocationStrategy	The "hash URL" style.
+
+The RouterModule.forRoot() function sets the LocationStrategy to the PathLocationStrategy, which makes it the default strategy. You also have the option of switching to the HashLocationStrategy with an override during the bootstrapping process.
+----------------
+
+<base href>
+The router uses the browser's history.pushState for navigation. pushState lets you customize in-application URL paths; for example, localhost:4200/crisis-center. The in-application URLs can be indistinguishable from server URLs.
+
+Modern HTML5 browsers were the first to support pushState which is why many people refer to these URLs as "HTML5 style" URLs.
+
+You must add a 
+<base href>
+element to the application's index.html for pushState routing to work. The browser uses the <base href> value to prefix relative URLs when referencing CSS files, scripts, and images.
+
+Add the <base> element just after the <head> tag. If the app folder is the application root, as it is for this application, set the href value in index.html as shown here.
+
+<base href="/">
+
+Make sure that it includes the base tag in the index.html file of your application. Although this is generally added when your app is created, if it’s not, then add a base tag with href attribute set to a forward slash. It requires this so that the application knows how to construct the URL while navigating. 
+=========================
+
+Router outlet
+The RouterOutlet is a directive from the router library that is used like a component. It acts as a placeholder that marks the spot in the template where the router should display the components for that outlet.
+
+Router links
+To navigate as a result of some user action such as the click of an anchor tag, use RouterLink.
+The RouterLink directives on the anchor tags give the router control over those elements. The navigation paths are fixed, so you can assign a string as a one-time binding to the routerLink.
+
+Active router links
+The RouterLinkActive directive toggles CSS classes for active RouterLink bindings based on the current RouterState.
+
+On each anchor tag, you see a property binding to the RouterLinkActive directive that looks like
+[routerLinkActive]="someStringProperty"
+
+The template expression to the right of the equal sign, =, contains a space-delimited string of CSS classes that the Router adds when this link is active and removes when the link is inactive. 
+
+Router state
+After the end of each successful navigation lifecycle, the router builds a tree of ActivatedRoute objects that make up the current state of the router. You can access the current RouterState from anywhere in the application using the Router service and the routerState property.
+
+Each ActivatedRoute in the RouterState provides methods to traverse up and down the route tree to get information from parent, child, and sibling routes.
+
+Activated route
+The route path and parameters are available through an injected router service called the ActivatedRoute. It has a great deal of useful information including:
+
+url	An Observable of the route paths, represented as an array of strings for each part of the route path.
+data	An Observable that contains the data object provided for the route. Also contains any resolved values from the resolve guard.
+params	An Observable that contains the required and optional parameters specific to the route.
+paramMap	An Observable that contains a map of the required and optional parameters specific to the route. The map supports retrieving single and multiple values from the same parameter.
+queryParamMap	An Observable that contains a map of the query parameters available to all routes. The map supports retrieving single and multiple values from the query parameter.
+queryParams	An Observable that contains the query parameters available to all routes.
+fragment	An Observable of the URL fragment available to all routes.
+outlet	The name of the RouterOutlet used to render the route. For an unnamed outlet, the outlet name is primary.
+routeConfig	The route configuration used for the route that contains the origin path.
+parent	The route's parent ActivatedRoute when this route is a child route.
+firstChild	Contains the first ActivatedRoute in the list of this route's child routes.
+children	Contains all the child routes activated under the current route.
+
+Router events
+During each navigation, the Router emits navigation events through the Router.events property. These events are shown in the following table.
+NavigationStart	Triggered when navigation starts.
+RouteConfigLoadStart	Triggered before the Router lazy loads a route configuration.
+RouteConfigLoadEnd	Triggered after a route has been lazy loaded.
+RoutesRecognized	Triggered when the Router parses the URL and the routes are recognized.
+GuardsCheckStart	Triggered when the Router begins the Guards phase of routing.
+ChildActivationStart	Triggered when the Router begins activating a route's children.
+ActivationStart	Triggered when the Router begins activating a route.
+GuardsCheckEnd	Triggered when the Router finishes the Guards phase of routing successfully.
+ResolveStart	Triggered when the Router begins the Resolve phase of routing.
+ResolveEnd	Triggered when the Router finishes the Resolve phase of routing successfully.
+ChildActivationEnd	Triggered when the Router finishes activating a route's children.
+ActivationEnd	Triggered when the Router finishes activating a route.
+NavigationEnd	Triggered when navigation ends successfully.
+NavigationCancel	Triggered when navigation is canceled. This can happen when a Route Guard returns false during navigation, or redirects by returning a UrlTree.
+NavigationError	Triggered when navigation fails due to an unexpected error.
+Scroll	Represents a scrolling event.
+When you enable the enableTracing option, Angular logs these events to the console.
+
+
+Router	Displays the application component for the active URL. Manages navigation from one component to the next.
+RouterModule	A separate NgModule that provides the necessary service providers and directives for navigating through application views.
+Routes	Defines an array of Routes, each mapping a URL path to a component.
+Route	Defines how the router should navigate to a component based on a URL pattern. Most routes consist of a path and a component type.
+RouterOutlet	The directive (<router-outlet>) that marks where the router displays a view.
+RouterLink	The directive for binding a clickable HTML element to a route. Clicking an element with a routerLink directive that's bound to a string or a link parameters array triggers a navigation.
+RouterLinkActive	The directive for adding/removing classes from an HTML element when an associated routerLink contained on or inside the element becomes active/inactive. It can also set the aria-current of an active link for better accessibility.
+ActivatedRoute	A service that's provided to each route component that contains route specific information such as route parameters, static data, resolve data, global query parameters, and the global fragment.
+RouterState	The current state of the router including a tree of the currently activated routes together with convenience methods for traversing the route tree.
+Link parameters array	An array that the router interprets as a routing instruction. You can bind that array to a RouterLink or pass the array as an argument to the Router.navigate method.
+Routing component	An Angular component with a RouterOutlet that displays views based on router navigations.
+
+---------------------------------
+
+THE ROUTER-OUTLET #
+The Router-Outlet is a directive that’s available from the router library where the Router inserts the component that gets matched based on the current browser’s URL. You can add multiple outlets in your Angular application which enables you to implement advanced routing scenarios.
+
+ROUTES AND PATHS #
+Routes are definitions (objects) comprised from at least a path and a component (or a redirectTo path) attributes. The path refers to the part of the URL that determines a unique view that should be displayed, and component refers to the Angular component that needs to be associated with a path. Based on a route definition that we provide (via a static RouterModule.forRoot(routes) method), the Router is able to navigate the user to a specific view.
+
+Each Route maps a URL path to a component.
+
+The path can be empty which denotes the default path of an application and it’s usually the start of the application.
+
+The path can take a wildcard string (**). The router will select this route if the requested URL doesn’t match any paths for the defined routes. This can be used for displaying a “Not Found” view or redirecting to a specific view if no match is found.
+
+ROUTE MATCHING STRATEGIES #
+The Angular Router provides different route matching strategies. The default strategy is simply checking if the current browser’s URL is prefixed with the path.
+
+The patchMath attribute specifies the matching strategy. In this case, it’s prefix which is the default.
+
+The second  matching strategy is full. When it’s specified for a route, the router will check if the the path is exactly equal to the path of the current browser’s URL:
+
+MULTIPLE OUTLETS AND AUXILIARY ROUTES #
+Angular Router supports multiple outlets in the same application.
+
+A component has one associated primary route and can have auxiliary routes. Auxiliary routes enable developers to navigate multiple routes at the same time.
+
+To create an auxiliary route, you’ll need a named router outlet where the component associated with the auxiliary route will be displayed.
+
+<router-outlet></router-outlet>  
+<router-outlet  name="outlet1"></router-outlet> 
+
+The outlet with no name is the primary outlet.
+All outlets should have a name except for the primary outlet.
+
+{ path: "contacts", component: ContactListComponent, outlet: "outlet1" }

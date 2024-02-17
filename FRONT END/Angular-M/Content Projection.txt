@@ -1,0 +1,80 @@
+Content projection
+--------------------------
+This topic describes how to use content projection to create flexible, reusable components.
+
+Content projection is a pattern in which you insert, or project, the content you want to use inside another component. For example, you could have a Card component that accepts content provided by another component.
+
+Single-slot content projection
+
+The most basic form of content projection is single-slot content projection. Single-slot content projection refers to creating a component into which you can project one component.
+
+To create a component that uses single-slot content projection:
+
+Create a component.
+In the template for your component, add an <ng-content> element where you want the projected content to appear.
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-zippy-basic',
+  template: `
+    <h2>Single-slot content projection</h2>
+    <ng-content></ng-content> --With the <ng-content> element in place, users of this component can now project their own message into the component. For example: Now it is replaced with :: Is content projection cool?
+  `
+})
+export class ZippyBasicComponent {}
+
+<app-zippy-basic>
+  <p>Is content projection cool?</p>
+</app-zippy-basic>
+
+
+Multi-slot content projection
+
+A component can have multiple slots. Each slot can specify a CSS selector that determines which content goes into that slot. This pattern is referred to as multi-slot content projection. With this pattern, you must specify where you want the projected content to appear. You accomplish this task by using the select attribute of <ng-content>.
+
+To create a component that uses multi-slot content projection:
+
+Create a component.
+
+In the template for your component, add an <ng-content> element where you want the projected content to appear.
+
+Add a select attribute to the <ng-content> elements. Angular supports selectors for any combination of tag name, attribute, CSS class, and the :not pseudo-class.
+
+For example, the following component uses two <ng-content> elements.
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-zippy-multislot',
+  template: `
+    <h2>Multi-slot content projection</h2>
+
+    Default:
+    <ng-content></ng-content>
+
+    Question:
+    <ng-content select="[question]"></ng-content> --Content that uses the question attribute is projected into the <ng-content> element with the select=[question] attribute.
+  `
+})
+export class ZippyMultislotComponent {}
+
+<app-zippy-multislot>
+  <p question>
+    Is content projection cool?
+  </p>
+  <p>Let's learn about content projection!</p>
+</app-zippy-multislot>
+
+Conditional content projection
+
+If your component needs to conditionally render content, or render content multiple times, you should configure that component to accept an <ng-template> element that contains the content you want to conditionally render.
+
+Using an <ng-content> element in these cases is not recommended, because when the consumer of a component supplies the content, that content is always initialized, even if the component does not define an <ng-content> element or if that <ng-content> element is inside of an ngIf statement.
+
+With an <ng-template> element, you can have your component explicitly render content based on any condition you want, as many times as you want. Angular will not initialize the content of an <ng-template> element until that element is explicitly rendered.
+
+The <ng-template> element defines a block of content that a component can render based on its own logic. A component can get a reference to this template content, or TemplateRef, by using either the @ContentChild or @ContentChildren decorators. 
+
+-----------
+The ng-container element is a logical construct that is used to group other DOM elements; however, the ng-container itself is not rendered in the DOM tree.

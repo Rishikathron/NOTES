@@ -1,0 +1,190 @@
+Directives:
+==================
+
+Directives are classes that add additional behavior to elements in your Angular applications.
+Use Angular's built-in directives to manage forms, lists, styles, and what users see.
+
+Basically directives are used to manipulate the DOM, for example adding/removing the element from DOM or changing the appearance of the DOM elements.
+
+Directives are meant to be a function that executes when found in the DOM by the Angular compiler to extend the power of the HTML with new syntax. 
+Directives have a name and can be predefined or custom-defined so that they can be called anything. Depending on the predefined directive, its use is determined – attribute, comment, element, or class.
+
+Directive in angular can be categorized into the following types: Component Directive, Structural Directive, and Attribute directive.
+
+Attribute directive
+-------------------
+This type of angular directive is used to make behavior or element changes in the appearance and behavior of an element. 
+Attribute directives listen to and modify the behavior of other HTML elements, attributes, properties, and components.
+Attribute directives deal with changing the look and behavior of the dom element. 
+For example, ngStyle( applying styles) or ngClass(applying CSS classes).
+
+NgClass	Adds and removes a set of CSS classes.
+NgStyle	Adds and removes a set of HTML styles.
+NgModel	Adds two-way data binding to an HTML form element.
+
+Add or remove multiple CSS classes simultaneously with ngClass.
+
+ [ngClass]="isSpecial ? 'special' : ''"
+
+ [ngClass]="currentClasses"
+
+ this.currentClasses =  {
+    saveable: this.canSave,
+    modified: !this.isUnchanged,
+    special:  this.isSpecial
+  };
+
+Use NgStyle to set multiple inline styles simultaneously, based on the state of the component.
+
+[ngStyle]="currentStyles"
+
+ this.currentStyles = {
+    'font-style':  this.canSave      ? 'italic' : 'normal',
+    'font-weight': !this.isUnchanged ? 'bold'   : 'normal',
+    'font-size':   this.isSpecial    ? '24px'   : '12px'
+  };
+
+Use the NgModel directive to display a data property and update that property when the user makes changes.
+
+[(ngModel)]="currentItem.name"
+
+structural directives
+--------------------------
+
+Structural directives are responsible for HTML layout.  It basically changes the structure of the DOM.
+They shape or reshape the DOM's structure, typically by adding, removing, and manipulating the host elements to which they are attached.
+Structural directives have a * sign before the directive. For example, *ngIf and *ngFor.
+
+NgIf	   Conditionally creates or disposes of subviews from the template.
+NgFor	   Repeat a node for each item in a list.
+NgSwitch   A set of directives that switch among alternative views.
+---------------------
+Add or remove an element by applying an NgIf directive to a host element.
+
+By default, NgIf prevents display of an element bound to a null value.
+
+<app-item-detail *ngIf="isActive" [item]="item"></app-item-detail>
+-----------------------
+Use the NgFor directive to present a list of items.
+
+Define a block of HTML that determines how Angular renders a single item.
+To list your items, assign the shorthand let item of items to *ngFor.
+
+<div *ngFor="let item of items">{{item.name}}</div>
+
+<div *ngFor="let item of items; let i=index">{{i + 1}} - {{item.name}}</div>
+-----------------
+Reduce the number of calls your application makes to the server by tracking changes to an item list. 
+With the *ngFor trackBy property, Angular can change and re-render only those items that have changed, rather than reloading the entire list of items.
+
+<div *ngFor="let item of items; trackBy: trackByItems">
+  ({{item.id}}) {{item.name}}
+</div>
+
+trackByItems(index: number, item: Item): number { return item.id; }
+
+Change ids creates new items with new item.ids. In the following illustration of the trackBy effect, Reset items creates new items with the same item.ids.
+
+With no trackBy, both buttons trigger complete DOM element replacement.
+With trackBy, only changing the id triggers element replacement.
+--------------
+The Angular <ng-container> is a grouping element that doesn't interfere with styles or layout because Angular doesn't put it in the DOM.
+
+Use <ng-container> when there's no single element to host the directive.
+---------------------------------------------------------------------------------------------
+Like the JavaScript switch statement, NgSwitch displays one element from among several possible elements, based on a switch condition. Angular puts only the selected element into the DOM.
+
+NgSwitch	An attribute directive that changes the behavior of its companion directives.
+NgSwitchCase	Structural directive that adds its element to the DOM when its bound value equals the switch value and removes its bound                   value when it doesn't equal the switch value.
+NgSwitchDefault	Structural directive that adds its element to the DOM when there is no selected NgSwitchCase.
+
+<div [ngSwitch]="currentItem.feature">
+  <app-stout-item    *ngSwitchCase="'stout'"    [item]="currentItem"></app-stout-item>
+  <app-device-item   *ngSwitchCase="'slim'"     [item]="currentItem"></app-device-item>
+  <app-lost-item     *ngSwitchCase="'vintage'"  [item]="currentItem"></app-lost-item>
+  <app-best-item     *ngSwitchCase="'bright'"   [item]="currentItem"></app-best-item>
+<!-- . . . -->
+  <app-unknown-item  *ngSwitchDefault           [item]="currentItem"></app-unknown-item>
+</div>
+------
+It's a quite common use-case to repeat a block of HTML but only when a particular condition is true. An intuitive way to do that is to put both an *ngFor and an *ngIf on the same element. 
+However, since both *ngFor and *ngIf are structural directives, this would be treated as an error by the compiler. 
+You may apply only one structural directive to an element.
+
+Component directive
+--------------------
+
+Components are special directives in Angular. They are the directive with a template
+
+It might confuse you a bit, but if you see the definition of the directive, it says directives are used to manipulate the DOM, so now if you think what component is doing, it is actually showing something in DOM, hence we can say component is also a directive with a template (template or templateUrls).
+
+These form the main class having details of how the component should be processed, instantiated and used at runtime.
+
+================
+
+Custom Directives
+----------------
+Custom Directive is very similar to creating the Angular component. The custom directive is created using the @Directive decorator to replace the @component decorator.
+
+1.Create a class and add @Directive decorator to it and pass the object which has selector property (name of the directive)
+2.To create an attribute directive we need to access the HTML element on which the directive is getting applied, for that we will inject ElementRefdependency using constructor in our class
+3.Now we have to listen for the hover event on the element, for that we can use HostListener
+HostListener listens to the DOM event on the host element. 
+It also provides a handler method to run when that event occurs.
+4.Here the host element is the element where we are applying our directive.
+On the handler method, access the element reference and change the color of the text
+
+ng g directive
+
+import { Directive, ElementRef, OnInit } from '@angular/core';
+
+@Directive({
+selector: '[appChanges]'
+})
+export class ChangesDirective {
+constructor(private eltRef: ElementRef) {
+
+	// Changing the background to green
+	this.eltRef.nativeElement.style.backgroundColor = 'green';
+	this.eltRef.nativeElement.style.color = 'white';
+	//changing the text color to white
+}
+
+ngOnInit() {
+}
+}
+
+import { Component, OnInit, Directive } from '@angular/core';
+import { ChangesDirective } from '../changes.directive';
+
+@Component({
+selector: 'app-derived-directive',
+templateUrl: './derived-directive.component.html',
+styleUrls: ['./derived-directive.component.css']
+})
+
+export class DerivedDirectiveComponent implements OnInit {
+
+isClicked:boolean=false;
+constructor() { }
+buttonClick(){
+
+	// Change controlled by button press
+	this.isClicked = true;
+}
+ngOnInit() {
+}
+}
+
+
+<button>Click Here</button>
+
+	<div style="width: 220px;height: 50px">
+		<h1>GeeksForGeeks</h1>
+	</div>
+
+
+	<div style="color: green;width: 300px;height: 50px">
+		<h1> GeeksForGeeks</h1>
+	</div>
+

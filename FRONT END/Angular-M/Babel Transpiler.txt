@@ -1,0 +1,82 @@
+Babel is a JavaScript compiler.
+
+Babel is a tool that helps you write code in the latest version of JavaScript. When your supported environments don't support certain features natively, Babel will help you compile those features down to a supported version.
+
+The Babel runtime also provides a number of additional features such as polyfills, which allow developers to use features that are not yet supported by all browsers. Additionally, the Babel runtime provides a number of plugins and presets that allow developers to customize their code to their specific needs.
+
+Babel is a toolchain that is mainly used to convert ECMAScript 2015+ code into a backwards compatible version of JavaScript in current and older browsers or environments
+
+Here are the main things Babel can do for you:
+
+Transform syntax
+Polyfill features that are missing in your target environment (through a third-party polyfill such as core-js)
+Source code transformations (codemods)
+
+Babel has support for the latest version of JavaScript through syntax transformers.
+These plugins allow you to use new syntax, right now without waiting for browser support.
+
+Babel is built out of plugins.
+Compose your own transformation pipeline using existing plugins or write your own. Easily use a set of plugins by using or creating a preset.
+
+Babel tries to stay true to the ECMAScript standard, as much as reasonably possible. It may also have specific options to be more spec compliant as a tradeoff to performance.
+Babel tries using the least amount of code possible with no dependence on a bulky runtime.
+
+
+Babel is a tool that converts newer versions of ECMAScript to ECMAScript5 (ES5). ES5 is the current standard Javascript that is understood by major browsers including IE11. 
+Babel enables developers to use cutting-edge Javascript without worrying about browser support.
+Babel is a JavaScript transpiler, meaning it converts a newer version of ECMAScript, such as ES9, to a standard version (ES5).
+
+@babel/core	Contains the core logic for the transpiled code.
+@babel/cli	Provides the CLI tool for working with Babel.
+@bable/env	A preset for transpiling ES6+ to ES5.
+
+Babel can be used with the CLI to transform code or with a build tool/module bundler like Webpack.
+
+transpilation -  ECMAScript syntax additions
+polyfiling - core ECMAScript modifications
+
+In
+
+// ES2020 nullish coalescing
+function greet(input) {
+  return input ?? "Hello world";
+}
+Out
+
+function greet(input) {
+  return input != null ? input : "Hello world";
+}
+
+
+A Babel plugin is a piece of code that modifies the behavior of Babel itself. It can be used to add new features, modify existing features, or even completely replace existing features. 
+
+A preset is a set of plugins that are used together to achieve a certain goal. For example, a preset might include plugins for transforming ES2015 syntax into ES5 syntax, or for adding support for React. Presets are a convenient way to quickly configure Babel for a specific purpose.
+
+The purpose of the Babel polyfill is to provide support for features that are not available in certain browsers or environments. It allows developers to write code that uses new JavaScript language features, even if the environment or browser does not support them natively. The polyfill implements the missing features in a way that is compatible with the environment, so that the code can still be executed correctly. This allows developers to write code that is more modern and efficient, without having to worry about compatibility issues.
+
+The difference between source and target in Babel is that source is the code that is written in a language that Babel can understand, while target is the code that Babel will output after it has been processed.
+
+Babel is a powerful tool that allows developers to write code in one language and have it automatically converted into another language. This allows developers to write code in a language that is more modern and feature-rich, while still being able to target older browsers and platforms.
+
+Source maps are important when using Babel because they allow you to map your original source code to the compiled code that Babel produces. This is important because it allows you to debug your code in the original source, even if you are running the compiled code.
+
+
+The .babelrc config files are used to specify the settings that should be used when compiling the code.
+
+You will need to install Babel and then create a configuration file, .babelrc, in your project’s root directory. In this file, you will need to specify the presets and plugins that you want to use. Once this is set up, you can run Babel from the command line to compile your code.
+
+Setting up a Babel development environment is a straightforward process.
+
+First, you need to install Node.js and npm. Node.js is a JavaScript runtime environment that allows you to run JavaScript code outside of the browser. Npm is a package manager for Node.js that allows you to install and manage packages.
+
+Once Node.js and npm are installed, you can install Babel. This can be done using the command line or through a package manager such as npm.
+
+Once Babel is installed, you need to create a configuration file. This file will tell Babel how to compile your code. The configuration file is usually named .babelrc and should be placed in the root directory of your project.
+
+Next, you need to install the necessary plugins and presets. Plugins are used to transform specific syntax, while presets are collections of plugins. You can install plugins and presets using npm.
+
+Finally, you need to create a build script. This script will tell Babel how to compile your code. The script should be written in JavaScript and should be placed in the root directory of your project.
+
+Once the build script is created, you can run it using the command line. This will compile your code and create the necessary files.
+
+And that's it! You now have a fully functioning Babel development environment.
