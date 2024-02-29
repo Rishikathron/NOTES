@@ -33,3 +33,1107 @@ Disadvantages of using PostgreSQL stored procedures:
 	1. Slowness in software development because stored procedure programming requires specialized skills that many developers do not possess.
 	2. Difficult to manage versions and hard to debug.
 	3. May not be portable to other database management systems e.g., MySQL or Microsoft SQL Server.
+	
+	
+CREATE PROCEDURE:
+=================
+
+To define a new stored procedure, you use the create procedure statement with the following syntax:
+
+
+		create [or replace] procedure procedure_name(parameter_list)
+		language plpgsql
+		as $$
+		declare
+		-- variable declaration
+		begin
+		-- stored procedure body
+		end; $$
+	
+	In this syntax:
+
+		First, specify the name of the stored procedure after the create procedure keywords.
+		Second, define parameters for the stored procedure. A stored procedure can accept zero or more parameters.
+		Third, specify plpgsql as the procedural language for the stored procedure. Note that you can use other procedural languages for the stored procedure such as SQL, C, etc.
+		Finally, use the dollar-quoted string constant syntax to define the body of the stored procedure.
+		Parameters in stored procedures can have the in and inout modes but cannot have the out mode.
+
+		A stored procedure does not return a value. You cannot use the return statement with a value inside a store procedure like this:
+
+			return expression;
+		
+		However, you can use the return statement without the expression to stop the stored procedure immediately:
+
+			return;
+		
+		If you want to return a value from a stored procedure, you can use parameters with the inout mode.
+	
+	Calling a stored procedure:
+	--------------------------
+	To call a stored procedure, you use the CALL statement as follows:
+
+		call stored_procedure_name(argument_list);
+		
+	Example : 
+		--Create an SP names Transfer
+		create or replace procedure transfer(
+		   sender int,
+		   receiver int, 
+		   amount dec
+		)
+		language plpgsql    
+		as $$
+		begin
+			-- subtracting the amount from the sender's account 
+			update accounts 
+			set balance = balance - amount 
+			where id = sender;
+
+			-- adding the amount to the receiver's account
+			update accounts 
+			set balance = balance + amount 
+			where id = receiver;
+
+			commit;
+		end;$$;
+		
+		--call the sp named transfer with params:
+		
+		call transfer(1,2,1000);
+		
+===========================================================================================
+		
+DECLARE BLOCK IN STORED PROCEDURE : 
+===================================
+	Declare Scalar Variables:
+	-------------------------
+	
+		You can declare scalar variables to store single values such as integers, text, booleans, etc.
+		
+		DECLARE
+			my_integer_variable INT;
+			my_text_variable TEXT;
+			my_boolean_variable BOOLEAN;
+			
+	Declare Constants:
+	------------------
+		You can use CONSTANT to declare constants within a PL/pgSQL block.
+		
+		DECLARE
+			PI CONSTANT DOUBLE PRECISION := 3.14;
+			MAX_ATTEMPTS CONSTANT INT := 5;
+	
+	Declare Composite Types (Row Types):
+	------------------------------------
+		Row types allow you to group multiple fields into a single variable.
+		
+		DECLARE
+			my_row_variable my_table%ROWTYPE;
+		
+		Here, my_table is a table in your database, and my_row_variable is declared with the same structure as the table.
+
+	Declare Arrays:
+	---------------
+		You can declare arrays to store multiple values of the same type.
+		
+		DECLARE
+			integer_array INT[];
+			text_array TEXT[];
+			
+	Declare Table Variables:
+	------------------------
+		You can declare variables with the type of a table, allowing you to store rows.
+		
+		DECLARE
+			my_table_variable my_table%ROWTYPE;
+	
+	Declare Variables with Default Values:
+	--------------------------------------
+		You can declare variables with default values.
+		
+		DECLARE
+			my_variable INT DEFAULT 42;
+			
+	Declare Variables with NULL:
+	---------------------------
+		You can declare variables that allow NULL values.
+		
+		DECLARE
+			nullable_variable INT;
+	
+	Declare Composite Variables:
+	----------------------------
+		You can declare variables with composite types to store structured data.
+		
+		DECLARE
+			my_composite_variable my_composite_type;
+		
+		Here, my_composite_type is a user-defined composite type.
+		
+	Example of Using DECLARE:
+		Here is an example combining some of the above declarations in a PL/pgSQL block:	
+		
+		DO $$ 
+			DECLARE
+				my_integer INT := 10;
+				my_text TEXT DEFAULT 'Hello, World!';
+				my_row my_table%ROWTYPE;
+			BEGIN
+				RAISE NOTICE 'Integer: %', my_integer;
+				RAISE NOTICE 'Text: %', my_text;
+
+				SELECT * INTO my_row FROM my_table WHERE id = my_integer;
+				RAISE NOTICE 'Row Data: %', my_row;
+			END;
+		$$ LANGUAGE plpgsql;
+		
+		In this example, we declare an integer variable, a text variable with a default value, and a row variable for a table. 
+		The block then raises notices to display the values of these variables.
+
+	ASSIGNING VALUES TO THE VARIABLES:
+	---------------------------------
+	
+		declare
+		   counter    integer := 1;
+		   first_name varchar(50) := 'John';
+		   last_name  varchar(50) := 'Doe';
+		   payment    numeric(11,2) := 20.5;
+		   
+		   
+		Example : 
+			do $$ 
+				declare
+				   counter    integer := 1;
+				   first_name varchar(50) := 'John';
+				   last_name  varchar(50) := 'Doe';
+				   payment    numeric(11,2) := 20.5;
+				begin 
+				   raise notice '% % % has been paid % USD', 
+					   counter, 
+					   first_name, 
+					   last_name, 
+					   payment;
+			end $$;
+		
+		Output:
+			NOTICE:  1 John Doe has been paid 20.50 USD
+
+		
+		First, declare four variables in the declaration part:
+
+			=> The counter variable is an integer with the initial value 1.
+			=> The first_name and last_name are varchar(50) with the initial values of 'John' and 'Doe' respectively.
+			=> The payment variable has the numeric type with the initial value 20.5.
+			
+		Second, display the values of the variables using the raise notice statement.
+		
+	Copying data types:
+	------------------
+	
+		The %type provides the data type of a table column or another variable. Typically, you use the %type to declare a variable that holds a value from the database or another variable.
+
+		The following illustrates how to declare a variable with the data type of a table column:
+
+			variable_name table_name.column_name%type;
+
+			variable_name variable%type;
+			
+		Example:
+			This example uses the type-copying technique to declare variables that hold values that come from the film table:
+
+			do 
+			$$ 
+			declare
+			   film_title film.title%type;
+			   featured_title film_title%type;
+			begin 
+			   -- get title of the film id 100
+			   select title
+			   from film
+			   into film_title
+			   where film_id = 100;
+			   
+			   -- show the film title
+			   raise notice 'Film title id 100: %s', film_title;
+			end; $$;
+			
+			Output:
+
+				NOTICE:  Film title id 100: Brooklyn Deserts
+	
+===============================================================================================================================================================
+					
+Select Into statement:
+---------------------
+
+	The select into statement allows you to select data from the database and assign the data to a variable.
+
+	The following illustrates the syntax of the select into statement:
+
+		select select_list
+		into variable_name
+		from table_expression;
+		
+	In this syntax, you place the variable after the into keyword. The select into statement will assign the data returned by the select clause to the variable.
+
+	Besides selecting data from a table, you can use other clauses of the select statement such as join, group by, and having.
+	
+	Let’s take some examples of using the select into statement.
+
+	1. Basic select into statement example
+		The following example illustrates how to use the select into statement:
+
+			do 
+			$$
+			declare
+			   actor_count integer; 
+			begin
+			   -- select the number of actors from the actor table
+			   select count(*)
+			   into actor_count
+			   from actor;
+
+			   -- show the number of actors
+			   raise notice 'The number of actors: %', actor_count;
+			end; 
+
+			$$;
+			
+	Output:
+		NOTICE:  The number of actors: 200
+		
+	
+	In this example:
+		First, declare a variable called actor_count that stores the number of actors from the actor table.
+		Second, assign the number of actors to the actor_count using the select into statement.
+		Third, display a message that shows the value of the actor_count variable using the raise notice statement.
+
+
+	2. Using the select into with multiple variables:
+
+		The following example uses the select into statement to assign the first name and last name of the actor id 1 to the corresponding variables:
+
+			do 
+			$$
+			declare
+			   first_name_var actor.first_name%type;
+			   last_name_var actor.last_name%type;
+			begin
+			   -- select the first_name and last_name of the actor id 1
+			   select first_name, last_name
+			   into first_name_var, last_name_var
+			   from actor
+			   where actor_id = 1;
+
+			   -- show the full name
+			   raise notice '% %', first_name_var, last_name_var;
+			end; 
+
+			$$;
+			
+		Output:
+			NOTICE:  Penelope Guiness
+		
+		How it works:
+
+			First, declare two variables with the types corresponding to the types of the first_name and last_name columns of the actor table:
+
+				first_name_var actor.first_name%type;
+				last_name_var actor.last_name%type;
+			
+			
+			Second, retrieve the first_name and last_name of the actor id 1 from the actor table and assign it to the first_name_var and last_name_var variables:
+
+				select first_name, last_name
+				into first_name_var, last_name_var
+				from actor
+				where actor_id = 1;
+				Code language: JavaScript (javascript)
+			
+			Third, show the values of first_name_var and last_name_var variables:
+				raise notice '% %', first_name_var, last_name_var;
+			
+	
+	3. 	PL/pgSQL row types:
+			To store the whole row of a result set returned by the select into statement, you use the row-type variable or row variable.
+
+			You can declare a variable that has the same datatype as the datatype of the row in a table by using the following syntax:
+
+				row_variable table_name%ROWTYPE;
+				row_variable view_name%ROWTYPE;
+				
+			To access the individual field of the row variable, you use the dot notation (.) like this:
+				row_variable.field_name
+
+			PL/pgSQL row types example:
+			
+			We’ll use the actor table from the sample database to show how row types work:
+			
+				The following example shows the first name and last name of the actor id 10:
+
+					do 
+					$$
+					declare
+					   selected_actor actor%rowtype;
+					begin
+					   -- select actor with id 10   
+					   select * 
+					   from actor
+					   into selected_actor
+					   where actor_id = 10;
+
+					   -- show the number of actor
+					   raise notice 'The actor name is % %',
+						  selected_actor.first_name,
+						  selected_actor.last_name;
+					end; 
+					$$;
+					
+			How it works:
+				First, declare a row variable called selected_actor whose datatype is the same as the row in the actor table.
+				Second, assign the row whose value in the actor_id column is 10 to the selected_actor variable by using the select into statement.
+				Third, show the first name and last name of the selected actor by using the raise notice statement. It accessed the first_name and last_name fields using the dot notation.
+		
+	3. 	PL/pgSQL record types:
+
+			PostgreSQL provides a “type” called the record that is similar to the row-type.
+			
+			To declare a record variable, you use a variable name followed by the record keyword like this:
+				variable_name record;
+				
+			A record variable is similar to a row-type variable. 
+			It can hold only one row of a result set.
+
+			Unlike a row-type variable, a record variable does not have a predefined structure. 
+			The structure of a record variable is determined when the select or for statement assigns an actual row to it.
+
+			To access a field in the record, you use the dot notation (.) syntax like this:
+				record_variable.field_name;
+				
+			If you attempt to access a field in a record variable before it is assigned, you will get an error.
+
+			It is important to note that a record is not a true data type but a placeholder. 
+			Additionally, a record variable can change its structure when you reassign it.
+
+===============================================================================================================================================================
+PL/pgSQL Errors and Messages:
+-----------------------------
+1.	Reporting messages:
+
+		To raise a message, you use the raise statement as follows
+			raise level format;
+		
+		
+		Level
+		
+			Following the raise statement is the level option that specifies the error severity.
+
+		PostgreSQL provides the following levels:
+
+			 debug
+			 log
+			 notice
+			 info
+			 warning
+			 exception
+			 
+		If you don’t specify the level, the raise statement will use exception level that raises an error and stops the current transaction by default. 
+		
+
+		Format
+		
+			The format is a string that specifies the message. The format uses percentage ( %) placeholders that will be substituted by the arguments.
+
+			The number of placeholders must be the same as the number of arguments. Otherwise, PostgreSQL will issue an error:
+
+			[Err] ERROR:  too many parameters specified for raise
+			
+			The following example illustrates the raise statement that reports different messages at the current time.
+
+				do $$ 
+				begin 
+				  raise info 'information message %', now() ;
+				  raise log 'log message %', now();
+				  raise debug 'debug message %', now();
+				  raise warning 'warning message %', now();
+				  raise notice 'notice message %', now();
+				end $$;
+				
+				Output:
+					info:  information message 2015-09-10 21:17:39.398+07
+					warning:  warning message 2015-09-10 21:17:39.398+07
+					notice:  notice message 2015-09-10 21:17:39.398+07
+		
+		Notice that not all messages are reported back to the client. 
+		PostgreSQL only reports the info, warning, and notice level messages back to the client. 
+		This is controlled by client_min_messages and log_min_messages configuration parameters.
+	
+	To handle Try catch block exceptions in the code:
+		PostgreSQL doesn not have native "try-catch" constructs like some other programming languages, but it provides error handling mechanisms 
+		using the BEGIN ... EXCEPTION ... END block in PL/pgSQL. 
+		You can use this block to catch and handle exceptions. 
+		
+		Here is an example:
+		
+			DO $$ 
+			BEGIN
+				-- Your PL/pgSQL code goes here
+
+				-- Example: Division by zero
+				DECLARE
+					dividend INT := 10;
+					divisor INT := 0;
+					result INT;
+				BEGIN
+					-- Attempt to perform division
+					BEGIN
+						result := dividend / divisor;
+					EXCEPTION
+						WHEN division_by_zero THEN
+							-- Handle the division by zero error
+							RAISE NOTICE 'Error: Division by zero';
+							-- You can add more logic or raise an error if needed
+							result := NULL; -- or another default value
+					END;
+
+					-- Your further logic with the result
+
+				END;
+
+				-- Your further PL/pgSQL code goes here
+
+			END $$ LANGUAGE plpgsql;
+			
+			The outer BEGIN ... END block is used to contain your PL/pgSQL code.
+			Inside that, there is an inner BEGIN ... END block with error handling logic specific to the operation where an error might occur.
+			The EXCEPTION block catches errors, and you can handle them accordingly.
+			
+		Example 2:
+			Handling any type of error in the exception:
+			
+			In PostgreSQL PL/pgSQL, you can use the EXCEPTION WHEN others block to catch any exception and log it. Here is an example of how you can log any exception:
+				
+				DO $$ 
+				BEGIN
+					-- Your PL/pgSQL code goes here
+
+					BEGIN
+						-- Your risky code that might throw an exception
+						-- ...
+
+						EXCEPTION
+							WHEN others THEN
+								-- Log the exception
+								RAISE NOTICE 'An exception occurred: %', SQLERRM;
+								-- You can add more logging or error-handling logic here
+					END;
+
+					-- Your further PL/pgSQL code goes here
+
+				END $$ LANGUAGE plpgsql;
+				
+			In this example:
+
+				The outer BEGIN ... END block is used to contain your PL/pgSQL code.
+				Inside that, there is an inner BEGIN ... END block where you place the code that might throw an exception.
+				The EXCEPTION WHEN others block catches any exception.
+				SQLERRM is used to get the error message associated with the exception.
+				You can log the error message using RAISE NOTICE or take further actions like writing to a log table, raising a different exception, etc.
+				
+				while using EXCEPTION WHEN others because it catches all exceptions, and it might make it harder to debug issues if not used carefully. 
+				
+		You can use additional information available in the PG_EXCEPTION_CONTEXT function to get more context information about where the error occurred. Here is an example:
+		
+			EXCEPTION
+				WHEN others THEN
+					-- Log the exception and additional context
+					RAISE NOTICE 'An exception occurred: %', SQLERRM;
+					RAISE NOTICE 'Exception context: %', PG_EXCEPTION_CONTEXT;
+					-- You can add more logging or error-handling logic here
+					
+		In this example, PG_EXCEPTION_CONTEXT is used to provide additional context information about where the error occurred. Note that the level of detail in the context information might vary depending on the nature of the error.
+		
+	System defined exceptions:
+	
+		1.	NO_DATA_FOUND: It is raised WHEN a SELECT INTO statement returns no rows.
+				DECLARE
+				   temp varchar(20); 
+				  
+				BEGIN
+				   SELECT g_id into temp from geeks where g_name='GeeksforGeeks'; 
+				  
+				exception 
+				   WHEN no_data_found THEN
+					   RAISE EXCEPTION 'ERROR'; 
+					   RAISE EXCEPTION 'there is no name as'; 
+					   RAISE EXCEPTION 'GeeksforGeeks in geeks table'; 
+				end; 
+		2.	TOO_MANY_ROWS:It is raised WHEN a SELECT INTO statement returns more than one row.
+				EXCEPTION 
+				   WHEN too_many_rows THEN
+					   RAISE EXCEPTION 'error trying to SELECT too many rows'; 
+				  
+				end; 
+		3. VALUE_ERROR:This error is raised WHEN a statement is executed that resulted in an arithmetic, numeric, string, conversion, or constraint error. This 	error mainly results from programmer error or invalid data input.
+				EXCEPTION 
+				   WHEN value_error THEN
+				    RAISE EXCEPTION 'Error'; 
+				    RAISE EXCEPTION 'Change data type of temp to varchar(20)'; 
+				   
+		4.	ZERO_DIVIDE = raises exception WHEN dividing with zero.
+		
+===============================================================================================================================================================
+CONTROL STRUCTURES:
+-------------------
+
+	The if statement determines which statements to execute based on the result of a boolean expression.
+
+	PL/pgSQL provides you with three forms of the if statements.
+
+		if then
+		if then else
+		if then elsif
+		
+	1. PL/pgSQL if-then statement:
+	
+		The following illustrates the simplest form of the if statement:
+
+		if condition then
+		   statements;
+		end if;
+		
+		Example : 
+			do $$
+				declare
+				  selected_film film%rowtype;
+				  input_film_id film.film_id%type := 0;
+				begin  
+
+				  select * from film
+				  into selected_film
+				  where film_id = input_film_id;
+				  
+				  if not found then
+					 raise notice'The film % could not be found', 
+						input_film_id;
+				  end if;
+			end $$;
+			
+		Clarification on If found statement:
+		
+			DO $$ 
+			DECLARE  
+				employee record;
+			BEGIN
+				BEGIN
+					-- Your PL/pgSQL code goes here
+
+					SELECT * INTO employee
+					FROM "Assessment" LIMIT 1;
+
+					-- Check if any rows were affected by the SELECT statement
+					if not found then
+						-- This block is executed if no rows were affected
+						RAISE notice 'No rows found: %', employee;
+					end if;
+
+					if found then
+						-- This block is executed if rows were affected
+						RAISE notice 'Rows found: %', employee;
+					end if;
+
+				EXCEPTION 
+					WHEN OTHERS THEN
+						-- This block is executed if an exception occurs
+						RAISE notice 'Exception occurred';
+
+				END;
+			END $$;
+
+			
+	2.  PL/pgSQL if-then-else statement:
+	
+		The following illustrates the syntax of the if-then-else statement:
+
+			if condition then
+			  statements;
+			else
+			  alternative-statements;
+			end if;
+	
+	3. PL/pgSQL if-then-elsif Statement
+		The following illustrates the syntax of the if then elsif statement:
+
+			if condition_1 then
+			  statement_1;
+			elsif condition_2 then
+			  statement_2
+			...
+			elsif condition_n then
+			  statement_n;
+			else
+			  else-statement;
+			end if;
+			
+	4. PL/pgSQL CASE Statment:
+	
+		1. Simple case statement
+		
+			Here’s the basic syntax of the simple case statement:
+
+				case search-expression
+				   when expression_1 [, expression_2, ...] then
+					  when-statements
+				  [ ... ]
+				  [else
+					  else-statements ]
+				END case;
+				
+			Example : 
+				do $$
+				declare 
+					rate film.rental_rate%type;
+					price_segment varchar(50);
+				begin
+					-- get the rental rate
+					select rental_rate into rate 
+					from film 
+					where film_id = 100;
+					
+					-- assign the price segment
+					if found then
+						case rate
+						   when 0.99 then
+							  price_segment =  'Mass';
+						   when 2.99 then
+							  price_segment = 'Mainstream';
+						   when 4.99 then
+							  price_segment = 'High End';
+						   else
+							  price_segment = 'Unspecified';
+						   end case;
+						   
+						raise notice '%', price_segment;  
+					else
+						raise notice 'film not found';  
+					end if;
+				end; $$
+				
+			Output:
+				NOTICE:  High End
+				
+		2.  Searched case statement
+				The following syntax shows the basic syntax of the searched case statement:
+
+					case
+						when boolean-expression-1 then
+						  statements
+					  [ when boolean-expression-2 then
+						  statements
+						... ]
+					  [ else
+						  statements ]
+					end case;
+					
+				Example :
+					SELECT 
+						CASE 
+							WHEN score >= 90 THEN 'A'
+							WHEN score >= 80 THEN 'B'
+							WHEN score >= 70 THEN 'C'
+							ELSE 'D'
+						END AS grade
+					FROM exam_results;
+					
+					
+		Main difference Between Simple case and searched case Statements:
+		
+		1. 	Simple CASE Statement:
+
+				The simple CASE statement compares an expression to a set of simple values to determine the result.
+
+					It evaluates the expression and compares it with each WHEN value. 
+					If a match is found, it returns the corresponding result. 
+					If no match is found, and there is an ELSE clause, it returns the else_result. 
+					If no match is found and there is no ELSE clause, it returns NULL.
+
+				Example:
+					SELECT 
+						CASE grade --here grade is mentioned as a case
+							WHEN 'A' THEN 'Excellent'
+							WHEN 'B' THEN 'Good'
+							WHEN 'C' THEN 'Average'
+							ELSE 'Fail'
+						END AS result
+					FROM students;
+					
+		2. Searched CASE Statement:
+
+				The searched CASE statement checks a set of Boolean conditions and returns the result of the first condition that is true.
+				
+				t evaluates each condition in order, and when the first condition that is true is found, it returns the corresponding result. 
+				If none of the conditions is true and there is an ELSE clause, it returns the else_result. 
+				If no conditions are true and there is no ELSE clause, it returns NULL.
+
+				Example:
+					SELECT 
+						CASE  --here nothing is mentioned as case 
+							WHEN score >= 90 THEN 'A'
+							WHEN score >= 80 THEN 'B'
+							WHEN score >= 70 THEN 'C'
+							ELSE 'D'
+						END AS grade
+					FROM exam_results;
+					
+				the main difference is in the way they handle conditions. 
+				
+				==> The simple CASE statement compares a single expression to multiple values, while the searched CASE statement evaluates multiple conditions and returns the result of the first true condition.
+				
+===============================================================================================================================================================
+PL/pgSQL Loop statement:
+-----------------------
+
+	The loop defines an unconditional loop that executes a block of code repeatedly until terminated by an exit or return statement.
+
+	The following illustrates the syntax of the loop statement:
+		
+		<<label>>
+		loop
+		   statements;
+		end loop;
+		
+	Typically, you use an if statement to terminate the loop based on a condition like this:
+
+		<<label>>
+		loop
+		   statements;
+		   if condition then
+			  exit;
+		   end if;
+		end loop;
+
+	The exit statement terminates the loop immediately.
+	
+	It’s possible to place a loop statement inside another loop statement. When a loop statement is placed inside another loop statement, it is called a nested loop:
+
+		<<outer>>
+		loop 
+		   statements;
+		   <<inner>>
+		   loop
+			 /* ... */
+			 exit <<inner>>
+		   end loop;
+		end loop;
+		
+	When you have nested loops, it’s necessary to use loop labels. 
+	The loop labels allow you to specify the loop in the exit and continue statements, indicating which loop these statements refer to.
+	
+	loop statement examples:
+	
+	1) Basic PL/pgSQL loop example
+		The following example uses a loop statement to display five numbers from 1 to five:
+
+			do $$
+
+			declare
+				counter int := 0;
+			begin
+			  
+			  loop
+				counter = counter + 1;
+				raise notice '%', counter;
+				
+				if counter = 5 then
+					exit;
+				end if;
+				
+			  end loop;
+
+			end;
+
+			$$;
+			
+		Output:
+			NOTICE:  1
+			NOTICE:  2
+			NOTICE:  3
+			NOTICE:  4
+			NOTICE:  5
+		
+		Since the initial value of the counter is zero, the loop executes five times before it is terminated.
+
+		In practice, you can combine the if and exit statements into a single statement like this:
+
+		exit when counter = 5;
+	
+			do $$
+
+			declare
+				counter int := 0;
+			begin
+			  
+			  loop
+				counter = counter + 1;
+				raise notice '%', counter;
+				exit when counter = 5;
+			  end loop;
+
+			end;
+
+			$$;
+	2) Using a loop with a label
+		The following example illustrates how to use a loop label:
+
+			do $$
+
+				declare
+					counter int := 0;
+				begin
+
+				 <<my_loop>>
+				  loop
+					counter = counter + 1;
+					raise notice '%', counter;
+					exit my_loop when counter = 5;
+				  end loop;
+
+				end;
+
+			$$;
+
+		Output:
+			NOTICE:  1
+			NOTICE:  2
+			NOTICE:  3
+			NOTICE:  4
+			NOTICE:  5
+			
+		How it works.
+
+			In this example, we place a loop label my_loop inside <<>> before the LOOP keyword.
+
+			Inside the loop’s body, we reference the loop label (my_loop) in the exit statement to explicitly instruct PostgreSQL to terminate the loop specified by the loop label: my_loop.
+
+			It’ll be more practical to use a loop label when you have a nested loop.
+	
+	3) Nested loop example:
+	
+		The following example illustrates how to use a nested loop with labels:
+
+			do $$
+			declare
+				row_var int := 0;
+				col_var int := 0;
+			begin
+				<<outer_loop>>
+				loop
+					row_var = row_var + 1;
+					<<inner_loop>>
+					loop
+						col_var = col_var + 1;
+						raise notice '(%, %)', row_var, col_var;
+						
+						-- terminate the inner loop
+						exit inner_loop when col_var = 3;
+					end loop;
+					-- reset the column
+					col_var = 0;
+					
+					-- terminate the outer loop
+					exit outer_loop when row_var = 3;
+				end loop;
+			end;
+			$$;
+			
+		Output:
+			NOTICE:  (1, 1)
+			NOTICE:  (1, 2)
+			NOTICE:  (1, 3)
+			NOTICE:  (2, 1)
+			NOTICE:  (2, 2)
+			NOTICE:  (2, 3)
+			NOTICE:  (3, 1)
+			NOTICE:  (3, 2)
+			NOTICE:  (3, 3)
+						
+===============================================================================================================================================================
+PL/pgSQL For Loop:
+-----------------
+
+	Using PL/pgSQL for loop to iterate over a range of integers:
+	-----------------------------------------------------------
+		The following illustrates the syntax of the for loop statement that loops through a range of integers:
+
+			[ <<label>> ]
+			for loop_counter in [ reverse ] from.. to [ by step ] loop
+				statements
+			end loop [ label ];
+			
+
+		In this syntax:
+
+			First, the for loop creates an integer variable loop_counter which is accessible only inside the loop. 
+			By default, the for loop increases the loop_counter by step after each iteration. However, when you use the reverse option, the for loop decreases the loop_counter by the step.
+			
+			Second, the from and to are expressions that specify the lower and upper bound of the range. The for loop evaluates these expressions before entering the loop.
+			
+			Third, the step that follows the by keyword specifies the iteration step. It is optional and defaults to 1. The for loop evaluates the step expression once only.
+			
+			Examples:
+			
+				The following example uses the for loop statement to iterate over five numbers from 1 to 5 and display each of them in each iteration:
+
+					do 
+					$$
+					begin
+					   for counter in 1..5 loop
+						raise notice 'counter: %', counter;
+					   end loop;
+					end; 
+					$$;
+					
+				Output:
+					NOTICE:  Counter: 1
+					NOTICE:  Counter: 2
+					NOTICE:  Counter: 3
+					NOTICE:  Counter: 4
+					NOTICE:  Counter: 5
+				
+				The following example uses the for loop statement to iterate over six numbers from 1 to 6. 
+				It adds 2 to the counter after each iteration:
+
+					do $$
+					begin 
+					  for counter in 1..6 by 2 loop
+						raise notice 'counter: %', counter;
+					  end loop;
+					end; $$
+				
+				Output:
+					NOTICE:  Counter 1
+					NOTICE:  Counter 3
+					NOTICE:  Counter 5
+					
+		
+	Using PL/pgSQL for loop to iterate over a result set:
+	----------------------------------------------------
+	
+		The following statement shows how to use the for loop statement to iterate over a result set of a query:
+
+			[ <<label>> ]
+			for target in query loop
+				statements
+			end loop [ label ];
+	
+		The following statement uses the for loop to display the titles of the top 10 longest films.
+
+			do
+			$$
+			declare
+				f record;
+			begin
+				for f in select title, length 
+					   from film 
+					   order by length desc, title
+					   limit 10 
+				loop 
+				raise notice '%(% mins)', f.title, f.length;
+				end loop;
+			end;
+			$$
+		 Output:
+			NOTICE:  Chicago North(185 mins)
+			NOTICE:  Control Anthem(185 mins)
+			NOTICE:  Darn Forrester(185 mins)
+			NOTICE:  Gangs Pride(185 mins)
+			NOTICE:  Home Pity(185 mins)
+			NOTICE:  Muscle Bright(185 mins)
+			NOTICE:  Pond Seattle(185 mins)
+			NOTICE:  Soldiers Evolution(185 mins)
+			NOTICE:  Sweet Brotherhood(185 mins)
+			NOTICE:  Worst Banger(185 mins)
+			
+	Using PL/pgSQL for loop to iterate over the result set of a dynamic query:
+	-------------------------------------------------------------------------
+	
+	In this syntax:
+
+		The query_expression is an SQL statement.
+		The using clause is used to pass parameters to the query.
+		The following block shows how to use the for loop statement to loop through a dynamic query. It has two configuration variables:
+
+		sort_type: 1 to sort the films by title, 2 to sort the films by release year.
+		rec_count: is the number of rows to query from the film table. We’ll use it in the using clause of the for loop.
+		
+			do $$
+				declare
+					-- sort by 1: title, 2: release year
+					sort_type smallint := 1; 
+					-- return the number of films
+					rec_count int := 10;
+					-- use to iterate over the film
+					rec record;
+					-- dynamic query
+					query text;
+				begin
+						
+					query := 'select title, release_year from film ';
+					
+					if sort_type = 1 then
+						query := query || 'order by title';
+					elsif sort_type = 2 then
+					  query := query || 'order by release_year';
+					else 
+					   raise 'invalid sort type %s', sort_type;
+					end if;
+
+					query := query || ' limit $1';
+
+					for rec in execute query using rec_count
+						loop
+						 raise notice '% - %', rec.release_year, rec.title;
+					end loop;
+			end;
+			$$
+			
+		With out own Example : 
+			do $$
+				declare
+					-- sort by 1: title, 2: release year
+					sort_type smallint := 1; 
+					-- return the number of films
+					rec_count int := 10;
+					-- use to iterate over the film
+					rec record;
+					-- dynamic query
+					query text;
+				begin
+						
+					query := 'select * from "AssessmentTemplate" ';
+					
+					if sort_type = 1 then
+						query := query || 'order by "AssessmentTemplateId"';
+					elsif sort_type = 2 then
+					  query := query || 'order by release_year';
+					else 
+					   raise 'invalid sort type %s', sort_type;
+					end if;
+
+					query := query || ' limit 5';
+
+					for rec in execute query using rec_count
+						loop
+						 raise notice '% - %', rec."AssessmentTemplateId",rec."Name";
+					end loop;
+			end;
+			$$
+
+
+												
+							
+									
+						
+
+
+					

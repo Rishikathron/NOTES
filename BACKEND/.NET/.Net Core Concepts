@@ -1,0 +1,394 @@
+.NET framework : 
+	.NET framework is developed by Microsoft, provides an environment to run, debug and deploy code onto web services and applications by using tools and functionalities like libraries, classes, and APIs. This framework uses object-oriented programming.
+	You can use different languages like C#, Cobol, VB, F#, Perl, etc. for writing .NET framework applications. This Framework supports services, websites, desktop applications, and many more on Windows. 
+
+.NET Core
+	.NET Core is a newer version of the .NET framework and it is a general-purpose, cost-free, open-source development platform developed by Microsoft. 
+	.NET Core is a cross-platform framework that runs an application on different operating systems such as Windows, Linux, and macOS operating systems.
+	This framework can be used to develop various kinds of applications like mobile, web, IoT, cloud, microservices, machine learning, game, etc.
+	
+============================================================
+
+1. How does the .NET framework work?
+
+	.NET framework-based applications that are written in supportive languages like C#, F#, or Visual basic are compiled to Common Intermediate Language (CIL).
+	Compiled code is stored in the form of an assembly file that has a .dll or .exe file extension.
+	When the .NET application runs, Common Language Runtime (CLR) takes the assembly file and converts the CIL into machine code with the help of the Just In Time(JIT) compiler.
+	Now, this machine code can execute on the specific architecture of the computer it is running on.
+	
+	Code is executed in the following order:
+	
+		Source Code  =======>  any code written in .net framework supportive languages
+		
+		Native compiler ====> Language Specific
+		
+		Common Intermediate Language (CIL) ==> Language independent within .NET framework 
+		
+		Common Language Runtime (CLR) ====> Compiles CIL tpo machine readable code
+		
+		Executable Code ======> Machine code in the form of 0's and 1's
+
+2. Common Language Runtime(CLR):
+
+	It is an execution engine that runs the code and provides services that make the development process easier.
+	Services provided by CLR are memory management, garbage collection, type safety, exception handling, security, and thread management. 
+	It also makes it easier for designing the applications and components whose objects interact across the languages.
+	The programs written for the .NET Framework are executed by the CLR regardless of programming language.
+	Every .NET Framework version is having CLR.
+	
+3. Framework Class Library(FCL):
+
+	It has pre-defined methods and properties to implement common and complex functions that can be used by .NET applications. 
+	It will also provide types for dates, strings, numbers, etc.
+	This class library includes APIs for database connection, file reading and writing, drawing, etc.
+	
+4. Base Class Library(BCL):
+
+	The Base Class Library(BCL) has a huge collection of libraries features and functions that are helpful in implementing various programming languages such as C#, F#, Visual C++, etc., in the .NET Framework.
+	BCL is divided into two parts. They are:
+		User-defined class library: It includes Assemblies.
+		
+			Assembly: A .NET assembly is considered as the major building block of the .NET Framework. 
+			An assembly in the CLI(Common Language Infrastructure) is a logical unit of code, which is used for security, deployment, and versioning. Assembly can be defined in two forms namely Dynamic Link Library(.dll) and executable(.exe) files.
+		
+			When compilation of the .NET program takes place, metadata with Microsoft Intermediate Language(MSIL) will be generated and will be stored in a file called Assembly.
+			
+		Predefined class library: It contains namespace.
+			Namespace: It is the collection of pre-defined methods and classes that are present in the .Net Framework.
+			A namespace can be added to a .NET program with the help of “using system”, where using represents a keyword and system represents a namespace.
+			
+5. Common Type System(CTS):
+
+	CTS specifies a standard that will mention which type of data and value can be defined and managed in memory during runtime.
+	It will make sure that programming data defined in different languages should interact with each other for sharing the information.
+	For example, in VB.NET we define datatype as integer, while in C# we define int as a data type.
+	It can be used to prevent data loss when you are trying to transfer data from a type in one language to its equivalent type in another language.
+	
+6. Common Language Specification (CLS):
+
+	Common Language Specification (CLS) is a subset of CTS and defines a set of rules and regulations to be followed by every .NET Framework’s language.
+	A CLS will support inter-operability or cross-language integration, which means it provides a common platform for interacting and sharing information.
+	For example, every programming language(C#, F#, VB .Net, etc.) under the .NET framework has its own syntax. 
+	So when statements belonging to different languages get executed, a common platform will be provided by the CLS to interact and share the information.
+			
+7. What is an EXE and a DLL?
+
+	EXE and DLLs are assembly executable modules.
+	EXE is an executable file that runs the application for which it is designed.
+	An EXE is produced when we build an application.
+	Therefore the assemblies are loaded directly when we run an EXE. However, an EXE cannot be shared with the other applications.
+	
+	Dynamic Link Library (DLL) is a library that consists of code that needs to be hidden. 
+	The code is encapsulated inside this library. 
+	An application can consist of many DLLs which can be shared with the other programs and applications.
+
+8. Explain CLS
+	Common Language Specification (CLS) helps the application developers to use the components that are inter-language compatible with certain rules that come with CLS. It also helps in reusing the code among all of the .NET-compatible languages.
+	
+9. What is JIT?
+	JIT stands for Just In Time. It is a compiler that converts the intermediate code into the native language during the execution.
+
+10. What is the difference between int and Int32?
+	There is no difference between int and Int32. 
+	Int32 is a type provided by the .NET framework class whereas int is an alias name for Int32 in the C# programming language.
+
+11. Explain the differences between value type and reference type.
+
+	The main differences between value type and reference type are given below:
+
+	A Value Type holds the actual data directly within the memory location and a reference type contains a pointer which consists of the address of another memory location that holds the actual data.
+	Value type stores its contents on the stack memory and reference type stores its contents on the heap memory.
+	Assigning a value type variable to another variable will copy the value directly and assigning a reference variable to another doesn’t copy the value, instead, it creates a second copy of the reference.
+	Predefined data types, structures, enums are examples of value types. Classes, Objects, Arrays, Indexers, Interfaces, etc are examples of reference types.
+
+9. What is the difference between managed and unmanaged code?
+
+	The main difference between managed and unmanaged code is listed below:
+
+			Managed Code													Unmanaged Code
+			-------------													--------------
+			It is managed by CLR.									||		It is not managed by CLR.
+			.NET framework is a must for execution.					||		Does not require a .NET framework for the execution.
+			Memory management is done through garbage collection.	||		Runtime environment takes care of memory management.
+			
+10. Explain Microsoft Intermediate Language
+
+	MSIL is the Microsoft Intermediate Language, which provides instructions for calling methods, memory handling, storing and initializing values, exception handling, and so on.
+	The instructions provided by MSIL are platform-independent and are generated by the language-specific compiler from the source code. 
+	JIT compiler compiles the MSIL into machine code based on the requirement.
+
+11. What is an assembly?
+
+	An assembly is a file that is automatically generated by the compiler which consists of a collection of types and resources that are built to work together and form a logical unit of functionality.
+	We can also say, assembly is a compiled code and logical unit of code.
+	Assemblies are implemented in the form of executable (.exe) or dynamic link library (.dll) files.
+
+12.Explain role-based security in .NET
+
+	Role-based security is used to implement security measures in .NET, based on the roles assigned to the users in the organization. In the organization, authorization of users is done based on their roles.
+	For example, windows have role-based access like administrators, users, and guests.
+
+13. Explain MVC.
+
+	MVC stands for Model View Controller. It is an architecture to build .NET applications. Following are three main logical components of MVC: the model, the view, and the controller.
+	
+	1.	Model: 
+			They hold data and its related logic. It handles the object storage and retrieval from the databases for an application. 
+			For example:
+				A Controller object will retrieve the employee information from the database.
+				It manipulates employee data and sends back to the database or uses it to render the same data.
+
+	2.	View: 
+			View handles the UI part of an application. They get the information from the models for their display. 
+			For example, any employee view will include many components like text boxes, dropdowns, etc.
+
+	3.	Controller: 
+			They handle the user interactions, figure out the responses for the user input and also render the final output.
+			For instance, the Employee controller will handle all the interactions and inputs from the Employee View and update the database using the Employee Model.
+			
+14.	What is a delegate in .NET?
+
+	A delegate is a .NET object which defines a method signature and it can pass a function as a parameter.
+	Delegate always points to a method that matches its specific signature. Users can encapsulate the reference of a method in a delegate object.
+	When we pass the delegate object in a program, it will call the referenced method. 
+	To create a custom event in a class, we can make use of delegate.
+
+15. What is boxing and unboxing in .NET?
+
+	Boxing is the process of converting a value type into a reference type directly. Boxing is implicit.
+	Unboxing is the process where reference type is converted back into a value type. Unboxing is explicit.
+	An example is given below to demonstrate boxing and unboxing operations:
+
+		int a = 10;      // a value type
+		object o = a;     // boxing
+		int b = (int)o;   // unboxing
+
+16. What is MIME in .NET?
+
+	MIME stands for Multipurpose Internet Mail Extensions.
+	It is the extension of the e-mail protocol which lets users use the protocol to exchange files over emails easily.
+	Servers insert the MIME header at the beginning of the web transmission to denote that it is a MIME transaction.
+	Then the clients use this header to select an appropriate ‘player’ for the type of data that the header indicates. 
+	Some of these players are built into the web browser.
+	
+17 What is the difference between an abstract class and an interface?
+
+	The main difference between an abstract class and an interface are listed below:
+
+								Abstract Class																		Interface
+								--------------																		---------
+								
+		Used to declare properties, events, methods, and fields as well.						 ||		Fields cannot be declared using interfaces.
+		Provides the partial implementation of functionalities that must be implemented 		 ||		Used to declare the behavior of an implementing
+			by inheriting classes.																			class.
+		Different kinds of access modifiers like private, public, protected, etc. are supported. ||		Only public access modifier is supported.
+		It can contain static members.															 ||		It does not contain static members.
+		Multiple inheritances cannot be achieved.												 ||		Multiple inheritances are achieved.
+
+18. What are the types of memories supported in the .NET framework?
+
+	Two types of memories are present in .NET. They are:
+		Stack: 
+			Stack is a stored-value type that keeps track of each executing thread and its location. 
+			It is used for static memory allocation.
+		Heap: 
+			Heap is a stored reference type that keeps track of the more precise objects or data. 
+			It is used for dynamic memory allocation.
+			
+===============================================================================================================================================
+
+1. What is CoreCLR?
+
+	CoreCLR is the run-time execution engine provided by the .NET Core.
+	It consists of a JIT compiler, garbage collector, low-level classes, and primitive data types. 
+	.NET Core is a modular implementation of .NET, and can be used as the base stack for large scenario types, ranging from console utilities to web applications in the cloud.
+
+2. What is middleware in .NET core?
+
+	Middleware is software assembled into an application pipeline for request and response handling.
+	Each component will choose whether the request should be passed to the next component within the pipeline, also it can carry out work before and after the next component within the pipeline.
+	For example, we can have a middleware component for user authentication, another middleware for handling errors, and one more middleware for serving static files like JavaScript files, images, CSS files, etc.
+
+3. What is .NET Core SDK?
+
+	.NET Core SDK is a set of tools and libraries that allows the developer to create a .NET application and library for .NET 5 (also .NET Core) and later versions. It includes the .NET CLI for building applications, .NET libraries and runtime for the purpose of building and running apps, and the dotnet.exe(dotnet executable) that runs CLI commands and runs an application. Here's the link to download.
+
+4. What is Docker?
+
+	Docker is an open-source platform for the development of applications, and also for shipping and running them. 
+	It allows for separating the application from the infrastructure using containers so that software can be delivered quickly. 
+	With Docker, you will be able to manage the infrastructure in the same ways you used to manage your applications.
+	It supports shipping, testing, and deploying application code quickly, thus reducing the delay between code writing and running it in production.
+	The Docker platform provides the ability of packaging and application execution in a loosely isolated environment namely container. 
+	The isolation and security permit you for running multiple containers at the same time on a given host. 
+	Containers are lightweight and they include every necessary thing required for running an application, so you need not depend on what is currently installed within the host.
+
+5. How can you differentiate ASP.NET Core from .NET Core?
+
+	.NET Core is a runtime and is used for the execution of an application that is built for it. 
+	Whereas ASP.NET Core is a collection of libraries that will form a framework for developing web applications.
+	ASP.NET Core libraries can be used on .NET Core as well as on the “Full .NET Fr  #region ConvertJsonToExcelMR
+        /// <summary>
+        /// Used to Import data Maturity report
+        /// </summary>
+        /// <param name="AssessmentUId"></param>
+        /// <param name="ReportUId"></param>
+        /// <param name="AssessmentAreaUId"></param>
+        /// <returns></returns>
+        [HttpGet("convertjsontoexcelMR")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult ConvertJsontoExcelMR(Guid AssessmentUId, Guid ReportUId, Guid? AssessmentAreaUId)
+        {
+            
+            try
+            {
+                using (_BsReport = new BsReport(_context))
+                {
+                    DataTable dt = new DataTable();
+
+                    logger4net.Info("GetMaturityReport starts AssessmentUId:" + AssessmentUId + "ReportUId:" + ReportUId + "AssessmentAreaUId:" + AssessmentAreaUId);
+                    var res = _BsReport.GetMaturityReport(AssessmentUId, ReportUId, AssessmentAreaUId);
+                    logger4net.Info("GetMaturityReport end");
+                    var Cat = res.Category;
+                    using (var workbook = new XLWorkbook())
+                    {
+
+
+                        //The new workbook will have 1 worksheets
+                        workbook.Worksheets.Add("Maturity_Data");
+                        //Creating a Sheet
+                        var sheet = workbook.Worksheet(1);
+                        
+
+                        int j = 1; int i = 1;
+                        sheet.Cell(i, j).Value = "Category Name";
+                        sheet.Cell(i, j + 1).Value = "Score";
+                        sheet.Cell(i, j + 2).Value = "Maturity Level";
+
+                        foreach (var item in Cat)
+                        {
+                            sheet.Cell(i + 1, j).Value = item.Name;
+                            // sheet.Range[i + 1, j+1].Text = .Name;
+                            sheet.Cell(i + 1, j + 1).SetValue(Math.Round(item.Score, 2));
+                            sheet.Cell(i + 1, j + 2).Value = item.LevelName;
+                            i++;
+                            foreach (var sub in item.SubCategory)
+                            {
+                                sheet.Cell(i + 1, j).Value = sub.Name;
+                                // sheet.Range[i + 1, j+1].Text = sub.Name;
+                                sheet.Cell(i + 1, j + 1).SetValue(Math.Round(sub.Score, 2));
+                                sheet.Cell(i + 1, j + 2).Value = sub.LevelName;
+                                i++;
+                            }
+
+                        }
+                        //Define the file name.
+                        string fileName = "Data_Maturity_Report.xlsx";
+
+                        //Creating stream object.                        
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            workbook.SaveAs(memoryStream);
+                            // Set the position to the beginning of the stream
+                            memoryStream.Position = 0;
+                            // Return the modified file as an attachment with a specified file name
+                            return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                        }
+                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger4net.Error("Error occured while convertjsontoexcelMR InnerException " + ex.Message);
+                logger4net.Error($"Error occured while convertjsontoexcelMR StackTrace: " + ex.StackTrace);
+                return BadRequest(new GenericMessage() { Success = false, ErrorMessage = ConstantConfiguration._errMsgInvalidFormat + ex.Message });
+
+            }
+        }
+
+        #endregion  #region ConvertJsonToExcelMR
+        /// <summary>
+        /// Used to Import data Maturity report
+        /// </summary>
+        /// <param name="AssessmentUId"></param>
+        /// <param name="ReportUId"></param>
+        /// <param name="AssessmentAreaUId"></param>
+        /// <returns></returns>
+        [HttpGet("convertjsontoexcelMR")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult ConvertJsontoExcelMR(Guid AssessmentUId, Guid ReportUId, Guid? AssessmentAreaUId)
+        {
+            
+            try
+            {
+                using (_BsReport = new BsReport(_context))
+                {
+                    DataTable dt = new DataTable();
+
+                    logger4net.Info("GetMaturityReport starts AssessmentUId:" + AssessmentUId + "ReportUId:" + ReportUId + "AssessmentAreaUId:" + AssessmentAreaUId);
+                    var res = _BsReport.GetMaturityReport(AssessmentUId, ReportUId, AssessmentAreaUId);
+                    logger4net.Info("GetMaturityReport end");
+                    var Cat = res.Category;
+                    using (var workbook = new XLWorkbook())
+                    {
+
+
+                        //The new workbook will have 1 worksheets
+                        workbook.Worksheets.Add("Maturity_Data");
+                        //Creating a Sheet
+                        var sheet = workbook.Worksheet(1);
+                        
+
+                        int j = 1; int i = 1;
+                        sheet.Cell(i, j).Value = "Category Name";
+                        sheet.Cell(i, j + 1).Value = "Score";
+                        sheet.Cell(i, j + 2).Value = "Maturity Level";
+
+                        foreach (var item in Cat)
+                        {
+                            sheet.Cell(i + 1, j).Value = item.Name;
+                            // sheet.Range[i + 1, j+1].Text = .Name;
+                            sheet.Cell(i + 1, j + 1).SetValue(Math.Round(item.Score, 2));
+                            sheet.Cell(i + 1, j + 2).Value = item.LevelName;
+                            i++;
+                            foreach (var sub in item.SubCategory)
+                            {
+                                sheet.Cell(i + 1, j).Value = sub.Name;
+                                // sheet.Range[i + 1, j+1].Text = sub.Name;
+                                sheet.Cell(i + 1, j + 1).SetValue(Math.Round(sub.Score, 2));
+                                sheet.Cell(i + 1, j + 2).Value = sub.LevelName;
+                                i++;
+                            }
+
+                        }
+                        //Define the file name.
+                        string fileName = "Data_Maturity_Report.xlsx";
+
+                        //Creating stream object.                        
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            workbook.SaveAs(memoryStream);
+                            // Set the position to the beginning of the stream
+                            memoryStream.Position = 0;
+                            // Return the modified file as an attachment with a specified file name
+                            return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                        }
+                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger4net.Error("Error occured while convertjsontoexcelMR InnerException " + ex.Message);
+                logger4net.Error($"Error occured while convertjsontoexcelMR StackTrace: " + ex.StackTrace);
+                return BadRequest(new GenericMessage() { Success = false, ErrorMessage = ConstantConfiguration._errMsgInvalidFormat + ex.Message });
+
+            }
+        }
+
+        #endregionamework”.
+	An application using the tools and libraries of ASP.NET Core is normally referred to as “ASP.NET Core Application”, which in theory doesn’t say whether it is built for .NET Framework or .NET Core.
+	So an application of “ASP.NET Core” can be considered as a “.NET Core Application” or a “.NET Framework Application”
